@@ -9,13 +9,38 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        ZStack {
+            TabView{
+                // HOME
+                HomeView()
+                    .tabItem {
+                        Label("Home", systemImage: "house")
+                    }
+                
+                // HISTORY
+                HistoryView()
+                    .tabItem {
+                        Label("History", systemImage: "clock.arrow.circlepath")
+                    }
+                
+                Color.clear.tabItem {
+                    Label("", systemImage: "")
+                }
+                // ANALYST
+                AnalystView()
+                    .tabItem {
+                        Label("Analyst", systemImage: "chart.bar.xaxis")
+                    }
+                
+                // PROFILE
+                ProfileView()
+                    .tabItem {
+                        Label("Profile", systemImage: "person")
+                    }
+            }.accentColor(Color(.primary))
+            CameraButton()
         }
-        .padding()
+        
     }
 }
 

@@ -9,9 +9,14 @@ import SwiftUI
 
 @main
 struct NutriQuorApp: App {
+    @State private var showContent = false
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            if showContent{
+                ContentView()
+            }else{
+                SplashView(showContent: $showContent)
+            }
         }
     }
 }
