@@ -12,6 +12,9 @@ import Combine
 
 class CameraViewModel: NSObject, ObservableObject {
     @Published var images: [UIImage] = []
+    @Published var isUploading = false
+    @Published var uploadError: String?
+    @Published var ocrResult: OCRData?
 
     let session = AVCaptureSession()
     private let videoOutput = AVCaptureVideoDataOutput()
@@ -36,7 +39,7 @@ class CameraViewModel: NSObject, ObservableObject {
         guard let device = AVCaptureDevice.default(.builtInWideAngleCamera,
                                                     for: .video,
                                                     position: .back) else {
-            print("❌ Không tìm thấy camera")
+            print("Không tìm thấy camera")
             session.commitConfiguration()
             return
         }
@@ -47,7 +50,7 @@ class CameraViewModel: NSObject, ObservableObject {
                 session.addInput(input)
             }
         } catch {
-            print("❌ Lỗi tạo camera input: \(error)")
+            print("Lỗi tạo camera input: \(error)")
             session.commitConfiguration()
             return
         }
@@ -63,19 +66,19 @@ class CameraViewModel: NSObject, ObservableObject {
 
         session.commitConfiguration()
         isConfigured = true
-        print("✅ Camera session đã được setup")
+        print("Camera session đã được setup")
     }
     
     private func checkPermissions() {
         switch AVCaptureDevice.authorizationStatus(for: .video) {
         case .authorized:
-            print("✅ Đã có quyền camera")
+            print("Đã có quyền camera")
         case .notDetermined:
             AVCaptureDevice.requestAccess(for: .video) { granted in
-                print(granted ? "✅ Đã cấp quyền camera" : "❌ Từ chối quyền camera")
+                print(granted ? "Đã cấp quyền camera" : "❌ Từ chối quyền camera")
             }
         default:
-            print("⚠️ Chưa có quyền camera")
+            print("Chưa có quyền camera")
         }
     }
 
@@ -117,6 +120,31 @@ class CameraViewModel: NSObject, ObservableObject {
         
         DispatchQueue.main.async {
             self.images.append(image)
+        }
+    }
+    
+    // MARK: - Upload và OCR
+    func uploadAndAnalyze(image: UIImage) async {
+        await MainActor.run {
+            isUploading = true
+            uploadError = nil
+            ocrResult = nil
+        }
+        
+        do {
+            let result = try await ImageUploadService.shared.uploadAndAnalyzeImage(image)
+            
+            await MainActor.run {
+                self.ocrResult = result
+                self.isUploading = false
+                print("Kết quả OCR: \(result.fullText)")
+            }
+        } catch {
+            await MainActor.run {
+                self.uploadError = error.localizedDescription
+                self.isUploading = false
+                print("Lỗi: \(error.localizedDescription)")
+            }
         }
     }
 }

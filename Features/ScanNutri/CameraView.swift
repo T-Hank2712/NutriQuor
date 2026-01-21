@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import PhotosUI
+import UIKit
 
 struct CameraView: View {
     @Environment(\.dismiss) var dismiss
@@ -13,6 +15,13 @@ struct CameraView: View {
     @State private var capturedImage: UIImage?
     @State private var cropRect: CGRect = .zero
     @State private var previewSize: CGSize = .zero
+    @State private var isUploading = false
+    @State private var uploadError: String?
+    @State private var showAlert = false
+    @State private var ocrResult: OCRData?
+    @State private var showOCRResult = false
+    @State private var uploadStatus = ""
+    @State private var selectedPhotoItem: PhotosPickerItem?
 
     var body: some View {
         ZStack {
@@ -83,19 +92,35 @@ struct CameraView: View {
                     
                     if capturedImage != nil {
                         Button("Sử dụng") {
-                            // TODO: Xử lý ảnh
-                            dismiss()
+                            uploadImage()
                         }
                         .font(.headline)
                         .foregroundColor(.white)
                         .padding(.horizontal, 20)
                         .padding(.vertical, 10)
-                        .background(Capsule().fill(Color.green))
+                        .background(Capsule().fill(isUploading ? Color.gray : Color.green))
+                        .disabled(isUploading)
+                        .overlay {
+                            if isUploading {
+                                ProgressView()
+                                    .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                            }
+                        }
                     }
                 }
                 .padding()
                 
                 Spacer()
+                
+                // Hiển thị status khi đang upload
+                if isUploading && !uploadStatus.isEmpty {
+                    Text(uploadStatus)
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .padding()
+                        .background(Capsule().fill(Color.black.opacity(0.7)))
+                        .padding(.bottom, 20)
+                }
                 
                 // Nút chụp
                 if capturedImage != nil {
@@ -118,19 +143,40 @@ struct CameraView: View {
                     }
                     .padding(.bottom, 40)
                 } else {
-                    Button {
-                        viewModel.capturePhoto()
-                    } label: {
-                        ZStack {
-                            Circle()
-                                .strokeBorder(Color.white, lineWidth: 4)
-                                .frame(width: 75, height: 75)
-                            Circle()
-                                .fill(Color.white)
-                                .frame(width: 65, height: 65)
+                    ZStack {
+                            // Nút chọn ảnh từ thư viện
+                            HStack {
+                                PhotosPicker(
+                                    selection: $selectedPhotoItem,
+                                    matching: .images,
+                                    photoLibrary: .shared()
+                                ) {
+                                    Image(systemName: "photo.on.rectangle")
+                                        .font(.system(size: 26))
+                                        .foregroundColor(.white)
+                                        .frame(width: 55, height: 55)
+                                        .background(Circle().fill(Color.black.opacity(0.6)))
+                                }
+
+                                Spacer()
+                            }
+                            .padding(.horizontal, 40)
+
+                            // Nút chụp ảnh
+                            Button {
+                                viewModel.capturePhoto()
+                            } label: {
+                                ZStack {
+                                    Circle()
+                                        .strokeBorder(Color.white, lineWidth: 4)
+                                        .frame(width: 75, height: 75)
+                                    Circle()
+                                        .fill(Color.white)
+                                        .frame(width: 65, height: 65)
+                                }
+                            }
                         }
-                    }
-                    .padding(.bottom, 40)
+                        .padding(.bottom, 40)
                 }
             }
         }
@@ -146,8 +192,69 @@ struct CameraView: View {
                 viewModel.stopSession()
             }
         }
+        .onChange(of: selectedPhotoItem) { newItem in
+            guard let item = newItem else { return }
+
+            Task {
+                if let data = try? await item.loadTransferable(type: Data.self),
+                   let uiImage = UIImage(data: data) {
+
+                    await MainActor.run {
+                        // Vì ảnh từ thư viện đã đúng tỉ lệ → không crop
+                        capturedImage = uiImage
+                        viewModel.stopSession()
+                    }
+                }
+            }
+        }
+        .alert("Lỗi", isPresented: $showAlert) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            if let error = uploadError {
+                Text(error)
+            }
+        }
+        .sheet(isPresented: $showOCRResult) {
+            OCRResultView(ocrData: ocrResult) {
+                dismiss()
+            }
+        }
     }
     
+    private func uploadImage() {
+        guard let image = capturedImage else { return }
+        
+        isUploading = true
+        ocrResult = nil
+        uploadStatus = "Đang upload ảnh..."
+        
+        Task {
+            do {
+                await MainActor.run {
+                    uploadStatus = "Đang phân tích OCR..."
+                }
+                
+                let result = try await ImageUploadService.shared.uploadAndAnalyzeImage(image)
+                
+                await MainActor.run {
+                    isUploading = false
+                    uploadStatus = ""
+                    ocrResult = result
+                    uploadError = nil
+                    showOCRResult = true
+                    print("Kết quả OCR: \(result.fullText)")
+                }
+            } catch {
+                await MainActor.run {
+                    isUploading = false
+                    uploadStatus = ""
+                    uploadError = error.localizedDescription
+                    showAlert = true
+                    print("Lỗi: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
     // Hàm crop ảnh chính xác theo khung preview
     private func cropImageToRect(image: UIImage, previewSize: CGSize, cropRect: CGRect) -> UIImage {
         // Normalize image orientation trước
@@ -190,7 +297,7 @@ struct CameraView: View {
         
         return UIImage(cgImage: croppedCGImage)
     }
-}
+} // <-- Inserted closing brace to end struct CameraView
 
 // Extension để fix orientation
 extension UIImage {
