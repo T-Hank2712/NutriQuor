@@ -15,6 +15,7 @@ class CameraViewModel: NSObject, ObservableObject {
     @Published var isUploading = false
     @Published var uploadError: String?
     @Published var ocrResult: OCRData?
+    @Published var uploadStatus = ""
 
     let session = AVCaptureSession()
     private let videoOutput = AVCaptureVideoDataOutput()
@@ -23,6 +24,17 @@ class CameraViewModel: NSObject, ObservableObject {
 
     override init() {
         super.init()
+    }
+    
+    // MARK: - Public Methods
+    
+    /// Crop và upload ảnh để phân tích OCR
+    func cropAndUploadImage(_ image: UIImage, previewSize: CGSize, cropRect: CGRect) async {
+        // Crop ảnh theo khung
+        let croppedImage = ImageCropHelper.cropImage(image, previewSize: previewSize, cropRect: cropRect)
+        
+        // Upload và phân tích
+        await uploadAndAnalyze(image: croppedImage)
     }
 
     private func setupSession() {
@@ -129,23 +141,38 @@ class CameraViewModel: NSObject, ObservableObject {
             isUploading = true
             uploadError = nil
             ocrResult = nil
+            uploadStatus = "Đang upload ảnh..."
         }
         
         do {
+            await MainActor.run {
+                uploadStatus = "Đang phân tích OCR..."
+            }
+            
             let result = try await ImageUploadService.shared.uploadAndAnalyzeImage(image)
             
             await MainActor.run {
                 self.ocrResult = result
                 self.isUploading = false
+                self.uploadStatus = ""
                 print("Kết quả OCR: \(result.fullText)")
             }
         } catch {
             await MainActor.run {
                 self.uploadError = error.localizedDescription
                 self.isUploading = false
+                self.uploadStatus = ""
                 print("Lỗi: \(error.localizedDescription)")
             }
         }
+    }
+    
+    /// Reset state để chụp lại
+    func resetCapture() {
+        images.removeAll()
+        ocrResult = nil
+        uploadError = nil
+        uploadStatus = ""
     }
 }
 

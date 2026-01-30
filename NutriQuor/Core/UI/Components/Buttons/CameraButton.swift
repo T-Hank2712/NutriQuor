@@ -23,11 +23,11 @@ struct CameraButton: View {
                     .frame(width: 64, height: 64)
                     .background(
                         Circle()
-                            .fill(Color.green)
+                            .fill(Color(.primary))
                             .shadow(radius: 10)
                     )
             }
-            .offset(y: -10)
+            .offset(y: -20)
             .fullScreenCover(isPresented: $showCamera) {
                 CameraView()
             }

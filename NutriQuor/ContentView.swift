@@ -16,22 +16,16 @@ struct ContentView: View {
                     .tabItem {
                         Label("Home", systemImage: "house")
                     }
-                
                 // HISTORY
                 HistoryView()
                     .tabItem {
                         Label("History", systemImage: "clock.arrow.circlepath")
                     }
-                
-                Color.clear.tabItem {
-                    Label("", systemImage: "")
-                }
                 // ANALYST
                 AnalystView()
                     .tabItem {
                         Label("Analyst", systemImage: "chart.bar.xaxis")
                     }
-                
                 // PROFILE
                 ProfileView()
                     .tabItem {
@@ -39,6 +33,7 @@ struct ContentView: View {
                     }
             }.accentColor(Color(.primary))
             CameraButton()
+
         }
         
     }
