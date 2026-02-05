@@ -28,15 +28,6 @@ class CameraViewModel: NSObject, ObservableObject {
     
     // MARK: - Public Methods
     
-    /// Crop và upload ảnh để phân tích OCR
-    func cropAndUploadImage(_ image: UIImage, previewSize: CGSize, cropRect: CGRect) async {
-        // Crop ảnh theo khung
-        let croppedImage = ImageCropHelper.cropImage(image, previewSize: previewSize, cropRect: cropRect)
-        
-        // Upload và phân tích
-        await uploadAndAnalyze(image: croppedImage)
-    }
-
     private func setupSession() {
         guard !isConfigured else { return }
         

@@ -8,12 +8,15 @@
 import SwiftUI
 
 struct NutriRowItem: View {
-    let record: Nutrition
+//    let record: Nutrition
+    let record: NutriText
     var body: some View {
         HStack{
-            Text(record.name)
-            Spacer()
-            Text(String(format: "%.2f \(record.unit)", record.value))
+//            Text(record.name)
+//            Spacer()
+//            Text(String(format: "%.2f \(record.unit)", record.value))
+            Text(record.text)
+                .frame(maxWidth: .infinity, alignment: .leading)
         }.overlay(
             Rectangle()
                 .frame(height: 0.5)
@@ -24,5 +27,6 @@ struct NutriRowItem: View {
 }
 
 #Preview {
-    NutriRowItem(record: Nutrition(name: "Calories", unit: "kcal", value: 100))
+    NutriRowItem(/*record: Nutrition(name: "Calories", unit: "kcal", value: 100)*/
+        record: NutriText(text: "Calories"))
 }

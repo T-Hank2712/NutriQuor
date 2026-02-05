@@ -44,8 +44,12 @@ struct CameraView: View {
                 Text(error)
             }
         }
-        .sheet(isPresented: $viewState.showOCRResult) {
-            OCRResultView(ocrData: viewState.ocrResult) {
+        .fullScreenCover(isPresented: $viewState.showOCRResult) {
+            NutritionInsights(
+                nutriItem: createHistoryItem(),
+                nutrition: createNutritionSample(),
+                ocrData: viewState.ocrResult
+            ) {
                 dismiss()
             }
         }
@@ -68,37 +72,7 @@ struct CameraView: View {
                         viewModel.startSession()
                     }
                 }
-            
-            cropOverlayView
         }
-    }
-    
-    private var cropOverlayView: some View {
-        GeometryReader { geometry in
-            let frameWidth = geometry.size.width * 0.65
-            let frameHeight = geometry.size.height * 0.4
-            
-            ZStack {
-                // Làm tối vùng ngoài khung
-                Color.black.opacity(0.5)
-                
-                // Khung crop trong suốt
-                Rectangle()
-                    .frame(width: frameWidth, height: frameHeight)
-                    .blendMode(.destinationOut)
-            }
-            .compositingGroup()
-            
-            // Viền khung crop
-            Rectangle()
-                .strokeBorder(Color.white, lineWidth: 3)
-                .frame(width: frameWidth, height: frameHeight)
-                .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
-                .onAppear {
-                    viewState.updateCropRect(width: frameWidth, height: frameHeight, in: geometry.size)
-                }
-        }
-        .ignoresSafeArea()
     }
     
     private var headerView: some View {
@@ -217,14 +191,7 @@ struct CameraView: View {
     
     private func handleCapturedImage(_ newImages: [UIImage]) {
         guard let image = newImages.first else { return }
-        
-        // Crop ảnh theo khung
-        let croppedImage = ImageCropHelper.cropImage(
-            image,
-            previewSize: viewState.previewSize,
-            cropRect: viewState.cropRect
-        )
-        viewState.capturedImage = croppedImage
+        viewState.capturedImage = image
         viewModel.stopSession()
     }
     
@@ -235,7 +202,6 @@ struct CameraView: View {
             if let data = try? await item.loadTransferable(type: Data.self),
                let uiImage = UIImage(data: data) {
                 await MainActor.run {
-                    // Vì ảnh từ thư viện đã đúng tỉ lệ → không crop
                     viewState.capturedImage = uiImage
                     viewModel.stopSession()
                 }
@@ -261,6 +227,26 @@ struct CameraView: View {
                 }
             }
         }
+    }
+    
+    // MARK: - Helper Methods
+    
+    private func createHistoryItem() -> History {
+        History(
+            image: Image(systemName: "photo"),
+            title: "Phân tích dinh dưỡng",
+            warning: "Đang phân tích...",
+            score: "0",
+            time: Date()
+        )
+    }
+    
+    private func createNutritionSample() -> Nutrition {
+        Nutrition(
+            name: "Sample",
+            unit: "g",
+            value: 0.0
+        )
     }
 }
 
