@@ -114,12 +114,17 @@ class CameraViewModel: NSObject, ObservableObject {
         let generator = UIImpactFeedbackGenerator(style: .medium)
         generator.impactOccurred()
         
-        // Convert buffer thành UIImage
+        // Convert buffer thành UIImage với orientation đúng
         let ciImage = CIImage(cvPixelBuffer: buffer)
-        let context = CIContext()
         
-        guard let cgImage = context.createCGImage(ciImage, from: ciImage.extent) else { return }
-        let image = UIImage(cgImage: cgImage, scale: 1.0, orientation: .right)
+        // Xoay ảnh để khớp với preview (portrait mode)
+        let rotatedImage = ciImage.oriented(.right)
+        
+        let context = CIContext()
+        guard let cgImage = context.createCGImage(rotatedImage, from: rotatedImage.extent) else { return }
+        
+        // Tạo UIImage với orientation up (không cần xoay thêm)
+        let image = UIImage(cgImage: cgImage, scale: 1.0, orientation: .up)
         
         DispatchQueue.main.async {
             self.images.append(image)
