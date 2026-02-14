@@ -4,6 +4,7 @@
 //
 //  Created by Lâm Tấn Thành on 26/1/26.
 //
+
 import SwiftUI
 
 struct NutritionInsights: View {
@@ -11,91 +12,148 @@ struct NutritionInsights: View {
     let nutrition: Nutrition
     let ocrData: OCRData?
     let onDismiss: () -> Void
+    
     @State private var selectedRow: NutriText?
-
+    
     var body: some View {
-        ScrollView {
-            VStack(spacing: 20) {
-
-                // MARK: - History Summary
-                HistoryItem(record: nutriItem)
-
-                // MARK: - Nutrition Section
-                VStack(alignment: .leading, spacing: 16) {
-                    let data = ocrData
-                    HStack {
-                        Text("Nutrition Analysis")
+        ZStack {
+            
+            ScrollView {
+                VStack(spacing: 20) {
+                    
+                    // MARK: - History Summary
+                    HistoryItem(record: nutriItem)
+                    
+                    // MARK: - Nutrition Section
+                    VStack(alignment: .leading, spacing: 16) {
+                        
+                        HStack {
+                            Text("Nutrition Analysis")
+                                .font(.title2)
+                                .bold()
+                            
+                            Spacer()
+                            
+                            Image(systemName: "chart.bar.fill")
+                                .foregroundColor(.green)
+                        }
+                        
+                        Divider()
+                        
+                        if let data = ocrData, !data.rows.isEmpty {
+                            VStack(spacing: 0) {
+                                ForEach(data.rows) { row in
+                                    NutriRowItem(record: NutriText(text: row.text))
+                                        .contentShape(Rectangle())
+                                        .onTapGesture {
+                                            withAnimation(.easeInOut) {
+                                                selectedRow = NutriText(text: row.text)
+                                            }
+                                        }
+                                }
+                            }
+                        } else {
+                            Text("Không có dữ liệu dinh dưỡng")
+                                .foregroundColor(.secondary)
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                                .background(Color.gray.opacity(0.1))
+                                .cornerRadius(12)
+                        }
+                    }
+                    .padding()
+                    .background(
+                        RoundedRectangle(cornerRadius: 20)
+                            .fill(Color(.secondarySystemBackground))
+                            .shadow(color: .black.opacity(0.05), radius: 6, y: 3)
+                    )
+                    
+                    InsightCard(title: "Warning",
+                                detail: "Không dùng cho trẻ em dưới 2 tuổi",
+                                color: .red)
+                    
+                    InsightCard(title: "Allergy",
+                                detail: "Sản phẩm có chứa sữa",
+                                color: .orange)
+                    
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Options")
                             .font(.title2)
                             .bold()
-                            .foregroundStyle(Color(.primary))
-
-                        Spacer()
-
-                        Image(systemName: "chart.bar.fill")
-                            .foregroundColor(.green)
+                        
+                        OptionCard(title: "Thêm vào yêu thích",
+                                   icon: "heart",
+                                   color: Color(.primary))
+                        
+                        OptionCard(title: "Chia sẻ",
+                                   icon: "square.and.arrow.up",
+                                   color: Color(.primary))
                     }
-
-                    Divider()
-
-                    // Hiển thị từng hàng OCR
-                    if let data = ocrData, !data.rows.isEmpty {
-                        VStack(spacing: 0) {
-                            ForEach(data.rows) { row in
-                                NutriRowItem(record: NutriText(text: row.text))
-                                    .contentShape(Rectangle())
-                                    .onTapGesture {
-                                        selectedRow = NutriText(text: row.text)
-                                    }
-                            }
-                            .sheet(item: $selectedRow) { row in
-                                VStack(spacing: 16) {
-                                    Text("Chi tiết")
-                                        .font(.headline)
-
-                                    Text(row.text)
-
-                                    Button("Đóng") {
-                                        selectedRow = nil
-                                    }
-                                }
-                                .padding()
-                            }
-
-                        }
-                    } else {
-                        Text("Không có dữ liệu dinh dưỡng")
-                            .font(.body)
-                            .foregroundColor(.secondary)
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color.gray.opacity(0.1))
-                            .cornerRadius(12)
-                    }
-
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 }
-                .padding()
-                .background(
-                    RoundedRectangle(cornerRadius: 20)
-                        .fill(Color(.secondarySystemBackground))
-                        .shadow(color: .black.opacity(0.05), radius: 6, y: 3)
-                )
-                
-                InsightCard(title: "Warning", detail: "Không dùng cho trẻ em dưới 2 tuổi", color: .orange)
-                
-                VStack(alignment: .leading, spacing: 12) {
-                    Text("Options")
-                        .font(.title2)
-                        .bold()
-                        .foregroundStyle(Color(.primary))
-                    OptionCard(title: "Thêm vào yêu thích", icon: "heart", color: Color(.primary))
-                    OptionCard(title: "Chia sẻ", icon: "square.and.arrow.up", color: Color(.primary))
-                }.frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.vertical)
             }
-            .padding(.vertical)
+            .padding(.horizontal, 20)
+            
+            
+            // MARK: - POPUP OVERLAY
+            if let row = selectedRow {
+                popupOverlay(for: row)
+            }
         }
-        .padding(.horizontal, 20)
     }
 }
+
+
+// MARK: - Popup UI
+
+extension NutritionInsights {
+    
+    @ViewBuilder
+    private func popupOverlay(for row: NutriText) -> some View {
+        ZStack {
+            
+            // Background blur/dim
+            Color.black.opacity(0.4)
+                .ignoresSafeArea()
+                .onTapGesture {
+                    withAnimation {
+                        selectedRow = nil
+                    }
+                }
+            
+            // Popup content
+            VStack(spacing: 20) {
+                
+                Text("Chi tiết")
+                    .font(.headline)
+                
+                Text(row.text)
+                    .multilineTextAlignment(.center)
+                    .font(.body)
+                
+                Button {
+                    withAnimation {
+                        selectedRow = nil
+                    }
+                } label: {
+                    Text("Đóng")
+                }
+            }
+            .padding(24)
+            .background(
+                RoundedRectangle(cornerRadius: 24)
+                    .fill(.ultraThinMaterial)
+                    .shadow(radius: 20)
+            )
+            .padding(.horizontal, 40)
+            .transition(.scale.combined(with: .opacity))
+        }
+        .zIndex(10)
+        .animation(.easeInOut(duration: 0.25), value: selectedRow)
+    }
+}
+
 
 
 #Preview {

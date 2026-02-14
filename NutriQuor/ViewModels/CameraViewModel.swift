@@ -120,8 +120,31 @@ class CameraViewModel: NSObject, ObservableObject {
         // Xoay ảnh để khớp với preview (portrait mode)
         let rotatedImage = ciImage.oriented(.right)
         
+        // Crop ảnh để khớp với aspect ratio của màn hình (giống như preview)
+        let screenSize = UIScreen.main.bounds.size
+        let screenAspect = screenSize.height / screenSize.width
+        
+        let imageSize = rotatedImage.extent.size
+        let imageAspect = imageSize.height / imageSize.width
+        
+        var cropRect = rotatedImage.extent
+        
+        if imageAspect > screenAspect {
+            // Ảnh cao hơn màn hình -> crop top và bottom
+            let targetHeight = imageSize.width * screenAspect
+            let yOffset = (imageSize.height - targetHeight) / 2
+            cropRect = CGRect(x: 0, y: yOffset, width: imageSize.width, height: targetHeight)
+        } else {
+            // Ảnh rộng hơn màn hình -> crop left và right
+            let targetWidth = imageSize.height / screenAspect
+            let xOffset = (imageSize.width - targetWidth) / 2
+            cropRect = CGRect(x: xOffset, y: 0, width: targetWidth, height: imageSize.height)
+        }
+        
+        let croppedImage = rotatedImage.cropped(to: cropRect)
+        
         let context = CIContext()
-        guard let cgImage = context.createCGImage(rotatedImage, from: rotatedImage.extent) else { return }
+        guard let cgImage = context.createCGImage(croppedImage, from: croppedImage.extent) else { return }
         
         // Tạo UIImage với orientation up (không cần xoay thêm)
         let image = UIImage(cgImage: cgImage, scale: 1.0, orientation: .up)

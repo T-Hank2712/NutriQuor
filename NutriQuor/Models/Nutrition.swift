@@ -11,7 +11,7 @@ struct Nutrition{
     let value: Double
 }
 
-struct NutriText: Identifiable {
+struct NutriText: Identifiable, Equatable {
     let id = UUID()
     let text: String
 }

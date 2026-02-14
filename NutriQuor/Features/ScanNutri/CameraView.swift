@@ -62,8 +62,11 @@ struct CameraView: View {
         if let image = viewState.capturedImage {
             Image(uiImage: image)
                 .resizable()
-                .scaledToFit()
+                .aspectRatio(contentMode: .fill)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(Color.black)
                 .ignoresSafeArea()
+                .clipped()
         } else {
             CameraPreview(session: viewModel.session)
                 .ignoresSafeArea()

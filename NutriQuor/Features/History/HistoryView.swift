@@ -101,15 +101,17 @@ struct HistoryView: View {
         )]
     var body: some View {
         VStack {
-            SearchBar(text: .constant(""))
+            Text("Lịch sử").font(.largeTitle).bold().foregroundColor(Color(.primary))
             ScrollView{
-                LazyVStack(spacing: 20){
+                FilterButton(title: "Past Week").frame(maxWidth: .infinity, alignment: .trailing)
+                Text("Hôm nay").font(.title2).bold().frame(maxWidth: .infinity, alignment: .leading).foregroundColor(.gray)
+                LazyVStack(spacing: 14){
                     ForEach(items){ item in
                         HistoryItem(record: item)
                     }
                 }
             }
-        }
+        }.padding(10)
     }
 }
 
