@@ -65,36 +65,25 @@ struct HomeView: View {
                     Spacer()
                     FilterButton(title: "Past Week")
                 }
-
-                BarChartView()
+                HStack(alignment: .bottom, spacing: 12) {
+                    ForEach(sampleData, id: \.day) { item in
+                        VStack {
+                            RoundedRectangle(cornerRadius: 6)
+                                .fill(Color.orange)
+                                .frame(width: 35,
+                                       height: item.value)
+                            
+                            Text(item.day)
+                                .font(.caption)
+                        }
+                    }
+                }
+                .frame(maxWidth: .infinity)
+                
             }
             .padding()
         }
         .background(Color(.systemBackground))
-    }
-}
-
-
-// MARK: - Bar Chart
-struct BarChartView: View {
-    let data: [CGFloat] = [1500, 2100, 1500, 1000, 1700, 2300, 1500]
-    let days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
-
-    var body: some View {
-        HStack(alignment: .bottom, spacing: 12) {
-            ForEach(data.indices, id: \.self) { index in
-                VStack {
-                    RoundedRectangle(cornerRadius: 6)
-                        .fill(index == 5 ? Color.blue : Color.blue.opacity(0.2))
-                        .frame(height: data[index] / 8)
-
-                    Text(days[index])
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
-            }
-        }
-        .padding(.top, 16)
     }
 }
 

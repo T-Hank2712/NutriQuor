@@ -35,9 +35,6 @@ struct HistoryItem: View {
                 }
             }
             Spacer()
-            Text(
-                record.time.formatted(.dateTime.hour().minute())
-            ).padding(15)
 
         }
         .overlay(

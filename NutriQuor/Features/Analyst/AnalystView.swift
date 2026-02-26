@@ -23,6 +23,7 @@ struct AnalystView: View {
                     .font(.largeTitle)
                     .bold()
                     .frame(maxWidth: .infinity, alignment: .leading)
+                    .foregroundColor(Color(.primary))
                 
                 // FILTER
                 HStack(spacing: 8) {
@@ -126,6 +127,25 @@ struct AnalystView: View {
                                 value: 600,
                                 color: .red)
                 }
+                
+                Text("Top calories meals")
+                    .font(.title2).bold()
+                HistoryItem(record: History(
+                    image: Image("Example"),
+                    title: "Bánh quy ABC",
+                    warning: "Nhiều đường",
+                    score: "Xấu",
+                    time: Calendar.current.date(
+                        from: DateComponents(
+                            year: 2025,
+                            month: 1,
+                            day: 24,
+                            hour: 21,
+                            minute: 04
+                        )
+                    )!
+                ))
+                    
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal)
