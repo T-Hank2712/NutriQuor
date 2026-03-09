@@ -71,7 +71,6 @@ struct SearchBar: View {
                     )
             )
             .shadow(color: .black.opacity(0.1), radius: 5, y: 3)
-            .padding(.horizontal)
             .animation(.easeOut(duration: 0.2), value: isFocused)
         }
 }

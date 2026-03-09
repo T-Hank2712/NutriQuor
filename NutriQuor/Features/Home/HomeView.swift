@@ -8,6 +8,26 @@
 import SwiftUI
 
 struct HomeView: View {
+    let items: [History] = [
+        History(
+            image: Image("Example"),
+            title: "Bánh quy ABC",
+            warning: "Nhiều đường",
+            score: "Xấu",
+            time: Calendar.current.date(
+                from: DateComponents(year: 2025, month: 1, day: 24, hour: 21, minute: 04)
+            )!
+        ),
+        History(
+            image: Image("Example"),
+            title: "Sữa tươi XYZ",
+            warning: "Ít đường",
+            score: "Tốt",
+            time: Calendar.current.date(
+                from: DateComponents(year: 2025, month: 1, day: 24, hour: 18, minute: 15)
+            )!
+        )
+    ]
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
@@ -30,16 +50,14 @@ struct HomeView: View {
                     Image(systemName: "line.3.horizontal")
                         .font(.title2)
                 }
+                
+                HealthScoreCard()
 
                 // TITLE + FILTER
                 HStack {
                     Text("Indexes")
-                        .font(.largeTitle)
+                        .font(.title)
                         .fontWeight(.bold)
-
-                    Spacer()
-
-                    FilterButton(title: "Today")
                 }
 
                 // STATS GRID
@@ -55,31 +73,15 @@ struct HomeView: View {
                     StatCard(nutri: Nutrition(name: "Sugars", unit: "kcal", value: 50.0), icon: "birthday.cake.fill", iconColor: .orange)
                     StatCard(nutri: Nutrition(name: "Fats", unit: "kcal", value: 50.0), icon: "atom", iconColor: .yellow)
                 }
-
-                // PEDOMETER
-                HStack {
-                    Text("Pedometer")
-                        .font(.title2)
-                        .fontWeight(.bold)
-
-                    Spacer()
-                    FilterButton(title: "Past Week")
-                }
-                HStack(alignment: .bottom, spacing: 12) {
-                    ForEach(sampleData, id: \.day) { item in
-                        VStack {
-                            RoundedRectangle(cornerRadius: 6)
-                                .fill(Color.orange)
-                                .frame(width: 35,
-                                       height: item.value)
-                            
-                            Text(item.day)
-                                .font(.caption)
-                        }
-                    }
-                }
-                .frame(maxWidth: .infinity)
                 
+                HStack {
+                    Text("Scans")
+                        .font(.title)
+                        .fontWeight(.bold)
+                }
+                ForEach(items) { item in
+                    HistoryItem(record: item)
+                }
             }
             .padding()
         }

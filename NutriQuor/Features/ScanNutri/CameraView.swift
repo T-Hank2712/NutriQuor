@@ -1,25 +1,20 @@
-//
-//  CameraView.swift
-//  NutriQuor
-//
-//  Created by Lâm Tấn Thành on 14/1/26.
-//
-
 import SwiftUI
 import PhotosUI
 import UIKit
 
 struct CameraView: View {
-    @Environment(\.dismiss) var dismiss
+    
+    @Environment(\.dismiss) private var dismiss
+    
     @StateObject private var viewModel = CameraViewModel()
     @StateObject private var viewState = CameraViewState()
-
+    
     var body: some View {
+        
         ZStack {
-            // Camera hoặc ảnh đã chụp
+            
             cameraOrImageView
             
-            // Header và controls
             VStack {
                 headerView
                 Spacer()
@@ -28,104 +23,127 @@ struct CameraView: View {
             }
         }
         .background(Color.black.ignoresSafeArea())
+        
         .onDisappear {
             viewModel.stopSession()
         }
-        .onChange(of: viewModel.images) { newImages in
+        
+        .onChange(of: viewModel.images) { _, newImages in
             handleCapturedImage(newImages)
         }
-        .onChange(of: viewState.selectedPhotoItem) { newItem in
+        
+        .onChange(of: viewState.selectedPhotoItem) { _, newItem in
             handleSelectedPhoto(newItem)
         }
+        
         .alert("Lỗi", isPresented: $viewState.showAlert) {
             Button("OK", role: .cancel) {}
         } message: {
-            if let error = viewState.uploadError {
-                Text(error)
-            }
+            Text(viewState.uploadError ?? "")
         }
+        
         .fullScreenCover(isPresented: $viewState.showOCRResult) {
             NutritionInsights(
                 nutriItem: createHistoryItem(),
-                nutrition: createNutritionSample(),
-                ocrData: viewState.ocrResult
-            ) {
-                dismiss()
-            }
+                onDismiss: {}
+            )
         }
     }
     
-    // MARK: - View Components
+    // MARK: - Camera / Image
     
     @ViewBuilder
     private var cameraOrImageView: some View {
+        
         if let image = viewState.capturedImage {
+            
             Image(uiImage: image)
                 .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(Color.black)
+                .scaledToFill()
                 .ignoresSafeArea()
-                .clipped()
+            
         } else {
+            
             CameraPreview(session: viewModel.session)
                 .ignoresSafeArea()
-                .onAppear {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                        viewModel.startSession()
-                    }
+                .task {
+                    viewModel.startSession()
                 }
         }
     }
     
+    // MARK: - Header
+    
     private var headerView: some View {
+        
         HStack {
+            
             Button {
                 dismiss()
             } label: {
                 Image(systemName: "xmark")
-                    .font(.system(size: 20, weight: .semibold))
+                    .font(.system(size: 18, weight: .semibold))
                     .foregroundColor(.white)
                     .frame(width: 40, height: 40)
-                    .background(Circle().fill(Color.black.opacity(0.5)))
+                    .background(Circle().fill(.black.opacity(0.6)))
             }
+            
             Spacer()
             
             if viewState.capturedImage != nil {
-                Button("Sử dụng") {
+                
+                Button {
                     uploadImage()
+                } label: {
+                    
+                    ZStack {
+                        
+                        Text("Sử dụng")
+                            .font(.headline)
+                        
+                        if viewModel.isUploading {
+                            ProgressView()
+                                .tint(.white)
+                        }
+                    }
                 }
-                .font(.headline)
                 .foregroundColor(.white)
                 .padding(.horizontal, 20)
                 .padding(.vertical, 10)
-                .background(Capsule().fill(viewModel.isUploading ? Color.gray : Color.green))
+                .background(
+                    Capsule()
+                        .fill(viewModel.isUploading ? .gray : .green)
+                )
                 .disabled(viewModel.isUploading)
-                .overlay {
-                    if viewModel.isUploading {
-                        ProgressView()
-                            .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                    }
-                }
             }
         }
         .padding()
     }
     
+    // MARK: - Upload Status
+    
     @ViewBuilder
     private var uploadStatusView: some View {
+        
         if viewModel.isUploading && !viewModel.uploadStatus.isEmpty {
+            
             Text(viewModel.uploadStatus)
                 .font(.headline)
                 .foregroundColor(.white)
                 .padding()
-                .background(Capsule().fill(Color.black.opacity(0.7)))
+                .background(
+                    Capsule()
+                        .fill(.black.opacity(0.7))
+                )
                 .padding(.bottom, 20)
         }
     }
     
+    // MARK: - Controls
+    
     @ViewBuilder
     private var controlsView: some View {
+        
         if viewState.capturedImage != nil {
             retakeButton
         } else {
@@ -133,14 +151,16 @@ struct CameraView: View {
         }
     }
     
+    // MARK: Retake
+    
     private var retakeButton: some View {
+        
         Button {
             viewState.reset()
             viewModel.resetCapture()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                viewModel.startSession()
-            }
+            viewModel.startSession()
         } label: {
+            
             HStack {
                 Image(systemName: "arrow.clockwise")
                 Text("Chụp lại")
@@ -149,40 +169,54 @@ struct CameraView: View {
             .foregroundColor(.white)
             .padding(.horizontal, 30)
             .padding(.vertical, 15)
-            .background(Capsule().fill(Color.black.opacity(0.6)))
+            .background(
+                Capsule()
+                    .fill(.black.opacity(0.6))
+            )
         }
         .padding(.bottom, 40)
     }
     
+    // MARK: Capture Controls
+    
     private var captureControls: some View {
+        
         ZStack {
-            // Nút chọn ảnh từ thư viện
+            
             HStack {
+                
                 PhotosPicker(
                     selection: $viewState.selectedPhotoItem,
-                    matching: .images,
-                    photoLibrary: .shared()
+                    matching: .images
                 ) {
+                    
                     Image(systemName: "photo.on.rectangle")
                         .font(.system(size: 26))
                         .foregroundColor(.white)
                         .frame(width: 55, height: 55)
-                        .background(Circle().fill(Color.black.opacity(0.6)))
+                        .background(
+                            Circle()
+                                .fill(.black.opacity(0.6))
+                        )
                 }
+                
                 Spacer()
             }
             .padding(.horizontal, 40)
             
-            // Nút chụp ảnh
+            
             Button {
                 viewModel.capturePhoto()
             } label: {
+                
                 ZStack {
+                    
                     Circle()
-                        .strokeBorder(Color.white, lineWidth: 4)
+                        .strokeBorder(.white, lineWidth: 4)
                         .frame(width: 75, height: 75)
+                    
                     Circle()
-                        .fill(Color.white)
+                        .fill(.white)
                         .frame(width: 65, height: 65)
                 }
             }
@@ -190,36 +224,48 @@ struct CameraView: View {
         .padding(.bottom, 40)
     }
     
-    // MARK: - Methods
     
-    private func handleCapturedImage(_ newImages: [UIImage]) {
-        guard let image = newImages.first else { return }
+    // MARK: - Image Handling
+    
+    private func handleCapturedImage(_ images: [UIImage]) {
+        
+        guard let image = images.first else { return }
+        
         viewState.capturedImage = image
         viewModel.stopSession()
     }
     
-    private func handleSelectedPhoto(_ newItem: PhotosPickerItem?) {
-        guard let item = newItem else { return }
+    
+    private func handleSelectedPhoto(_ item: PhotosPickerItem?) {
+        
+        guard let item else { return }
         
         Task {
+            
             if let data = try? await item.loadTransferable(type: Data.self),
-               let uiImage = UIImage(data: data) {
+               let image = UIImage(data: data) {
+                
                 await MainActor.run {
-                    viewState.capturedImage = uiImage
+                    viewState.capturedImage = image
                     viewModel.stopSession()
                 }
             }
         }
     }
     
+    
+    // MARK: Upload
+    
     private func uploadImage() {
+        
         guard let image = viewState.capturedImage else { return }
         
         Task {
+            
             await viewModel.uploadAndAnalyze(image: image)
             
-            // Sync state từ ViewModel sang ViewState
             await MainActor.run {
+                
                 viewState.uploadError = viewModel.uploadError
                 viewState.ocrResult = viewModel.ocrResult
                 
@@ -232,23 +278,17 @@ struct CameraView: View {
         }
     }
     
-    // MARK: - Helper Methods
+    
+    // MARK: Mock Data
     
     private func createHistoryItem() -> History {
+        
         History(
             image: Image(systemName: "photo"),
             title: "Phân tích dinh dưỡng",
             warning: "Đang phân tích...",
             score: "0",
             time: Date()
-        )
-    }
-    
-    private func createNutritionSample() -> Nutrition {
-        Nutrition(
-            name: "Sample",
-            unit: "g",
-            value: 0.0
         )
     }
 }

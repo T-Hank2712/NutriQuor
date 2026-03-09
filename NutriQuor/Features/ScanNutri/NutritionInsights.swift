@@ -9,8 +9,6 @@ import SwiftUI
 
 struct NutritionInsights: View {
     let nutriItem: History
-    let nutrition: Nutrition
-    let ocrData: OCRData?
     let onDismiss: () -> Void
     
     @State private var selectedRow: NutriText?
@@ -19,86 +17,64 @@ struct NutritionInsights: View {
         ZStack {
             
             ScrollView {
-                VStack(spacing: 20) {
+                VStack(alignment: .leading, spacing: 20) {
                     
-                    // MARK: - History Summary
-                    HistoryItem(record: nutriItem)
+                    // MARK: - Product
+                    ProductCard()
                     
-                    // MARK: - Nutrition Section
-                    VStack(alignment: .leading, spacing: 16) {
-                        
+                    // MARK: - Score
+                    HealthScoreRing(title: "HEALTH SCORE",score: 70, size: 220, lineWidth: 16)
+                    
+                    // MARK: - Alert
+                    InsightCard(color: .red, title: "Warning", description: "Không giành cho trẻ em dưới 3 tuổi.")
+                    InsightCard(color: .orange, title: "Allergy", description: "Sản phẩm có chứa Sữa.")
+                    
+                    // MARK: - Ingredients
+                    Text("Contains")
+                        .font(.title2)
+                        .bold()
+                    HStack(spacing: 20){
+                        ContainCard(title: "Ingredients", good: "6 Healthy", bad: "2 To Limit", color: .green)
+                        ContainCard(title: "Additives", good: "", bad: "6 adds", color: .orange)
+                    }
+                    Button {
+                        print("View All")
+                    } label: {
                         HStack {
-                            Text("Nutrition Analysis")
-                                .font(.title2)
-                                .bold()
-                            
-                            Spacer()
-                            
-                            Image(systemName: "chart.bar.fill")
-                                .foregroundColor(.green)
+                            Image(systemName: "ellipsis.circle")
+                            Text("View All Ingredients")
                         }
-                        
-                        Divider()
-                        
-                        if let data = ocrData, !data.rows.isEmpty {
-                            VStack(spacing: 0) {
-                                ForEach(data.rows) { row in
-                                    NutriRowItem(record: NutriText(text: row.text))
-                                        .contentShape(Rectangle())
-                                        .onTapGesture {
-                                            withAnimation(.easeInOut) {
-                                                selectedRow = NutriText(text: row.text)
-                                            }
-                                        }
-                                }
-                            }
-                        } else {
-                            Text("Không có dữ liệu dinh dưỡng")
-                                .foregroundColor(.secondary)
-                                .padding()
-                                .frame(maxWidth: .infinity)
-                                .background(Color.gray.opacity(0.1))
-                                .cornerRadius(12)
-                        }
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.gray.opacity(0.1))
+                        .foregroundColor(.black)
+                        .cornerRadius(12)
                     }
-                    .padding()
-                    .background(
-                        RoundedRectangle(cornerRadius: 20)
-                            .fill(Color(.secondarySystemBackground))
-                            .shadow(color: .black.opacity(0.05), radius: 6, y: 3)
-                    )
-                    
-                    InsightCard(title: "Warning",
-                                detail: "Không dùng cho trẻ em dưới 2 tuổi",
-                                color: .red)
-                    
-                    InsightCard(title: "Allergy",
-                                detail: "Sản phẩm có chứa sữa",
-                                color: .orange)
-                    
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("Options")
-                            .font(.title2)
-                            .bold()
-                        
-                        OptionCard(title: "Thêm vào yêu thích",
-                                   icon: "heart",
-                                   color: Color(.primary))
-                        
-                        OptionCard(title: "Chia sẻ",
-                                   icon: "square.and.arrow.up",
-                                   color: Color(.primary))
+                    Text("Nutrition")
+                        .font(.title2)
+                        .bold()
+                    //MARK: - Nutrient
+                    HStack{
+                        NutrientCard(title: "PROTEIN", value: "8g", color: .red, icon: "drop.fill")
+                        NutrientCard(title: "CARBS", value: "12g", color: .blue, icon: "drop.fill")
+                        NutrientCard(title: "FAT", value: "14g", color: .green, icon: "drop.fill")
                     }
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                    
+                    // MARK: - Options
+                    Text("Options")
+                        .font(.title2)
+                        .bold()
+                    
+                    OptionCard(title: "Thêm vào yêu thích",
+                               icon: "heart",
+                               color: Color(.primary))
+                    
+                    OptionCard(title: "Chia sẻ",
+                               icon: "square.and.arrow.up",
+                               color: Color(.primary))
                 }
-                .padding(.vertical)
-            }
-            .padding(.horizontal, 20)
-            
-            
-            // MARK: - POPUP OVERLAY
-            if let row = selectedRow {
-                popupOverlay(for: row)
+                .padding(.horizontal, 20)
+                
             }
         }
     }
@@ -106,54 +82,6 @@ struct NutritionInsights: View {
 
 
 // MARK: - Popup UI
-
-extension NutritionInsights {
-    
-    @ViewBuilder
-    private func popupOverlay(for row: NutriText) -> some View {
-        ZStack {
-            
-            // Background blur/dim
-            Color.black.opacity(0.4)
-                .ignoresSafeArea()
-                .onTapGesture {
-                    withAnimation {
-                        selectedRow = nil
-                    }
-                }
-            
-            // Popup content
-            VStack(spacing: 20) {
-                
-                Text("Chi tiết")
-                    .font(.headline)
-                
-                Text(row.text)
-                    .multilineTextAlignment(.center)
-                    .font(.body)
-                
-                Button {
-                    withAnimation {
-                        selectedRow = nil
-                    }
-                } label: {
-                    Text("Đóng")
-                }
-            }
-            .padding(24)
-            .background(
-                RoundedRectangle(cornerRadius: 24)
-                    .fill(.ultraThinMaterial)
-                    .shadow(radius: 20)
-            )
-            .padding(.horizontal, 40)
-            .transition(.scale.combined(with: .opacity))
-        }
-        .zIndex(10)
-        .animation(.easeInOut(duration: 0.25), value: selectedRow)
-    }
-}
-
 
 
 #Preview {
@@ -172,24 +100,6 @@ extension NutritionInsights {
             )
         )!
         ),
-                      nutrition: Nutrition(
-                        name: "Calories",
-                        unit: "kcal",
-                        value: 100.0
-                        ),
-                      ocrData: OCRData(
-                          fullText: "Năng lượng/ Energy 94 kcal\nChất béo/ Fat 1.3 g\nProtein 1.4 g",
-                          rows: [
-                              OCRRow(rowNumber: 1, text: "Năng lượng/ Energy 94 (5%) kcal", items: nil),
-                              OCRRow(rowNumber: 2, text: "Chất béo/ Fat 1.3 (2%) g", items: nil),
-                              OCRRow(rowNumber: 3, text: "Chất đạm/ Protein 1.4 (3%) g", items: nil)
-                          ],
-                          nutritionInfo: [
-                              "energy": "Năng lượng/ Energy 94 (5%) kcal",
-                              "fat": "Chất béo/ Fat 1.3 (2%) g",
-                              "protein": "Chất đạm/ Protein 1.4 (3%) g"
-                          ]
-                      ),
-                      onDismiss: {}
+        onDismiss: {}
     )
 }

@@ -30,8 +30,8 @@ struct SummaryCard: View {
             }
             
             HStack(spacing: 8) {
-                Tag(text: day)
-                Tag(text: date)
+//                Tag(text: day)
+//                Tag(text: date)
             }
             
             ZStack {
@@ -50,18 +50,6 @@ struct SummaryCard: View {
             RoundedRectangle(cornerRadius: 20)
                 .fill(Color(.systemGray6))
         )
-    }
-}
-struct Tag: View {
-    var text: String
-    
-    var body: some View {
-        Text(text)
-            .font(.caption)
-            .padding(.horizontal, 10)
-            .padding(.vertical, 6)
-            .background(Color.blue.opacity(0.2))
-            .cornerRadius(8)
     }
 }
 #Preview {
