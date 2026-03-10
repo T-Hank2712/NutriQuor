@@ -61,7 +61,7 @@ struct EditProfile: View {
                     }
                     .pickerStyle(.menu)
                 }
-
+                
                 
                 PrimaryGoalsCard()
                 
@@ -87,7 +87,7 @@ struct EditProfile: View {
                             .fontWeight(.bold)
                     }
                 }
-
+                
             }
             .navigationTitle("Edit Profile")
         }.background()

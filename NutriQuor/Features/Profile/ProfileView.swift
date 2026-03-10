@@ -27,7 +27,7 @@ struct ProfileView: View {
                     .fontWeight(.bold)
                     .padding(.horizontal, 6)
                     .padding(.vertical, 3)
-                    .background(Color.green)
+                    .background(Color(.primary))
                     .foregroundColor(.white)
                     .clipShape(Capsule())
                     .offset(x: 6, y: 6)
@@ -48,7 +48,7 @@ struct ProfileView: View {
                     }
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.green)
+                    .background(Color(.primary))
                     .foregroundColor(.white)
                     .cornerRadius(16)
                 }

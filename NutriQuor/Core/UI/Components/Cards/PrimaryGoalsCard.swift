@@ -38,7 +38,7 @@ struct PrimaryGoalsCard: View {
                 } label: {
                     Image(systemName: "plus.circle.fill")
                         .font(.title)
-                        .foregroundStyle(.green)
+                        .foregroundStyle(Color(.primary))
                 }
             }
             
