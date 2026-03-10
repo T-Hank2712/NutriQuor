@@ -14,7 +14,7 @@ struct MedicalConditionsCard: View {
         VStack(alignment: .leading, spacing: 12) {
             
             HStack {
-                Image(systemName: "cross.case.fill")
+                Image(systemName: "cross.case.fill").foregroundStyle(.blue)
                 Text("Medical Conditions")
                     .fontWeight(.bold)
                 

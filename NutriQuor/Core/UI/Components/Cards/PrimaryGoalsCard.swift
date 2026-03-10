@@ -26,7 +26,7 @@ struct PrimaryGoalsCard: View {
         VStack(alignment: .leading, spacing: 12) {
             
             HStack {
-                Image(systemName: "target")
+                Image(systemName: "target").foregroundStyle(.green)
                 
                 Text("Primary Health Goals")
                     .fontWeight(.bold)

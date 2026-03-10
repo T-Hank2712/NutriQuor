@@ -14,7 +14,7 @@ struct AllergiesCard: View {
         VStack(alignment: .leading, spacing: 12) {
             
             HStack {
-                Image(systemName: "exclamationmark.triangle")
+                Image(systemName: "exclamationmark.triangle").foregroundStyle(.orange)
                 Text("Allergies")
                     .fontWeight(.bold)
             }

@@ -58,6 +58,10 @@ struct ProfileView: View {
                 MedicalConditionsCard()
                 
                 AllergiesCard()
+                
+                FamilyProfilesCard()
+                
+                
             }
             .padding()
         }
