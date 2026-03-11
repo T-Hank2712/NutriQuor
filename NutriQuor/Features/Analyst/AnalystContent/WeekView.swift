@@ -30,6 +30,23 @@ struct WeekView: View {
                     LitmitBar(title: "Sugar", value: 10, limit: 50, unit: "g", color: .yellow)
                     LitmitBar(title: "Carbs", value: 100, limit: 600, unit: "g", color: .blue)
                 }
+                
+                // MARK: - Best and worst day
+                HStack(spacing: 10){
+                    SummaryCard(title: "Best Day",
+                                icon: "star.fill",
+                                day: "20/6",
+                                date: "Today",
+                                value: 1500,
+                                color: .green)
+                    
+                    SummaryCard(title: "Worst Day",
+                                icon: "exclamationmark.triangle.fill",
+                                day: "17/6",
+                                date: "3 days ago",
+                                value: 600,
+                                color: .red)
+                }
             }.padding(.vertical, 20)
         }
     }

@@ -2,8 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>PrivPrivacy - Camera Usage Description</key>
-	<string>NutriQuor cần camera để chụp ảnh món ăn</string>
+	<key>NSCameraUsageDescription</key>
+	<string>NutriQuor cần quyền truy cập camera để chụp ảnh món ăn và phân tích dinh dưỡng</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
