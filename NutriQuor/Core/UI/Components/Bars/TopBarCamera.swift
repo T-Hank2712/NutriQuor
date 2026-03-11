@@ -9,6 +9,8 @@ import SwiftUI
 
 struct TopBarCamera: View {
     
+    @Environment(\.dismiss) private var dismiss   // 👈 thêm dòng này
+    
     @State private var selectedMode = "Tôi"
     @State private var showDropdown = false
     
@@ -19,7 +21,12 @@ struct TopBarCamera: View {
             
             // Nút X bên trái
             HStack {
-                CircleButton(icon: "xmark")
+                Button {
+                    dismiss()   // 👈 quay lại màn trước
+                } label: {
+                    CircleButton(icon: "xmark")
+                }
+                
                 Spacer()
             }
             
@@ -53,7 +60,7 @@ struct TopBarCamera: View {
                         selectedMode: $selectedMode,
                         showDropdown: $showDropdown
                     )
-                    .offset(y: 45)   // dropdown rơi xuống dưới title
+                    .offset(y: 45)
                     .transition(.opacity.combined(with: .move(edge: .top)))
                 }
             }

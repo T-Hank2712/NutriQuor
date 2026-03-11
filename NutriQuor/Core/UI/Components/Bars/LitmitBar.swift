@@ -46,13 +46,12 @@ struct LitmitBar: View {
 
         }
         .padding()
-        .background(Color.white)
+        .background(
+            RoundedRectangle(cornerRadius: 20)
+                .stroke(color)
+        )
         .cornerRadius(16)
         
-        .overlay(
-            RoundedRectangle(cornerRadius: 16)
-                .stroke(color, lineWidth: 1)
-        )
     }
 }
 

@@ -49,7 +49,11 @@ struct PrimaryGoalsCard: View {
             }
         }
         .padding()
-        .background(.white)
+        .background(Color(.systemBackground))
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+        )
         .cornerRadius(16)
         .shadow(radius: 2)
         

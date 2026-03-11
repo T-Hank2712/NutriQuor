@@ -43,7 +43,10 @@ struct HealthScoreCard: View {
             }
         }
         .padding()
-        .background(Color.white)
+        .background(
+            RoundedRectangle(cornerRadius: 20)
+                .stroke(Color.gray.opacity(0.2))
+        )
         .cornerRadius(20)
     }
 }

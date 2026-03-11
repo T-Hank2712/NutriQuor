@@ -26,10 +26,10 @@ struct ConditionRow: View {
                 .font(.caption2)
                 .padding(.horizontal, 8)
                 .padding(.vertical, 4)
-                .background(Color.white)
+                .background(Color(.systemBackground))
                 .overlay(
                     RoundedRectangle(cornerRadius: 6)
-                        .stroke(color.opacity(0.3))
+                        .stroke(Color.gray.opacity(0.3), lineWidth: 1)
                 )
                 .foregroundColor(color)
         }

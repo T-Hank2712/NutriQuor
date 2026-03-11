@@ -36,7 +36,10 @@ struct MedicalConditionsCard: View {
             )
         }
         .padding()
-        .background(Color.white)
+        .background(
+            RoundedRectangle(cornerRadius: 20)
+                .stroke(Color.gray.opacity(0.5))
+        )
         .cornerRadius(16)
         .shadow(radius: 2)
     }
