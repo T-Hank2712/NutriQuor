@@ -13,6 +13,7 @@ struct CameraView: View {
     @State private var croppedImage: UIImage?
     @State private var cutoutRect: CGRect = .zero
     @State private var showImagePreview = false
+    @Environment(\.dismiss) var dismiss
     
     let frameHeight: CGFloat = 550
     let horizontalPadding: CGFloat = 20
@@ -102,8 +103,24 @@ struct CameraView: View {
             
                 VStack {
                     
-                    TopBarCamera()
-                        .padding(.horizontal, 10)
+                    HStack {
+                        Button {
+                            dismiss()
+                        } label: {
+                            Image(systemName: "xmark")
+                                .font(.title2)
+                                .foregroundColor(.white)
+                                .frame(width: 44, height: 44)
+                        }
+                        
+                        
+                        Spacer()
+                        
+                        Color.clear
+                            .frame(width: 44, height: 44)
+                    }
+                    .padding()
+                    .background(Color.black.opacity(0.5))
                     
                     
                     Spacer()

@@ -19,7 +19,7 @@ struct BottomControlCamera: View {
                     onCapture()
                 }
             Spacer()
-            CircleButton(icon: "arrow.trianglehead.2.clockwise")
+            CircleButton(icon: "flashlight.off.fill")
         }
     }
 }
