@@ -20,8 +20,8 @@ struct AllergiesCard: View {
             }
             
             HStack {
-                AllergyTag(text: "Nuts", color: .red)
-                AllergyTag(text: "Gluten", color: .orange)
+                TagCanDelete(text: "Nuts", color: .red)
+                TagCanDelete(text: "Gluten", color: .orange)
                 
                 Button {
                     

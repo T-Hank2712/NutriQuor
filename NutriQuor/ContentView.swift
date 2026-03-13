@@ -16,15 +16,15 @@ struct ContentView: View {
                     .tabItem {
                         Label("Home", systemImage: "house")
                     }
+                // SEARCH
+                SearchView()
+                    .tabItem {
+                        Label("Search", systemImage: "magnifyingglass")
+                    }
                 // HISTORY
                 HistoryView()
                     .tabItem {
                         Label("History", systemImage: "clock.arrow.circlepath")
-                    }
-                // ANALYST
-                AnalystView()
-                    .tabItem {
-                        Label("Analyst", systemImage: "chart.bar.xaxis")
                     }
                 // PROFILE
                 ProfileView()

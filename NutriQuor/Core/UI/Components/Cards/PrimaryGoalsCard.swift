@@ -16,7 +16,7 @@ struct GoalTag: Identifiable {
 struct PrimaryGoalsCard: View {
     
     @State private var tags: [GoalTag] = [
-        GoalTag(text: "Lose weight", color: .green)
+        GoalTag(text: "Lose weight", color: .green),
     ]
     
     @State private var showGoalPicker = false

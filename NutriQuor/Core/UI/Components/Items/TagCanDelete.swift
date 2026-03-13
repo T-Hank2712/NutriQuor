@@ -1,5 +1,5 @@
 //
-//  AllergyTag.swift
+//  TagCanDelete.swift
 //  NutriQuor
 //
 //  Created by Lâm Tấn Thành on 9/3/26.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct AllergyTag: View {
+struct TagCanDelete: View {
     
     var text: String
     var color: Color
@@ -27,5 +27,5 @@ struct AllergyTag: View {
 }
 
 #Preview {
-    AllergyTag(text: "Nuts", color: .red)
+    TagCanDelete(text: "Nuts", color: .red)
 }

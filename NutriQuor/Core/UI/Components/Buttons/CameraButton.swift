@@ -27,7 +27,7 @@ struct CameraButton: View {
                             .shadow(radius: 10)
                     )
             }
-            .offset(y: -20)
+            .offset(y: -30)
             .fullScreenCover(isPresented: $showCamera) {
                 CameraView()
             }

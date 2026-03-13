@@ -1,5 +1,5 @@
 //
-//  NutritionInsights.swift
+//  AnalystView.swift
 //  NutriQuor
 //
 //  Created by Lâm Tấn Thành on 26/1/26.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct NutritionInsights: View {
+struct AnalystView: View {
     let nutriItem: History
     let onDismiss: () -> Void
     
@@ -22,12 +22,20 @@ struct NutritionInsights: View {
                     // MARK: - Product
                     ProductCard()
                     
-                    // MARK: - Score
-                    HealthScoreRing(title: "HEALTH SCORE",score: 70, size: 220, lineWidth: 16)
+                    Text("Nutrition")
+                        .font(.title2)
+                        .bold()
+                    //MARK: - Nutrient
+                    HStack{
+                        NutrientCard(title: "PROTEIN", value: "8g", color: .red, icon: "drop.fill")
+                        NutrientCard(title: "CARBS", value: "12g", color: .blue, icon: "drop.fill")
+                        NutrientCard(title: "FAT", value: "14g", color: .green, icon: "drop.fill")
+                    }
+                    
                     
                     // MARK: - Alert
-                    InsightCard(color: .red, title: "Warning", description: "Không giành cho trẻ em dưới 3 tuổi.")
-                    InsightCard(color: .orange, title: "Allergy", description: "Sản phẩm có chứa Sữa.")
+                    AlertCard(color: .red, title: "Warning", description: "Không giành cho trẻ em dưới 3 tuổi.")
+                    AlertCard(color: .orange, title: "Allergy", description: "Sản phẩm có chứa Sữa.")
                     
                     // MARK: - Ingredients
                     Text("Contains")
@@ -50,16 +58,6 @@ struct NutritionInsights: View {
                         .foregroundColor(.black)
                         .cornerRadius(12)
                     }
-                    Text("Nutrition")
-                        .font(.title2)
-                        .bold()
-                    //MARK: - Nutrient
-                    HStack{
-                        NutrientCard(title: "PROTEIN", value: "8g", color: .red, icon: "drop.fill")
-                        NutrientCard(title: "CARBS", value: "12g", color: .blue, icon: "drop.fill")
-                        NutrientCard(title: "FAT", value: "14g", color: .green, icon: "drop.fill")
-                    }
-                    
                     // MARK: - Options
                     Text("Options")
                         .font(.title2)
@@ -85,7 +83,7 @@ struct NutritionInsights: View {
 
 
 #Preview {
-    NutritionInsights(nutriItem: History(
+    AnalystView(nutriItem: History(
         image: Image("Example"),
         title: "Bánh quy ABC",
         warning: "Nhiều đường",

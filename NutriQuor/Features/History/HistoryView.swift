@@ -24,59 +24,69 @@ struct HistoryView: View {
     ]
     
     var body: some View {
-        VStack(alignment: .leading) {
-            
-            Text("Lịch sử")
-                .font(.largeTitle)
-                .bold()
-                .foregroundStyle(Color(.primary))
-            
-            ScrollView {
-                DatePicker(
-                    "",
-                    selection: $selectedDate,
-                    displayedComponents: .date
-                )
-                .datePickerStyle(.compact)
-                .labelsHidden()
-                .frame(maxWidth: .infinity, alignment: .leading)
+        NavigationStack{
+            VStack(alignment: .leading) {
                 
-                Text("Hôm nay")
-                    .font(.title2)
+                Text("Lịch sử")
+                    .font(.largeTitle)
                     .bold()
-                    .foregroundColor(.gray)
-                    .padding(.vertical, 8)
+                    .foregroundStyle(Color(.primary))
                 
-                LazyVStack(spacing: 24) {
-                    ForEach(items.sorted(by: { $0.time > $1.time })) { item in
-                        
-                        HStack(alignment: .top, spacing: 16) {
+                ScrollView {
+                    DatePicker(
+                        "",
+                        selection: $selectedDate,
+                        displayedComponents: .date
+                    )
+                    .datePickerStyle(.compact)
+                    .labelsHidden()
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    
+                    Text("Hôm nay")
+                        .font(.title2)
+                        .bold()
+                        .foregroundColor(.gray)
+                        .padding(.vertical, 8)
+                    
+                    LazyVStack(spacing: 24) {
+                        ForEach(items.sorted(by: { $0.time > $1.time })) { item in
                             
-                            // MARK: - Time + Timeline
-                            VStack {
-                                Rectangle()
-                                    .fill(Color.gray.opacity(0.2))
-                                    .frame(width: 2)
-                                    .frame(maxHeight: .infinity)
-                                Text(formatTime(item.time))
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
+                            HStack(alignment: .top, spacing: 16) {
                                 
-                                Rectangle()
-                                    .fill(Color.gray.opacity(0.2))
-                                    .frame(width: 2)
-                                    .frame(maxHeight: .infinity)
+                                // MARK: - Time + Timeline
+                                VStack {
+                                    Rectangle()
+                                        .fill(Color.gray.opacity(0.2))
+                                        .frame(width: 2)
+                                        .frame(maxHeight: .infinity)
+                                    Text(formatTime(item.time))
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                    
+                                    Rectangle()
+                                        .fill(Color.gray.opacity(0.2))
+                                        .frame(width: 2)
+                                        .frame(maxHeight: .infinity)
+                                }
+                                .frame(width: 60)
+                                
+                                // MARK: - Card
+                                NavigationLink {
+                                    AnalystView(
+                                        nutriItem: item,
+                                        onDismiss: {}
+                                    )
+                                } label: {
+                                    HistoryItem(record: item)
+                                }
+                                .buttonStyle(.plain)
                             }
-                            .frame(width: 60)
-                            
-                            // MARK: - Card
-                            HistoryItem(record: item)
                         }
                     }
                 }
             }
+            .padding()
         }
-        .padding()
     }
     
     // MARK: - Format Time
