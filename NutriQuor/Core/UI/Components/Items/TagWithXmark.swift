@@ -1,5 +1,5 @@
 //
-//  TagCanDelete.swift
+//  TagWithXmark.swift
 //  NutriQuor
 //
 //  Created by Lâm Tấn Thành on 9/3/26.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct TagCanDelete: View {
+struct TagWithXmark: View {
     
     var text: String
     var color: Color
@@ -27,5 +27,5 @@ struct TagCanDelete: View {
 }
 
 #Preview {
-    TagCanDelete(text: "Nuts", color: .red)
+    TagWithXmark(text: "Nuts", color: .red)
 }

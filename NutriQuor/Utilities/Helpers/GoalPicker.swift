@@ -9,15 +9,15 @@ import SwiftUI
 
 struct GoalPicker: View {
     
-    let goals: [GoalTag] = [
-        GoalTag(text: "Lose weight", color: .green),
-        GoalTag(text: "Gain muscle", color: .blue),
-        GoalTag(text: "Eat healthy", color: .orange),
-        GoalTag(text: "Low sugar", color: .red),
-        GoalTag(text: "High protein", color: .purple)
+    let goals: [Goal] = [
+        Goal(text: "Lose weight", color: .green),
+        Goal(text: "Gain muscle", color: .blue),
+        Goal(text: "Eat healthy", color: .orange),
+        Goal(text: "Low sugar", color: .red),
+        Goal(text: "High protein", color: .purple)
     ]
     
-    var onSelect: (GoalTag) -> Void
+    var onSelect: (Goal) -> Void
     
     @Environment(\.dismiss) var dismiss
     

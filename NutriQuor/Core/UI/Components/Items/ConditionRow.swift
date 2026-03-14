@@ -10,35 +10,64 @@ import SwiftUI
 struct ConditionRow: View {
     
     var title: String
-    var status: String
     var color: Color
+    var onDelete: (() -> Void)? = nil
+    
+    @State private var showDeleteAlert = false
     
     var body: some View {
         
-        HStack {
+        HStack(spacing: 12) {
             
             Text(title)
                 .font(.subheadline)
+                .fontWeight(.medium)
             
             Spacer()
             
-            Text(status)
-                .font(.caption2)
-                .padding(.horizontal, 8)
-                .padding(.vertical, 4)
-                .background(Color(.systemBackground))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 6)
-                        .stroke(Color.gray.opacity(0.3), lineWidth: 1)
-                )
-                .foregroundColor(color)
+            if onDelete != nil {
+                Button {
+                    showDeleteAlert = true
+                } label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundStyle(.secondary)
+                        .font(.system(size: 16))
+                }
+                .buttonStyle(.plain)
+            }
         }
         .padding(10)
         .background(color.opacity(0.08))
-        .cornerRadius(10)
+        .clipShape(RoundedRectangle(cornerRadius: 10))
+        
+        .alert("Delete Condition?", isPresented: $showDeleteAlert) {
+            
+            Button("Cancel", role: .cancel) {}
+            
+            Button("Delete", role: .destructive) {
+                withAnimation {
+                    onDelete?()
+                }
+            }
+            
+        } message: {
+            Text("Are you sure you want to remove this condition?")
+        }
     }
 }
-
 #Preview {
-    ConditionRow(title: "Tiểu đường", status: "History", color: .blue)
+    VStack(spacing: 12) {
+        
+        ConditionRow(
+            title: "Type II Diabetes",
+            color: .blue
+        )
+        
+        ConditionRow(
+            title: "Hypertension",
+            color: .gray
+        )
+        
+    }
+    .padding()
 }

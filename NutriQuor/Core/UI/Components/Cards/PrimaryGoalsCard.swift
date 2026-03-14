@@ -7,26 +7,23 @@
 
 import SwiftUI
 
-struct GoalTag: Identifiable {
-    let id = UUID()
-    let text: String
-    let color: Color
-}
-
 struct PrimaryGoalsCard: View {
     
-    @State private var tags: [GoalTag] = [
-        GoalTag(text: "Lose weight", color: .green),
+    @State private var tags: [Goal] = [
+        Goal(text: "Lose weight", color: .green),
     ]
     
     @State private var showGoalPicker = false
+    @State private var selectedGoal: Goal? = nil
+    @State private var showDeleteAlert = false
     
     var body: some View {
         
         VStack(alignment: .leading, spacing: 12) {
             
             HStack {
-                Image(systemName: "target").foregroundStyle(.green)
+                Image(systemName: "target")
+                    .foregroundStyle(.green)
                 
                 Text("Primary Health Goals")
                     .fontWeight(.bold)
@@ -44,7 +41,15 @@ struct PrimaryGoalsCard: View {
             
             HStack {
                 ForEach(tags) { tag in
-                    Tag(text: tag.text, color: tag.color)
+                    
+                    Button {
+                        selectedGoal = tag
+                        showDeleteAlert = true
+                    } label: {
+                        Tag(text: tag.text, color: tag.color)
+                    }
+                    .buttonStyle(.plain)
+                    
                 }
             }
         }
@@ -61,6 +66,22 @@ struct PrimaryGoalsCard: View {
             GoalPicker { goal in
                 tags.append(goal)
             }
+        }
+        
+        .alert("Remove Goal?", isPresented: $showDeleteAlert) {
+            
+            Button("Cancel", role: .cancel) {}
+            
+            Button("Delete", role: .destructive) {
+                if let goal = selectedGoal {
+                    withAnimation {
+                        tags.removeAll { $0.id == goal.id }
+                    }
+                }
+            }
+            
+        } message: {
+            Text("Are you sure you want to remove this goal?")
         }
     }
 }

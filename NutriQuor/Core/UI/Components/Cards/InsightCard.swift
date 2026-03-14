@@ -31,14 +31,17 @@ struct InsightCard: View {
             Text("Used in candies and dairy products. Recent studies link it to hyperactivity in children. Check for 'Allura Red' on your labels.")
                 .foregroundColor(.white)
             
-            Button("LEARN MORE") {
-                
+            NavigationLink {
+                SearchDetailView()
+            } label: {
+                Text("LEARN MORE")
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 10)
+                    .background(Color(.primary))
+                    .foregroundColor(.black)
+                    .cornerRadius(10)
             }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 10)
-            .background(Color(.primary))
-            .foregroundColor(.black)
-            .cornerRadius(10)
+            .buttonStyle(.plain)
         }
         .padding()
         .background(

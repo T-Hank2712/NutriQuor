@@ -9,7 +9,6 @@ import SwiftUI
 
 struct SearchDetailView: View {
     var body: some View {
-        TopBar(title: "Detail").padding(16)
         ScrollView{
             VStack(spacing: 20){
                 ZStack(alignment: .bottomTrailing) {
