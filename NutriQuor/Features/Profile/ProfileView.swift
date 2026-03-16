@@ -50,7 +50,7 @@ struct ProfileView: View {
                     .padding()
                     .background(Color(.primary))
                     .foregroundColor(.white)
-                    .cornerRadius(16)
+                    .cornerRadius(.cardRadius)
                 }
                 
                 PrimaryGoalsCard()

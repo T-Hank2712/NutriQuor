@@ -53,7 +53,7 @@ struct CameraView: View {
                             .padding()
                             .background(Color.blue)
                             .foregroundColor(.white)
-                            .cornerRadius(10)
+                            .cornerRadius(.smallRadius)
                         }
                     }
                 }
@@ -70,7 +70,7 @@ struct CameraView: View {
                     ZStack {
                         
                         // Overlay tối
-                        Color.black.opacity(0.6)
+                        Color.black.opacity(.opacityMedium)
                             .mask(
                                 Path { path in
                                     
@@ -120,7 +120,7 @@ struct CameraView: View {
                             .frame(width: 44, height: 44)
                     }
                     .padding()
-                    .background(Color.black.opacity(0.5))
+                    .background(Color.black.opacity(.opacityStrong))
                     
                     
                     Spacer()

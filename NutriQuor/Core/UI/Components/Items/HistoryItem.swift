@@ -22,13 +22,13 @@ struct HistoryItem: View {
                 Text(record.title)
                     .font(.headline)
                 HStack {
-                    Image(systemName: "exclamationmark.triangle.fill").foregroundColor(.yellow).opacity(0.7)
+                    Image(systemName: "exclamationmark.triangle.fill").foregroundColor(.yellow).opacity(.opacityStrong)
                     Text(record.warning)
                         .font(.subheadline)
                         .foregroundColor(.gray)
                 }
                 HStack {
-                    Image(systemName: "circle.fill").foregroundColor(.orange).opacity(0.7)
+                    Image(systemName: "circle.fill").foregroundColor(.orange).opacity(.opacityStrong)
                     Text(record.score)
                         .font(.subheadline)
                         .foregroundColor(.gray)
@@ -38,8 +38,8 @@ struct HistoryItem: View {
 
         }
         .overlay(
-            RoundedRectangle(cornerRadius: 12)
-                .stroke(Color.gray.opacity(0.3), lineWidth: 1.5)
+            RoundedRectangle(cornerRadius: .cardRadius)
+                .stroke(Color.gray.opacity(.opacityMedium), lineWidth: 1.5)
         )
     }
 }

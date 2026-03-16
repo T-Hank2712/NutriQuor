@@ -56,7 +56,7 @@ struct HistoryView: View {
                                 // MARK: - Time + Timeline
                                 VStack {
                                     Rectangle()
-                                        .fill(Color.gray.opacity(0.2))
+                                        .fill(Color.gray.opacity(.opacityMedium))
                                         .frame(width: 2)
                                         .frame(maxHeight: .infinity)
                                     Text(formatTime(item.time))
@@ -64,7 +64,7 @@ struct HistoryView: View {
                                         .foregroundColor(.secondary)
                                     
                                     Rectangle()
-                                        .fill(Color.gray.opacity(0.2))
+                                        .fill(Color.gray.opacity(.opacityMedium))
                                         .frame(width: 2)
                                         .frame(maxHeight: .infinity)
                                 }

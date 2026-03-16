@@ -20,9 +20,9 @@ struct TagWithXmark: View {
         }
         .font(.title3)
         .padding(8)
-        .background(color.opacity(0.15))
+        .background(color.opacity(.opacityLight))
         .foregroundColor(color)
-        .cornerRadius(10)
+        .cornerRadius(.smallRadius)
     }
 }
 

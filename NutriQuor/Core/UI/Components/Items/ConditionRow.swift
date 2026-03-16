@@ -37,8 +37,8 @@ struct ConditionRow: View {
             }
         }
         .padding(10)
-        .background(color.opacity(0.08))
-        .clipShape(RoundedRectangle(cornerRadius: 10))
+        .background(color.opacity(.opacityLight))
+        .clipShape(RoundedRectangle(cornerRadius: .cardRadius))
         
         .alert("Delete Condition?", isPresented: $showDeleteAlert) {
             

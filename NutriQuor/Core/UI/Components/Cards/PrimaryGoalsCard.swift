@@ -56,10 +56,10 @@ struct PrimaryGoalsCard: View {
         .padding()
         .background(Color(.systemBackground))
         .overlay(
-            RoundedRectangle(cornerRadius: 12)
-                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+            RoundedRectangle(cornerRadius: .smallRadius)
+                .stroke(Color.gray.opacity(.opacityMedium), lineWidth: 1)
         )
-        .cornerRadius(16)
+        .cornerRadius(.cardRadius)
         .shadow(radius: 2)
         
         .sheet(isPresented: $showGoalPicker) {

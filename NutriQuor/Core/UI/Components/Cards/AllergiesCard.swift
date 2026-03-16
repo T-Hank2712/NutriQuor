@@ -53,7 +53,7 @@ struct AllergiesCard: View {
                     }
                     .padding(8)
                     .overlay(
-                        RoundedRectangle(cornerRadius: 10)
+                        RoundedRectangle(cornerRadius: .cardRadius)
                             .stroke(style: StrokeStyle(lineWidth: 2, dash: [5]))
                             .foregroundColor(.gray)
                     )
@@ -64,10 +64,10 @@ struct AllergiesCard: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(Color(.systemBackground))
         .overlay(
-            RoundedRectangle(cornerRadius: 12)
-                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+            RoundedRectangle(cornerRadius: .cardRadius)
+                .stroke(Color.gray.opacity(.opacityLight), lineWidth: 1)
         )
-        .cornerRadius(16)
+        .cornerRadius(.cardRadius)
         .shadow(radius: 2)
         
         .sheet(isPresented: $showPicker) {

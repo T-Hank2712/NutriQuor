@@ -13,7 +13,7 @@ struct SearchDetailView: View {
             VStack(spacing: 20){
                 ZStack(alignment: .bottomTrailing) {
                     
-                    RoundedRectangle(cornerRadius: 20)
+                    RoundedRectangle(cornerRadius: .cardRadius)
                         .fill(Color.black)
                         .frame(width: 140, height: 140)
                     
@@ -24,7 +24,7 @@ struct SearchDetailView: View {
                         .padding(.vertical, 4)
                         .background(Color.red)
                         .foregroundColor(.white)
-                        .cornerRadius(12)
+                        .cornerRadius(.smallRadius)
                         .offset(x: 10, y: 10)
                 }
                 
@@ -78,12 +78,12 @@ struct SearchDetailView: View {
                 }
                 .padding()
                 .background(Color(.systemBackground))
-                .cornerRadius(18)
+                .cornerRadius(.cardRadius)
                 .overlay(
-                    RoundedRectangle(cornerRadius: 16)
-                        .stroke(Color.gray.opacity(0.1), lineWidth: 1)
+                    RoundedRectangle(cornerRadius: .cardRadius)
+                        .stroke(Color.gray.opacity(.opacityLight), lineWidth: 1)
                 )
-                .shadow(color: Color.black.opacity(0.05), radius: 6, x: 0, y: 3)
+                .shadow(color: Color.black.opacity(.opacityLight), radius: 6, x: 0, y: 3)
                 
                 VStack(alignment: .leading){
                     Text("Commonly Found In")

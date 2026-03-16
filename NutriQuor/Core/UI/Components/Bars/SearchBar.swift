@@ -34,24 +34,24 @@ struct SearchBar: View {
             .padding(.horizontal, 14)
             .padding(.vertical, 11)
             .background(
-                RoundedRectangle(cornerRadius: 15)
+                RoundedRectangle(cornerRadius: .cardRadius)
                     .fill(
                         scheme == .dark
-                        ? Color.white.opacity(0.06)
-                        : Color.black.opacity(0.04)
+                        ? Color.white.opacity(.opacityMedium)
+                        : Color.black.opacity(.opacityLight)
                     )
                     .overlay(
                         // Reflection band (gương)
                         LinearGradient(
                             colors: [
-                                Color.white.opacity(0.55),
-                                Color.white.opacity(0.15),
+                                Color.white.opacity(.opacityMedium),
+                                Color.white.opacity(.opacityLight),
                                 Color.clear
                             ],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
                         )
-                        .clipShape(RoundedRectangle(cornerRadius: 15))
+                        .clipShape(RoundedRectangle(cornerRadius: .cardRadius))
                         .opacity(0.35)
                     )
             )
@@ -61,8 +61,8 @@ struct SearchBar: View {
                     .stroke(
                         LinearGradient(
                             colors: [
-                                Color.white.opacity(0.5),
-                                Color.white.opacity(0.05)
+                                Color.white.opacity(.opacityStrong),
+                                Color.white.opacity(.opacityLight)
                             ],
                             startPoint: .top,
                             endPoint: .bottom
@@ -70,7 +70,7 @@ struct SearchBar: View {
                         lineWidth: 1
                     )
             )
-            .shadow(color: .black.opacity(0.1), radius: 5, y: 3)
+            .shadow(color: .black.opacity(.opacityLight), radius: 5, y: 3)
             .animation(.easeOut(duration: 0.2), value: isFocused)
         }
 }

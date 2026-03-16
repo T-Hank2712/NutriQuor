@@ -27,14 +27,14 @@ struct LitmitBar: View {
                 Text(String(format: "%.1f", value) + unit)
                     .foregroundColor(color)
                 
-                Text("/ " + String(format: "%.1f", limit) + unit).foregroundStyle(.gray.opacity(0.5)).bold()
+                Text("/ " + String(format: "%.1f", limit) + unit).foregroundStyle(.gray.opacity(.opacityStrong)).bold()
             }
             
             
             ZStack(alignment: .leading) {
                 
                 Capsule()
-                    .fill(Color.gray.opacity(0.2))
+                    .fill(Color.gray.opacity(.opacityMedium))
                     .frame(height: 12)
                 
                 Capsule()
@@ -47,10 +47,10 @@ struct LitmitBar: View {
         }
         .padding()
         .background(
-            RoundedRectangle(cornerRadius: 20)
+            RoundedRectangle(cornerRadius: .cardRadius)
                 .stroke(color)
         )
-        .cornerRadius(16)
+        .cornerRadius(.cardRadius)
         
     }
 }

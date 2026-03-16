@@ -24,7 +24,7 @@ struct FoundItem: View {
         .padding()
         .frame(maxWidth: .infinity, minHeight: 80)
         .background(Color(.secondarySystemBackground))
-        .cornerRadius(14)
+        .cornerRadius(.cardRadius)
     }
 }
 

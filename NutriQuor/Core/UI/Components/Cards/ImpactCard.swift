@@ -33,8 +33,8 @@ struct ImpactCard: View {
         }
         .padding()
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(color.opacity(0.08))
-        .cornerRadius(14)
+        .background(color.opacity(.opacityLight))
+        .cornerRadius(.cardRadius)
     }
 }
 

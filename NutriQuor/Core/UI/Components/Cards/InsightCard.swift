@@ -20,7 +20,7 @@ struct InsightCard: View {
                 Text("INSIGHT OF THE DAY")
                     .font(.caption)
                     .fontWeight(.bold)
-                    .foregroundColor(Color(.primary))
+                    .foregroundColor(Color(.white))
             }
             
             Text("Red 40 (E129)")
@@ -39,19 +39,19 @@ struct InsightCard: View {
                     .padding(.vertical, 10)
                     .background(Color(.primary))
                     .foregroundColor(.black)
-                    .cornerRadius(10)
+                    .cornerRadius(.smallRadius)
             }
             .buttonStyle(.plain)
         }
         .padding()
         .background(
             LinearGradient(
-                colors: [.black, .green.opacity(0.9)],
+                colors: [.black, Color(.primary).opacity(.opacityStrong)],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
         )
-        .cornerRadius(20)
+        .cornerRadius(.cardRadius)
     }
 }
 

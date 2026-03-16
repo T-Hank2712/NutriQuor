@@ -27,10 +27,10 @@ struct NutrientCard: View {
            .frame(maxWidth: .infinity)
            .padding()
            .background(Color.white)
-           .cornerRadius(16)
+           .cornerRadius(.cardRadius)
            
 
-           .shadow(color: Color.black.opacity(0.05), radius: 6, x: 0, y: 3)
+           .shadow(color: Color.black.opacity(.opacityLight), radius: 6, x: 0, y: 3)
        }
 }
 

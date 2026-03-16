@@ -23,19 +23,19 @@ struct CountScansCard: View {
                 
                 Text("+4 vs avg")
                     .font(.caption)
-                    .foregroundColor(.green)
+                    .foregroundColor(Color(.primary))
             }
         }
         .padding()
         .frame(maxWidth: .infinity, minHeight: 130, alignment: .leading)
         .background(Color(.systemBackground))
-        .cornerRadius(16)
+        .cornerRadius(.cardRadius)
         .overlay(
-            RoundedRectangle(cornerRadius: 16)
-             .stroke(Color.gray.opacity(0.1), lineWidth: 1)
+            RoundedRectangle(cornerRadius: .cardRadius)
+                .stroke(Color.gray.opacity(.opacityLight), lineWidth: 1)
         )
 
-        .shadow(color: Color.black.opacity(0.05), radius: 6, x: 0, y: 3)
+        .shadow(color: Color.black.opacity(.opacityLight), radius: 6, x: 0, y: 3)
     }
 }
 

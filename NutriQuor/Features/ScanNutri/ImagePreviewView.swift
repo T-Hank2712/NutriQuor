@@ -65,7 +65,7 @@ struct ImagePreviewView: View {
                         .frame(width: 44, height: 44)
                 }
                 .padding()
-                .background(Color.black.opacity(0.5))
+                .background(Color.black.opacity(.opacityStrong))
                 
                 // Image display
                 Spacer()
@@ -118,7 +118,7 @@ struct ImagePreviewView: View {
                     }
                 }
                 .padding(.vertical, 30)
-                .background(Color.black.opacity(0.5))
+                .background(Color.black.opacity(.opacityStrong))
             }
             
             // Dropdown (nằm trên cùng)

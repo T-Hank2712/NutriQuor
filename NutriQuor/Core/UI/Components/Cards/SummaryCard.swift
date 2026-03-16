@@ -47,7 +47,7 @@ struct SummaryCard: View {
         }
         .padding()
         .background(
-            RoundedRectangle(cornerRadius: 20)
+            RoundedRectangle(cornerRadius: .cardRadius)
                 .fill(Color(.systemGray6))
         )
     }

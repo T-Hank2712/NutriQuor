@@ -48,12 +48,12 @@ struct Dropdown: View {
         }
         .frame(width: 180)
         .background(
-            RoundedRectangle(cornerRadius: 14)
+            RoundedRectangle(cornerRadius: .cardRadius)
                 .fill(.ultraThinMaterial)
         )
         .overlay(
-            RoundedRectangle(cornerRadius: 14)
-                .stroke(Color.white.opacity(0.2))
+            RoundedRectangle(cornerRadius: .cardRadius)
+                .stroke(Color.white.opacity(.opacityLight))
         )
         .shadow(radius: 10)
     }

@@ -19,8 +19,8 @@ struct CategoryCard: View {
             
             ZStack {
                 
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(Color(active ? Color(.primary).opacity(0.2) : Color(.systemGray6)))
+                RoundedRectangle(cornerRadius: .smallRadius)
+                    .fill(Color(active ? Color(.primary).opacity(.opacityMedium) : Color(.systemGray6)))
                     .frame(width: 40, height: 40)
                 
                 Image(systemName: icon)
@@ -36,10 +36,10 @@ struct CategoryCard: View {
         .background(Color(.systemBackground))
         .cornerRadius(16)
         .overlay(
-            RoundedRectangle(cornerRadius: 16)
+            RoundedRectangle(cornerRadius: .cardRadius)
                 .stroke(active ? Color(.primary) : Color.clear, lineWidth: 1)
         )
-        .shadow(color: Color.black.opacity(0.05), radius: 6, x: 0, y: 3)
+        .shadow(color: Color.black.opacity(.opacityLight), radius: 6, x: 0, y: 3)
     }
 }
 

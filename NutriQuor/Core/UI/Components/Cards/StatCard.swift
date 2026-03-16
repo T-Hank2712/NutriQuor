@@ -34,8 +34,8 @@ struct StatCard: View {
         .padding()
         .frame(maxWidth: .infinity)
         .background(
-            RoundedRectangle(cornerRadius: 20)
-                .stroke(Color.gray.opacity(0.2))
+            RoundedRectangle(cornerRadius: .cardRadius)
+                .stroke(Color.gray.opacity(.opacityMedium))
         )
     }
 }

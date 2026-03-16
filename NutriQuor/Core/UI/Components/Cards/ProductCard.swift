@@ -11,8 +11,8 @@ struct ProductCard: View {
     var body: some View {
            HStack(spacing: 16) {
                
-               RoundedRectangle(cornerRadius: 16)
-                   .fill(Color.green.opacity(0.2))
+               RoundedRectangle(cornerRadius: .cardRadius)
+                   .fill(Color.green.opacity(.opacityLight))
                    .frame(width: 90, height: 90)
                
                VStack(alignment: .leading, spacing: 6) {
@@ -28,7 +28,7 @@ struct ProductCard: View {
                Spacer()
            }
            .background(Color.white)
-           .cornerRadius(20)
+           .cornerRadius(.cardRadius)
        }}
 
 #Preview {

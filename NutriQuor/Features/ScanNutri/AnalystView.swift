@@ -34,16 +34,16 @@ struct AnalystView: View {
                     
                     
                     // MARK: - Alert
-                    AlertCard(color: .red, title: "Warning", description: "Không giành cho trẻ em dưới 3 tuổi.")
-                    AlertCard(color: .orange, title: "Allergy", description: "Sản phẩm có chứa Sữa.")
+                    AlertCard(color: Color(.warning), title: "Warning", description: "Không giành cho trẻ em dưới 3 tuổi.")
+                    AlertCard(color: Color(.allergy), title: "Allergy", description: "Sản phẩm có chứa Sữa.")
                     
                     // MARK: - Ingredients
                     Text("Contains")
                         .font(.title2)
                         .bold()
                     HStack(spacing: 20){
-                        ContainCard(title: "Ingredients", good: "6 Healthy", bad: "2 To Limit", color: .green)
-                        ContainCard(title: "Additives", good: "", bad: "6 adds", color: .orange)
+                        ContainCard(title: "Ingredients", good: "6 Healthy", bad: "2 To Limit", color: Color(.primary))
+                        ContainCard(title: "Additives", good: "", bad: "6 adds", color: Color(.badHealth))
                     }
                     Button {
                         print("View All")
@@ -54,9 +54,9 @@ struct AnalystView: View {
                         }
                         .padding()
                         .frame(maxWidth: .infinity)
-                        .background(Color.gray.opacity(0.1))
+                        .background(Color.gray.opacity(.opacityLight))
                         .foregroundColor(.black)
-                        .cornerRadius(12)
+                        .cornerRadius(.smallRadius)
                     }
                     // MARK: - Options
                     Text("Options")

@@ -4,7 +4,7 @@ struct CameraFrame: View {
     let frameHeight: CGFloat
     var body: some View {
         
-        RoundedRectangle(cornerRadius: 20)
+        RoundedRectangle(cornerRadius: .cardRadius)
             .stroke(Color.primary, lineWidth: 2)
             .frame(height: frameHeight)
     }

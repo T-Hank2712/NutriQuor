@@ -13,7 +13,7 @@ struct CircleButton: View {
         ZStack {
             
             Circle()
-                .fill(Color.white.opacity(0.9))
+                .fill(Color.white.opacity(.opacityLight))
                 .frame(width:50,height:50)
                 .overlay(
                     Circle()

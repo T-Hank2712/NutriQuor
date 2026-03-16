@@ -12,7 +12,7 @@ struct CaptureButton: View {
         ZStack {
             
             Circle()
-                .fill(Color.white.opacity(0.2))
+                .fill(Color.white.opacity(.opacityLight))
                 .frame(width:90,height:90)
                 .overlay(
                     Circle()

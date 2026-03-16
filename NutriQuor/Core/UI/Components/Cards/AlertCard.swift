@@ -30,8 +30,8 @@ struct AlertCard: View {
            }
            .padding()
            .frame(maxWidth: .infinity, alignment: .leading)
-           .background(color.opacity(0.1))
-           .cornerRadius(16)
+           .background(color.opacity(.opacityLight))
+           .cornerRadius(.cardRadius)
        }
 }
 

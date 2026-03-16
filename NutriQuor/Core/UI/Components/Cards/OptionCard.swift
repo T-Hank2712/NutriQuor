@@ -29,7 +29,7 @@ struct OptionCard: View {
            .padding(.vertical, 14)
            .background(
                Capsule()
-                .stroke(color.opacity(0.5), lineWidth: 1)
+                .stroke(color.opacity(.opacityMedium), lineWidth: 1)
            )
        }
 }

@@ -20,21 +20,21 @@ struct ContainCard: View {
                     .fontWeight(.semibold)
             }
             Text(good)
-                .foregroundColor(.green)
+                .foregroundColor(Color(.primary))
             Text(bad)
-                .foregroundColor(.orange)
+                .foregroundColor(Color(.badHealth))
         }
         .padding()
         .frame(maxWidth: .infinity, minHeight: 120)
         .background(Color.white)
-        .cornerRadius(16)
+        .cornerRadius(.cardRadius)
 
         .overlay(
-            RoundedRectangle(cornerRadius: 16)
+            RoundedRectangle(cornerRadius: .cardRadius)
                 .stroke(color, lineWidth: 1)
         )
 
-        .shadow(color: Color.black.opacity(0.02), radius: 6, x: 0, y: 3)
+        .shadow(color: Color.black.opacity(.opacityLight), radius: 6, x: 0, y: 3)
     }
 }
 

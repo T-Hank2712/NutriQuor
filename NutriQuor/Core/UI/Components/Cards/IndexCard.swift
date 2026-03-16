@@ -17,18 +17,18 @@ struct IndexCard: View {
                        .foregroundColor(.gray)
                    
                    ProgressView(value: 0.7)
-                       .tint(.green)
+                       .tint(Color(.primary))
                    
                    HStack {
                        Text("8 SAFE")
                            .font(.caption)
-                           .foregroundColor(.green)
+                           .foregroundColor(Color(.primary))
                        
                        Spacer()
                        
                        Text("4 AVOID")
                            .font(.caption)
-                           .foregroundColor(.red)
+                           .foregroundColor(Color(.badHealth))
                    }
                    
                    Text("70%")
@@ -37,13 +37,13 @@ struct IndexCard: View {
                .padding()
                .frame(maxWidth: .infinity, minHeight: 130)
                .background(Color(.systemBackground))
-               .cornerRadius(16)
+               .cornerRadius(.cardRadius)
                .overlay(
-                   RoundedRectangle(cornerRadius: 16)
-                    .stroke(Color.gray.opacity(0.1), lineWidth: 1)
+                RoundedRectangle(cornerRadius: .cardRadius)
+                    .stroke(Color.gray.opacity(.opacityLight), lineWidth: 1)
                )
 
-               .shadow(color: Color.black.opacity(0.05), radius: 6, x: 0, y: 3)
+               .shadow(color: Color.black.opacity(.opacityLight), radius: 6, x: 0, y: 3)
     }
 }
 
