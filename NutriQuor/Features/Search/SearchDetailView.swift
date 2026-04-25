@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct SearchDetailView: View {
+    var data: Nutrient
     var body: some View {
         ScrollView{
             VStack(spacing: 20){
@@ -28,7 +29,7 @@ struct SearchDetailView: View {
                         .offset(x: 10, y: 10)
                 }
                 
-                Text("Vitamin D")
+                Text(data.name)
                     .font(.largeTitle)
                     .fontWeight(.bold)
                 HStack{
@@ -41,9 +42,9 @@ struct SearchDetailView: View {
                         .font(.title3)
                         .fontWeight(.bold)
                     
-                    Text("Aspartame is a low-calorie artificial sweetener used as a sugar substitute in many foods and beverages. It is approximately 200 times sweeter than sucrose but has a negligible caloric effect.")
+                    Text(data.description)
                         .foregroundColor(.secondary)
-                }
+                }.frame(maxWidth: .infinity, alignment: .leading)
                 
                 VStack(alignment: .leading, spacing: 16) {
                     
@@ -108,5 +109,5 @@ struct SearchDetailView: View {
     }
 }
 #Preview {
-    SearchDetailView()
+    SearchDetailView(data: Nutrient(id: 1, name: "Vitamin D", description: "Aspartame is a low-calorie artificial sweetener used as a sugar substitute in many foods and beverages. It is approximately 200 times sweeter than sucrose but has a negligible caloric effect."))
 }

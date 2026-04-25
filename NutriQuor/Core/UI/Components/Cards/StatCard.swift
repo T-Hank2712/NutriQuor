@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct StatCard: View {
-    let nutri: Nutrition
+    let nutri: Nutrient
     let icon: String
     let iconColor: Color
 
@@ -23,10 +23,10 @@ struct StatCard: View {
             }
 
             HStack(alignment: .lastTextBaseline, spacing: 4) {
-                Text(String(format: "%.2f", nutri.value))
+                Text(String(format: "%.2f", nutri.name))
                     .font(.title)
                     .fontWeight(.bold)
-                Text(nutri.unit)
+                Text(nutri.name)
                     .font(.headline)
                     .foregroundColor(.secondary)
             }
@@ -41,5 +41,5 @@ struct StatCard: View {
 }
 
 #Preview {
-    StatCard(nutri: Nutrition(name: "Calories", unit: "kcal", value: 50.0), icon: "flame", iconColor: .red)
+    StatCard(nutri: Nutrient(id: 1, name: "Calories", description: "100"), icon: "flame", iconColor: .red)
 }

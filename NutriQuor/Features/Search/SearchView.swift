@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct SearchView: View {
-    
+    @StateObject var viewModel = SearchNutritionViewModel()
     var body: some View {
         NavigationStack{
             ScrollView {
@@ -29,10 +29,18 @@ struct SearchView: View {
                         CategoryCard(icon: "plus.square.fill", title: "Additives")
                         CategoryCard(icon: "heart.fill", title: "Healthys")
                     }
-                    ForEach(0..<5) { index in
-                        NavigationLink(destination: SearchDetailView()) {
-                                ProductCard()
+                    LazyVStack {
+                        ForEach(viewModel.nutrients) { item in
+                            NavigationLink(destination: SearchDetailView(data: item)) {
+                                ProductCard(
+                                    name: item.name,
+                                    tags: ["Drink", "Healthy"]
+                                )
                             }
+                        }
+                    }
+                    .task {
+                        await viewModel.loadAll()
                     }
                     
                 }

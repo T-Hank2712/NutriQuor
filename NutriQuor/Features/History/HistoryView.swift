@@ -1,27 +1,14 @@
 import SwiftUI
 
 struct HistoryView: View {
-    @State private var selectedDate = Date()
-    let items: [History] = [
-        History(
-            image: Image("Example"),
-            title: "Bánh quy ABC",
-            warning: "Nhiều đường",
-            score: "Xấu",
-            time: Calendar.current.date(
-                from: DateComponents(year: 2025, month: 1, day: 24, hour: 21, minute: 04)
-            )!
-        ),
-        History(
-            image: Image("Example"),
-            title: "Sữa tươi XYZ",
-            warning: "Ít đường",
-            score: "Tốt",
-            time: Calendar.current.date(
-                from: DateComponents(year: 2025, month: 1, day: 24, hour: 18, minute: 15)
-            )!
-        )
-    ]
+    @State private var items: [History] = []
+    @State private var errorMessage: String?
+    @State private var isLoading = false
+    
+    private var filteredItems: [History] {
+        items
+            .sorted(by: { $0.time > $1.time })
+    }
     
     var body: some View {
         NavigationStack{
@@ -33,24 +20,27 @@ struct HistoryView: View {
                     .foregroundStyle(Color(.primary))
                 
                 ScrollView {
-                    DatePicker(
-                        "",
-                        selection: $selectedDate,
-                        displayedComponents: .date
-                    )
-                    .datePickerStyle(.compact)
-                    .labelsHidden()
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    
-                    Text("Hôm nay")
-                        .font(.title2)
-                        .bold()
-                        .foregroundColor(.gray)
-                        .padding(.vertical, 8)
+                    if let errorMessage {
+                        Text(errorMessage)
+                            .font(.caption)
+                            .foregroundColor(.red)
+                    }
+
+                    if isLoading {
+                        ProgressView("Đang tải lịch sử...")
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+
+                    if !isLoading, errorMessage == nil, items.isEmpty {
+                        Text("Chưa có lịch sử quét")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.top, 8)
+                    }
                     
                     LazyVStack(spacing: 24) {
-                        ForEach(items.sorted(by: { $0.time > $1.time })) { item in
-                            
+                        ForEach(filteredItems) { item in
                             HStack(alignment: .top, spacing: 16) {
                                 
                                 // MARK: - Time + Timeline
@@ -87,14 +77,72 @@ struct HistoryView: View {
             }
             .padding()
         }
+        .task {
+            await loadProducts()
+        }
+    }
+
+    @MainActor
+    private func loadProducts() async {
+        isLoading = true
+        errorMessage = nil
+        defer { isLoading = false }
+
+        do {
+            let products = try await ProductAPI.fetchProducts()
+            items = products.map { p in
+                History(
+                    image: Image("Example"),
+                    title: p.productName,
+                    warning: p.warning ?? "Không có cảnh báo",
+                    score: p.nutrition?.sugar ?? "Chưa có",
+                    time: parseDate(p.createdAtLocal) ?? parseDate(p.createdAt) ?? Date()
+                )
+            }
+        } catch {
+            errorMessage = "Không tải được dữ liệu. Kiểm tra API server và baseURL rồi thử lại."
+        }
     }
     
     // MARK: - Format Time
-    
     func formatTime(_ date: Date) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "HH:mm"
         return formatter.string(from: date)
+    }
+
+    private func parseDate(_ raw: String?) -> Date? {
+        guard let raw else { return nil }
+
+        let isoWithFraction = ISO8601DateFormatter()
+        isoWithFraction.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+
+        let isoWithoutFraction = ISO8601DateFormatter()
+        isoWithoutFraction.formatOptions = [.withInternetDateTime]
+
+        if let d = isoWithFraction.date(from: raw) ?? isoWithoutFraction.date(from: raw) {
+            return d
+        }
+
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = .current
+
+        let formats = [
+            "yyyy-MM-dd HH:mm:ss",
+            "yyyy-MM-dd'T'HH:mm:ss",
+            "yyyy-MM-dd'T'HH:mm:ss.SSS",
+            "yyyy-MM-dd'T'HH:mm:ss.SSSSSS"
+        ]
+
+        for format in formats {
+            formatter.dateFormat = format
+            if let d = formatter.date(from: raw) {
+                return d
+            }
+        }
+
+        return nil
     }
 }
 
