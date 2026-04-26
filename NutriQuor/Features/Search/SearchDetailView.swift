@@ -56,26 +56,14 @@ struct SearchDetailView: View {
                             .font(.headline)
                     }
                     
-                    ImpactCard(
-                        icon: "flame.fill",
-                        title: "Weight Loss",
-                        text: "May trigger insulin response despite being calorie-free.",
-                        color: .orange
-                    )
-                    
-                    ImpactCard(
-                        icon: "brain.head.profile",
-                        title: "Neurological Effects",
-                        text: "Some studies link long-term use to headaches and dizziness.",
-                        color: .red
-                    )
-                    
-                    ImpactCard(
-                        icon: "cross.case.fill",
-                        title: "PKU Warning",
-                        text: "Contains phenylalanine. Dangerous for PKU patients.",
-                        color: .blue
-                    )
+                    ForEach(data.effects) { effect in
+                        ImpactCard(
+                            icon: "",
+                            title: effect.title,
+                            text: "Hihi",
+                            color: .green
+                        )
+                    }
                 }
                 .padding()
                 .background(Color(.systemBackground))
@@ -97,11 +85,12 @@ struct SearchDetailView: View {
                         ],
                         spacing: 12
                     ) {
-                        
-                        FoundItem(icon: "cup.and.saucer.fill", title: "Diet Sodas")
-                        FoundItem(icon: "circle.grid.2x2.fill", title: "Sugar-free Gum")
-                        FoundItem(icon: "leaf.fill", title: "Light Yogurts")
-                        FoundItem(icon: "pills.fill", title: "Tablets")
+                        ForEach(data.found_in, id: \.id) { found in
+                            FoundItem(
+                                icon: "cup.and.saucer.fill",
+                                title: found.name
+                            )
+                        }
                     }
                 }
             }.padding(.horizontal, 16)
@@ -109,5 +98,40 @@ struct SearchDetailView: View {
     }
 }
 #Preview {
-    SearchDetailView(data: Nutrient(id: 1, name: "Vitamin D", description: "Aspartame is a low-calorie artificial sweetener used as a sugar substitute in many foods and beverages. It is approximately 200 times sweeter than sucrose but has a negligible caloric effect."))
+    SearchDetailView(
+        data: Nutrient(
+            id: 1,
+            name: "Vitamin D",
+            description: "Aspartame is a low-calorie artificial sweetener used as a sugar substitute in many foods and beverages. It is approximately 200 times sweeter than sucrose but has a negligible caloric effect.",
+            image: "",
+            effects: [
+                HealthEffect(
+                    id: 1,
+                    title: "Weight Loss"
+                ),
+                HealthEffect(
+                    id: 2,
+                    title: "Neurological Effects",
+                ),
+                HealthEffect(
+                    id: 3,
+                    title: "PKU Warning",
+                )
+            ],
+            found_in: [
+                FoodCategory(
+                    id: 1,
+                    name: "Sữa"
+                ),
+                FoodCategory(
+                    id: 2,
+                    name: "Bánh"
+                ),
+                FoodCategory(
+                    id: 1,
+                    name: "Trái cây"
+                )
+            ]
+        )
+    )
 }

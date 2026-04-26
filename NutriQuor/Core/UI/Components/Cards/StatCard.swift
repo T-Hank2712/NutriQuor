@@ -41,5 +41,32 @@ struct StatCard: View {
 }
 
 #Preview {
-    StatCard(nutri: Nutrient(id: 1, name: "Calories", description: "100"), icon: "flame", iconColor: .red)
+    StatCard(nutri: Nutrient(id: 1, name: "Calories", description: "100", image: "", effects: [
+        HealthEffect(
+            id: 1,
+            title: "Weight Loss"
+        ),
+        HealthEffect(
+            id: 2,
+            title: "Neurological Effects",
+        ),
+        HealthEffect(
+            id: 3,
+            title: "PKU Warning",
+        ),
+    ],
+                             found_in: [
+                                 FoodCategory(
+                                     id: 1,
+                                     name: "Sữa"
+                                 ),
+                                 FoodCategory(
+                                     id: 2,
+                                     name: "Bánh"
+                                 ),
+                                 FoodCategory(
+                                     id: 1,
+                                     name: "Trái cây"
+                                 )
+                             ]), icon: "flame", iconColor: .red)
 }
