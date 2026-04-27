@@ -21,6 +21,7 @@ struct ProductCard: View {
                    
                    Text(name)
                        .font(.headline)
+                       .foregroundStyle(.black)
                    
                    HStack {
                        ForEach(tags, id: \.self) { tag in

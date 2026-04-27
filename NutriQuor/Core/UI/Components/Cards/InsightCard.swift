@@ -32,42 +32,7 @@ struct InsightCard: View {
                 .foregroundColor(.white)
             
             NavigationLink {
-                SearchDetailView(
-                    data: Nutrient(
-                        id: 1,
-                        name: "Vitamin D",
-                        description: "Aspartame is a low-calorie artificial sweetener used as a sugar substitute in many foods and beverages. It is approximately 200 times sweeter than sucrose but has a negligible caloric effect.",
-                        image: "",
-                        effects: [
-                            HealthEffect(
-                                id: 1,
-                                title: "Weight Loss"
-                            ),
-                            HealthEffect(
-                                id: 2,
-                                title: "Neurological Effects",
-                            ),
-                            HealthEffect(
-                                id: 3,
-                                title: "PKU Warning",
-                            )
-                        ],
-                        found_in: [
-                            FoodCategory(
-                                id: 1,
-                                name: "Sữa"
-                            ),
-                            FoodCategory(
-                                id: 2,
-                                name: "Bánh"
-                            ),
-                            FoodCategory(
-                                id: 1,
-                                name: "Trái cây"
-                            )
-                        ]
-                    )
-                )
+                SearchDetailView(data: SearchDTO(id: "1", name: "Test", code: "E123",image: "test", description: "Test", effects: [], found_in: [], type: "Test"))
             } label: {
                 Text("LEARN MORE")
                     .padding(.horizontal, 20)
