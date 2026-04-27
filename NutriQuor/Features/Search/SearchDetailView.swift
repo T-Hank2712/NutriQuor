@@ -33,8 +33,9 @@ struct SearchDetailView: View {
                     .font(.largeTitle)
                     .fontWeight(.bold)
                 HStack{
-                    Tag(text: "Vitamin", color: Color.green)
-                    Tag(text: "Health", color: Color.blue)
+                    ForEach([data.code, data.type].compactMap { $0 }, id: \.self) { tag in
+                        Tag(text: tag, color: .green)
+                    }
                 }
                 VStack(alignment: .leading, spacing: 10) {
                     
@@ -60,11 +61,12 @@ struct SearchDetailView: View {
                         ImpactCard(
                             icon: "",
                             title: effect.title,
-                            text: "Hihi",
+                            text: "",
                             color: .green
                         )
                     }
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
                 .padding()
                 .background(Color(.systemBackground))
                 .cornerRadius(.cardRadius)
@@ -98,5 +100,5 @@ struct SearchDetailView: View {
     }
 }
 #Preview {
-    SearchDetailView(data: SearchDTO(id: "1", name: "Test", code: "E123", image: "test", description: "Test", effects: [], found_in: [], type: "Test"))
+    SearchDetailView(data: SearchDTO(id: "1", name: "Test", code: "E123", image: "test", description: "Test", effects: [HealthEffect(id: 1, title: "Test")], found_in: [FoodCategory(id: 1, name: "Test")], type: "Test"))
 }

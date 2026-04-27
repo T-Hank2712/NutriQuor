@@ -1,53 +1,86 @@
-//
-//  SearchNutritionViewModel.swift
-//  NutriQuor
-//
-//  Created by Lâm Tấn Thành on 25/4/26.
-//
-
 import Foundation
 import Combine
 
 @MainActor
 final class SearchNutritionViewModel: ObservableObject {
-    @Published  private var selectedCategory: NutritionCategory = .nutrient
 
+    // MARK: - Search state
+    @Published var isSearching: Bool = false
+
+    @Published var query: String = "" {
+        didSet {
+            isSearching = !query.isEmpty
+            applySearch()
+        }
+    }
+
+    // MARK: - Data
     @Published var list: [SearchDTO] = []
+    @Published var filteredList: [SearchDTO] = []
+
+    // MARK: - Services
     private let searchService = SearchService()
     private let nutrientService = NutrientAPIService()
     private let ingredientService = IngredientAPIService()
     private let additiveService = AdditiveAPIService()
 
+    // MARK: - Load All
     func loadAll() async {
         do {
-            async let task = searchService.fetchAllItem()
-            let result = try await task
-            self.list = result
+            let result = try await searchService.fetchAllItem()
+            list = result
+
+            if query.isEmpty {
+                filteredList = result
+            }
 
         } catch {
             print("Error loading data:", error)
         }
     }
-    
+
+    // MARK: - Load by category
     func loadByCategory(_ category: NutritionCategory) async {
         do {
+            let data: [SearchDTO]
+
             switch category {
             case .all:
                 await loadAll()
+                return
+
             case .nutrient:
-                let data = try await nutrientService.fetchNutrients()
-                self.list = data.map { $0.toSearchDTO() }
+                data = try await nutrientService.fetchNutrients().map { $0.toSearchDTO() }
 
             case .ingredient:
-                let data = try await ingredientService.fetchIngredients()
-                self.list = data.map { $0.toSearchDTO() }
+                data = try await ingredientService.fetchIngredients().map { $0.toSearchDTO() }
+
             case .additive:
-                let data = try await additiveService.fetchAdditives()
-                self.list = data.map { $0.toSearchDTO() }
+                data = try await additiveService.fetchAdditives().map { $0.toSearchDTO() }
             }
-            
+
+            list = data
+
+            if query.isEmpty {
+                filteredList = data
+            } else {
+                applySearch()
+            }
+
         } catch {
             print("Error loading data:", error)
+        }
+    }
+
+    // MARK: - Search
+    func applySearch() {
+        guard !query.isEmpty else {
+            filteredList = list
+            return
+        }
+
+        filteredList = list.filter {
+            $0.name.localizedCaseInsensitiveContains(query)
         }
     }
 }
