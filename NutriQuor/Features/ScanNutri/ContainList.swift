@@ -12,7 +12,10 @@ struct ContainList: View {
         ScrollView{
             VStack(spacing: 20){
                 SearchBar(text: .constant(""))
-                ProductCard()
+                ProductCard(
+                    name: "Sữa",
+                    tags: ["Drink", "Healthy"]
+                )
                 IngredientSection(title: "Ingredients", tag: "6 items")
                 IngredientSection(title: "Additives", tag: "6 items")
             }

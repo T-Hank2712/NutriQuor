@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct ProductCard: View {
+    var name: String
+    var tags: [String]
     var body: some View {
            HStack(spacing: 16) {
                
@@ -17,11 +19,14 @@ struct ProductCard: View {
                
                VStack(alignment: .leading, spacing: 6) {
                    
-                   Text("Organic Almond Milk")
+                   Text(name)
                        .font(.headline)
+                       .foregroundStyle(.black)
                    
                    HStack {
-                       Tag(text: "Snack", color: .orange)
+                       ForEach(tags, id: \.self) { tag in
+                           Tag(text: tag, color: .orange)
+                       }
                    }
                }
                
@@ -32,5 +37,8 @@ struct ProductCard: View {
        }}
 
 #Preview {
-    ProductCard()
+    ProductCard(
+        name: "Sữa",
+        tags: ["Drink", "Healthy"]
+    )
 }

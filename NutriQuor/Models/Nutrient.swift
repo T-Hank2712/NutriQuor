@@ -5,10 +5,13 @@
 //  Created by Lâm Tấn Thành on 26/1/26.
 //
 import Foundation
-struct Nutrition{
+struct Nutrient: Identifiable, Codable {
+    let id: Int
     let name: String
-    let unit: String
-    let value: Double
+    let description: String
+    let image: String
+    let effects: [HealthEffect]
+    let found_in: [FoodCategory]
 }
 
 struct NutriText: Identifiable, Equatable {

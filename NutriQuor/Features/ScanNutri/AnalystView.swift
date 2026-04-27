@@ -20,7 +20,10 @@ struct AnalystView: View {
                 VStack(alignment: .leading, spacing: 20) {
                     
                     // MARK: - Product
-                    ProductCard()
+                    ProductCard(
+                        name: "Sữa",
+                        tags: ["Drink", "Healthy"]
+                    )
                     
                     Text("Nutrition")
                         .font(.title2)
