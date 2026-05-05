@@ -7,8 +7,7 @@
 
 import SwiftUI
 
-struct Allergy: Identifiable {
-    let id = UUID()
-    let text: String
-    let color: Color
+struct Allergy: Identifiable, Codable {
+    let id: Int
+    let name: String
 }

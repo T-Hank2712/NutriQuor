@@ -8,35 +8,31 @@
 import SwiftUI
 
 struct AllergyPicker: View {
-    
+    @StateObject var viewModel = UserProfileViewModel()
     @Environment(\.dismiss) private var dismiss
-    
-    let allergies = [
-        "Nuts",
-        "Gluten",
-        "Milk",
-        "Eggs",
-        "Soy",
-        "Shellfish"
-    ]
-    
+
     var onSelect: (Allergy) -> Void
-    
+
     var body: some View {
-        
         NavigationStack {
-            
-            List(allergies, id: \.self) { allergy in
-                
+
+            List(viewModel.allergyList) { allergy in
                 Button {
-                    onSelect(Allergy(text: allergy, color: .red))
+                    onSelect(allergy)
                     dismiss()
                 } label: {
-                    Text(allergy)
+                    Text(allergy.name)
                 }
-                
             }
             .navigationTitle("Select Allergy")
         }
+        .task {
+            print("LOAD ALLERGIES IN PICKER")
+            await viewModel.loadAllergies()
+        }
     }
+}
+
+#Preview {
+    AllergyPicker(onSelect: { _ in })
 }

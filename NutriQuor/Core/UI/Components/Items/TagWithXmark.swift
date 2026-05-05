@@ -16,6 +16,8 @@ struct TagWithXmark: View {
         
         HStack {
             Text(text)
+                .lineLimit(1)
+                .fixedSize(horizontal: true, vertical: false)
             Image(systemName: "xmark").foregroundStyle(.gray)
         }
         .font(.title3)

@@ -62,12 +62,28 @@ struct EditProfile: View {
                     .pickerStyle(.menu)
                 }
                 
+                PrimaryGoalsCard(
+                    goals: [
+                    ],
+                    onAdd: {},
+                    onDelete: { _ in }
+                )
                 
-                PrimaryGoalsCard()
+                MedicalConditionsCard(
+                    diseases: [
+                    ],
+                    onAdd: {},
+                    onDelete: { _ in }
+                )
                 
-                MedicalConditionsCard()
-                
-                AllergiesCard()
+                AllergiesCard(
+                    allergies: [
+                        Allergy(id: 1, name: "Nuts"),
+                        Allergy(id: 2, name: "Gluten")
+                    ],
+                    onAdd: {},
+                    onDelete: { _ in }
+                )
                 
                 
                 // SAVE BUTTON
