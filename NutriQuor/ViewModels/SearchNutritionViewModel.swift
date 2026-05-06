@@ -33,6 +33,7 @@ final class SearchNutritionViewModel: ObservableObject {
             if query.isEmpty {
                 filteredList = result
             }
+            print(list)
 
         } catch {
             print("Error loading data:", error)

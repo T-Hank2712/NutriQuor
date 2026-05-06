@@ -8,45 +8,31 @@
 import SwiftUI
 
 struct MedicalPicker: View {
-    
+    @StateObject var viewModel = UserProfileViewModel()
     @Environment(\.dismiss) private var dismiss
-    
-    @Binding var conditions: [Condition]
-    
-    let allConditions = [
-        "Diabetes",
-        "Hypertension",
-        "Heart Disease",
-        "Obesity",
-        "Kidney Disease",
-        "High Cholesterol"
-    ]
+
+    var onSelect: (Disease) -> Void
     
     var body: some View {
-        
         NavigationStack {
-            
-            List(allConditions, id: \.self) { condition in
-                
+
+            List(viewModel.diseaseList) { allergy in
                 Button {
-                    
-                    conditions.append(
-                        Condition(
-                            title: condition,
-                            status: "Monitored",
-                            color: .blue
-                        )
-                    )
-                    
+                    onSelect(allergy)
                     dismiss()
-                    
                 } label: {
-                    Text(condition)
+                    Text(allergy.name)
                 }
-                
             }
-            .navigationTitle("Select Condition")
+            .navigationTitle("Select Disease")
+        }
+        .task {
+            print("LOAD DISEASE IN PICKER")
+            await viewModel.loadDiseases()
         }
     }
+}
+#Preview {
+    MedicalPicker(onSelect: { _ in })
 }
 

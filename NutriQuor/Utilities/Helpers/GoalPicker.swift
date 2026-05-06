@@ -9,39 +9,30 @@ import SwiftUI
 
 struct GoalPicker: View {
     
-    let goals: [Goal] = [
-        Goal(text: "Lose weight", color: .green),
-        Goal(text: "Gain muscle", color: .blue),
-        Goal(text: "Eat healthy", color: .orange),
-        Goal(text: "Low sugar", color: .red),
-        Goal(text: "High protein", color: .purple)
-    ]
-    
-    var onSelect: (Goal) -> Void
-    
-    @Environment(\.dismiss) var dismiss
+    @StateObject var viewModel = UserProfileViewModel()
+    @Environment(\.dismiss) private var dismiss
+
+    var onSelect: (HealthGoal) -> Void
     
     var body: some View {
-        
         NavigationStack {
-            
-            List(goals) { goal in
-                
+
+            List(viewModel.healthGoals) { healthGoal in
                 Button {
-                    onSelect(goal)
+                    onSelect(healthGoal)
                     dismiss()
                 } label: {
-                    HStack {
-                        Circle()
-                            .fill(goal.color)
-                            .frame(width: 10)
-                        
-                        Text(goal.text)
-                    }
+                    Text(healthGoal.name)
                 }
             }
-            .navigationTitle("Select Goal")
+            .navigationTitle("Select Health Goal")
+        }
+        .task {
+            print("LOAD ALLERGIES IN PICKER")
+            await viewModel.loadHealthGoals()
         }
     }
 }
-
+#Preview {
+    GoalPicker(onSelect: { _ in })
+}

@@ -7,45 +7,39 @@
 
 import SwiftUI
 
+import SwiftUI
+
 struct AllergiesCard: View {
-    
-    @State private var allergies: [Allergy] = [
-        Allergy(text: "Nuts", color: .red),
-        Allergy(text: "Gluten", color: .orange)
-    ]
-    
-    @State private var showPicker = false
-    @State private var selectedAllergy: Allergy? = nil
-    @State private var showDeleteAlert = false
-    
+    let allergies: [Allergy]
+
+    var onAdd: () -> Void
+    var onDelete: (Allergy) -> Void
+
     var body: some View {
-        
+
         VStack(alignment: .leading, spacing: 12) {
-            
+
             HStack {
                 Image(systemName: "exclamationmark.triangle")
                     .foregroundStyle(.orange)
-                
+
                 Text("Allergies")
                     .fontWeight(.bold)
             }
-            
+
             HStack {
-                
+
                 ForEach(allergies) { allergy in
-                    
                     Button {
-                        selectedAllergy = allergy
-                        showDeleteAlert = true
+                        onDelete(allergy)
                     } label: {
-                        TagWithXmark(text: allergy.text, color: allergy.color)
+                        TagWithXmark(text: allergy.name, color: .orange)
                     }
                     .buttonStyle(.plain)
-                    
                 }
-                
+
                 Button {
-                    showPicker = true
+                    onAdd()
                 } label: {
                     HStack {
                         Image(systemName: "plus")
@@ -69,31 +63,16 @@ struct AllergiesCard: View {
         )
         .cornerRadius(.cardRadius)
         .shadow(radius: 2)
-        
-        .sheet(isPresented: $showPicker) {
-            AllergyPicker { allergy in
-                allergies.append(allergy)
-            }
-        }
-        
-        .alert("Remove Allergy?", isPresented: $showDeleteAlert) {
-            
-            Button("Cancel", role: .cancel) {}
-            
-            Button("Delete", role: .destructive) {
-                if let allergy = selectedAllergy {
-                    withAnimation {
-                        allergies.removeAll { $0.id == allergy.id }
-                    }
-                }
-            }
-            
-        } message: {
-            Text("Are you sure you want to remove this allergy?")
-        }
     }
 }
 
 #Preview {
-    AllergiesCard()
+    AllergiesCard(
+        allergies: [
+            Allergy(id: 1, name: "Nuts"),
+            Allergy(id: 2, name: "Gluten")
+        ],
+        onAdd: {},
+        onDelete: { _ in }
+    )
 }

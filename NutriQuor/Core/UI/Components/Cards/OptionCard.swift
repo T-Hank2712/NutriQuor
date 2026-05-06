@@ -24,6 +24,7 @@ struct OptionCard: View {
                
                Image(systemName: icon)
                    .font(.system(size: 24))
+                   .foregroundStyle(.black)
            }
            .padding(.horizontal, 16)
            .padding(.vertical, 14)

@@ -27,9 +27,9 @@ struct ContentView: View {
                         Label("History", systemImage: "clock.arrow.circlepath")
                     }
                 // PROFILE
-                ProfileView()
+                SettingView()
                     .tabItem {
-                        Label("Profile", systemImage: "person")
+                        Label("Setting", systemImage: "person")
                     }
             }.accentColor(Color(.primary))
             CameraButton()

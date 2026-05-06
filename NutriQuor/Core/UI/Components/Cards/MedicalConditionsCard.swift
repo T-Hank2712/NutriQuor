@@ -8,17 +8,16 @@
 import SwiftUI
 
 struct MedicalConditionsCard: View {
-    
-    @State private var showConditionList = false
-    
-    @State private var conditions: [Condition] = [
-        Condition(title: "Type II Diabetes", status: "Monitored", color: .blue)
-    ]
+    let diseases: [Disease]
+
+    var onAdd: () -> Void
+    var onDelete: (Disease) -> Void
     
     var body: some View {
         
         VStack(alignment: .leading, spacing: 12) {
             
+            // Header
             HStack {
                 Image(systemName: "cross.case.fill")
                     .foregroundStyle(.blue)
@@ -29,34 +28,41 @@ struct MedicalConditionsCard: View {
                 Spacer()
                 
                 Button {
-                    showConditionList = true
+                    onAdd()
                 } label: {
                     Image(systemName: "plus")
                 }
             }
             
-            ForEach(conditions) { condition in
+            // LIST CONDITIONS
+            ForEach(diseases) { disease in
                 ConditionRow(
-                    title: condition.title,
-                    color: condition.color
+                    title: disease.name,
+                    color: .blue
                 ) {
-                    conditions.removeAll { $0.id == condition.id }
+                    onDelete(disease)
                 }
             }
         }
         .padding()
-        .background(
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Color(.systemBackground))
+        .overlay(
             RoundedRectangle(cornerRadius: .cardRadius)
                 .stroke(Color.gray.opacity(.opacityMedium))
         )
+        .cornerRadius(.cardRadius)
         .shadow(radius: 2)
-        
-        .sheet(isPresented: $showConditionList) {
-            MedicalPicker(conditions: $conditions)
-        }
     }
 }
 
 #Preview {
-    MedicalConditionsCard()
+    MedicalConditionsCard(
+        diseases: [
+            Disease(id: 1, name: "Nuts"),
+            Disease(id: 2, name: "Gluten")
+        ],
+        onAdd: {},
+        onDelete: { _ in }
+    )
 }

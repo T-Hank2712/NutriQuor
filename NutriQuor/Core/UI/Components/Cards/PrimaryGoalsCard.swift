@@ -9,18 +9,19 @@ import SwiftUI
 
 struct PrimaryGoalsCard: View {
     
-    @State private var tags: [Goal] = [
-        Goal(text: "Lose weight", color: .green),
-    ]
+    let goals: [HealthGoal]
+
+    var onAdd: () -> Void
+    var onDelete: (HealthGoal) -> Void
     
-    @State private var showGoalPicker = false
-    @State private var selectedGoal: Goal? = nil
     @State private var showDeleteAlert = false
+    @State private var selectedGoal: HealthGoal?
     
     var body: some View {
         
         VStack(alignment: .leading, spacing: 12) {
             
+            // Header
             HStack {
                 Image(systemName: "target")
                     .foregroundStyle(.green)
@@ -31,7 +32,7 @@ struct PrimaryGoalsCard: View {
                 Spacer()
                 
                 Button {
-                    showGoalPicker = true
+                    onAdd()
                 } label: {
                     Image(systemName: "plus.circle.fill")
                         .font(.title)
@@ -39,44 +40,38 @@ struct PrimaryGoalsCard: View {
                 }
             }
             
+            // Goals list
             HStack {
-                ForEach(tags) { tag in
+                ForEach(goals) { goal in
                     
                     Button {
-                        selectedGoal = tag
+                        selectedGoal = goal
                         showDeleteAlert = true
                     } label: {
-                        Tag(text: tag.text, color: tag.color)
+                        Tag(text: goal.name, color: .green)
                     }
                     .buttonStyle(.plain)
-                    
                 }
             }
         }
         .padding()
+        .frame(maxWidth: .infinity, alignment: .leading)
         .background(Color(.systemBackground))
         .overlay(
-            RoundedRectangle(cornerRadius: .smallRadius)
+            RoundedRectangle(cornerRadius: .cardRadius)
                 .stroke(Color.gray.opacity(.opacityMedium), lineWidth: 1)
         )
         .cornerRadius(.cardRadius)
         .shadow(radius: 2)
         
-        .sheet(isPresented: $showGoalPicker) {
-            GoalPicker { goal in
-                tags.append(goal)
-            }
-        }
-        
+        // Delete confirm
         .alert("Remove Goal?", isPresented: $showDeleteAlert) {
             
             Button("Cancel", role: .cancel) {}
             
             Button("Delete", role: .destructive) {
                 if let goal = selectedGoal {
-                    withAnimation {
-                        tags.removeAll { $0.id == goal.id }
-                    }
+                    onDelete(goal)
                 }
             }
             
@@ -87,5 +82,12 @@ struct PrimaryGoalsCard: View {
 }
 
 #Preview {
-    PrimaryGoalsCard()
+    PrimaryGoalsCard(
+        goals: [
+            HealthGoal(id: 1, name: "Lose Weight"),
+            HealthGoal(id: 2, name: "Build Muscle")
+        ],
+        onAdd: {},
+        onDelete: { _ in }
+    )
 }
