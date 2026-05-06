@@ -79,7 +79,7 @@ struct SearchView: View {
                         name: item.name,
                         tags: [item.code, item.type].compactMap { $0 }
                     )
-                }
+                }.buttonStyle(.plain)
             }
         }
     }

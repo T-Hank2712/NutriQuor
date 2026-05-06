@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct SettingView: View {
+    @AppStorage("app_theme") private var appTheme: String = AppearanceMode.system.rawValue
     
     var body: some View {
         NavigationStack{
@@ -63,7 +64,20 @@ struct SettingView: View {
                     }
                     
                     SettingsSection(title: "App Preferences") {
-                        AppearancePreviewWrapper()
+                        
+                        VStack(alignment: .leading, spacing: 12) {
+                            
+                            Text("Appearance")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                            
+                            Picker("Appearance", selection: $appTheme) {
+                                Text("System").tag(AppearanceMode.system.rawValue)
+                                Text("Light").tag(AppearanceMode.light.rawValue)
+                                Text("Dark").tag(AppearanceMode.dark.rawValue)
+                            }
+                            .pickerStyle(.segmented)
+                        }
                     }
                     
                     SettingsSection(title: "Support & Legal") {

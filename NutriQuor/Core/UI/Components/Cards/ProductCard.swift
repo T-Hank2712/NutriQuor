@@ -21,7 +21,7 @@ struct ProductCard: View {
                    
                    Text(name)
                        .font(.headline)
-                       .foregroundStyle(.black)
+                       .foregroundStyle(.primary)
                    
                    HStack {
                        ForEach(tags, id: \.self) { tag in
@@ -32,7 +32,7 @@ struct ProductCard: View {
                
                Spacer()
            }
-           .background(Color.white)
+           .background(Color(.systemBackground))
            .cornerRadius(.cardRadius)
        }}
 
