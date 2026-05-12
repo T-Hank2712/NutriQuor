@@ -57,7 +57,7 @@ struct AppearancePreviewWrapper: View {
             AppearanceButton(
                 title: "System",
                 icon: "gear",
-                mode: .auto,
+                mode: .system,
                 selected: $selected
             )
         }

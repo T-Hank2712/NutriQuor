@@ -14,7 +14,7 @@ struct AppearanceSelector: View {
         HStack(spacing: 10) {
             AppearanceButton(title: "Light", icon: "sun.max", mode: .light, selected: $selected)
             AppearanceButton(title: "Dark", icon: "moon", mode: .dark, selected: $selected)
-            AppearanceButton(title: "Auto", icon: "gear", mode: .auto, selected: $selected)
+            AppearanceButton(title: "Auto", icon: "gear", mode: .system, selected: $selected)
         }
         .padding()
     }

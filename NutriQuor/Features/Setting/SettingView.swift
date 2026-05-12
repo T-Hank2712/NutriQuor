@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct SettingView: View {
+    @AppStorage("app_theme") private var appTheme: String = AppearanceMode.system.rawValue
     
     var body: some View {
         NavigationStack{
@@ -32,7 +33,7 @@ struct SettingView: View {
                             .fontWeight(.bold)
                             .padding(.horizontal, 6)
                             .padding(.vertical, 3)
-                            .background(Color.primary)
+                            .background(Color(.primary))
                             .foregroundColor(.white)
                             .clipShape(Capsule())
                             .offset(x: 6, y: 6)
@@ -54,7 +55,7 @@ struct SettingView: View {
                                 icon: "person.circle",
                                 color: Color(.primary)
                             )
-                        }
+                        }.buttonStyle(.plain)
                         OptionCard(
                             title: "Change Your Password",
                             icon: "lock.circle",
@@ -63,7 +64,20 @@ struct SettingView: View {
                     }
                     
                     SettingsSection(title: "App Preferences") {
-                        AppearancePreviewWrapper()
+                        
+                        VStack(alignment: .leading, spacing: 12) {
+                            
+                            Text("Appearance")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                            
+                            Picker("Appearance", selection: $appTheme) {
+                                Text("System").tag(AppearanceMode.system.rawValue)
+                                Text("Light").tag(AppearanceMode.light.rawValue)
+                                Text("Dark").tag(AppearanceMode.dark.rawValue)
+                            }
+                            .pickerStyle(.segmented)
+                        }
                     }
                     
                     SettingsSection(title: "Support & Legal") {
@@ -101,7 +115,7 @@ struct SettingView: View {
                 .padding(.vertical)
             }
             .padding()
-            .background(Color(.systemGroupedBackground))
+            .background(Color(.systemBackground))
         }
     }
 }
