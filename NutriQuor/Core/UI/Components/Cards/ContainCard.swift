@@ -26,7 +26,7 @@ struct ContainCard: View {
         }
         .padding()
         .frame(maxWidth: .infinity, minHeight: 120)
-        .background(Color.white)
+        .background(Color(.systemBackground))
         .cornerRadius(.cardRadius)
 
         .overlay(

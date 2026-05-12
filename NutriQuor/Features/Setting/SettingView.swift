@@ -33,7 +33,7 @@ struct SettingView: View {
                             .fontWeight(.bold)
                             .padding(.horizontal, 6)
                             .padding(.vertical, 3)
-                            .background(Color.primary)
+                            .background(Color(.primary))
                             .foregroundColor(.white)
                             .clipShape(Capsule())
                             .offset(x: 6, y: 6)
@@ -55,7 +55,7 @@ struct SettingView: View {
                                 icon: "person.circle",
                                 color: Color(.primary)
                             )
-                        }
+                        }.buttonStyle(.plain)
                         OptionCard(
                             title: "Change Your Password",
                             icon: "lock.circle",
@@ -115,7 +115,7 @@ struct SettingView: View {
                 .padding(.vertical)
             }
             .padding()
-            .background(Color(.systemGroupedBackground))
+            .background(Color(.systemBackground))
         }
     }
 }

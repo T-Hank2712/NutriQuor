@@ -14,7 +14,9 @@ struct OptionCard: View {
 
        var body: some View {
            HStack{
-
+               Image(systemName: icon)
+                   .font(.system(size: 24))
+                   .foregroundStyle(.primary)
                Text(title)
                    .font(.system(size: 18))
                    .fontWeight(.medium)
@@ -22,9 +24,9 @@ struct OptionCard: View {
 
                Spacer()
                
-               Image(systemName: icon)
-                   .font(.system(size: 24))
-                   .foregroundStyle(.black)
+               Image(systemName: "chevron.right")
+                   .font(.system(size: 20))
+                   .foregroundStyle(.gray)
            }
            .padding(.horizontal, 16)
            .padding(.vertical, 14)
