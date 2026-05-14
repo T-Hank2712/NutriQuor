@@ -9,7 +9,7 @@ import SwiftUI
 
 extension CGFloat {
     // MARK: Radius
-    static let cardRadius: CGFloat = 16
+    static let cardRadius: CGFloat = 24
     static let smallRadius: CGFloat = 12
     
 }
@@ -21,4 +21,11 @@ extension Double {
     static let opacityMedium: Double = 0.3
     static let opacityStrong: Double = 0.6
     
+}
+
+extension Font {
+    static let heading1 = Font.system(size: 38, weight: .bold)
+    static let heading3 = Font.system(size: 24, weight: .bold)
+    static let title = Font.system(size: 20, weight: .bold)
+    static let text = Font.system(size: 20)
 }
