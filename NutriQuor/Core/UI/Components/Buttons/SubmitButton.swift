@@ -8,11 +8,14 @@
 import SwiftUI
 
 struct SubmitButton: View {
+    
     let title: String
+    let action: () -> Void
+    
     var body: some View {
-        Button {
+        
+        Button(action: action) {
             
-        } label: {
             HStack(spacing: 12) {
                 
                 Text(title)
@@ -23,7 +26,7 @@ struct SubmitButton: View {
             }
             .foregroundStyle(.white)
             .frame(maxWidth: .infinity)
-            .frame(minHeight: 65)
+            .frame(height: 65)
             .background(
                 RoundedRectangle(cornerRadius: .cardRadius)
                     .fill(Color(.heading))
@@ -39,5 +42,7 @@ struct SubmitButton: View {
 }
 
 #Preview {
-    SubmitButton(title: "Sign Up")
+    SubmitButton(title: "Sign Up") {
+        
+    }
 }

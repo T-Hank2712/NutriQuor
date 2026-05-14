@@ -81,7 +81,9 @@ struct LoginView: View {
                             }
                             .padding(.top, 10)
                             
-                            SubmitButton(title: "Log in")
+                            SubmitButton(title: "Log in") {
+                                
+                            }
                             
                             HStack(spacing: 4) {
                                         

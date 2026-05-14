@@ -9,10 +9,13 @@ import SwiftUI
 
 struct RegisterView: View {
     
+    @StateObject private var viewModel = RegisterViewModel()
+    
     @State private var firstName = ""
     @State private var lastName = ""
     @State private var email = ""
     @State private var password = ""
+    @State private var confirmPassword = ""
     
     var body: some View {
         GeometryReader { geo in
@@ -76,6 +79,7 @@ struct RegisterView: View {
                                             title: "First Name",
                                             placeholder: "Jane",
                                             icon: "person",
+                                            isSecure: false,
                                             text: $firstName
                                         )
                                         
@@ -83,6 +87,7 @@ struct RegisterView: View {
                                             title: "Last Name",
                                             placeholder: "Doe",
                                             icon: "person.text.rectangle",
+                                            isSecure: false,
                                             text: $lastName
                                         )
                                         
@@ -90,6 +95,7 @@ struct RegisterView: View {
                                             title: "Email",
                                             placeholder: "jane@example.com",
                                             icon: "envelope",
+                                            isSecure: false,
                                             text: $email
                                         )
                                         
@@ -97,6 +103,7 @@ struct RegisterView: View {
                                             title: "Password",
                                             placeholder: "Password",
                                             icon: "lock",
+                                            isSecure: true,
                                             text: $password
                                         )
                                         
@@ -104,39 +111,75 @@ struct RegisterView: View {
                                             title: "Confirm Password",
                                             placeholder: "Confirm Password",
                                             icon: "lock",
-                                            text: $password
+                                            isSecure: true,
+                                            text: $confirmPassword
                                         )
                                     }
                                     .padding(.top, 10)
                                     
-                                    SubmitButton(title: "Sign Up")
+                                    ZStack {
+                                        
+                                        SubmitButton(title: "Sign Up") {
+                                            
+                                            if password != confirmPassword {
+                                                viewModel.errorMessage = "Passwords do not match"
+                                                return
+                                            }
+                                            
+                                            Task {
+                                                await viewModel.register(
+                                                    firstName: firstName,
+                                                    lastName: lastName,
+                                                    email: email,
+                                                    password: password,
+                                                    confirmPassword: confirmPassword
+                                                )
+                                            }
+                                        }
+                                        
+                                        if viewModel.isLoading {
+                                            ProgressView()
+                                        }
+                                    }
+                                    
+                                    if let error = viewModel.errorMessage {
+                                        Text(error)
+                                            .foregroundStyle(.red)
+                                            .font(.system(size: 14))
+                                            .multilineTextAlignment(.center)
+                                    }
                                     
                                     HStack(spacing: 4) {
                                                 
-                                                Text("Already have an account?")
-                                                    .foregroundStyle(.gray)
+                                        Text("Already have an account?")
+                                            .foregroundStyle(.gray)
                                                 
-                                                Button("Log in") {
+                                        Button("Log in") {
                                                     
-                                                }
-                                                .foregroundStyle(Color(.heading))
-                                                .fontWeight(.semibold)
-                                            }
-                                            .font(.system(size: 18))
-                                            .padding(.bottom, 20)
+                                        }
+                                        .foregroundStyle(Color(.heading))
+                                        .fontWeight(.semibold)
+                                    }
+                                    .font(.system(size: 18))
+                                    .padding(.bottom, 20)
                                 }
                                 .padding()
                             }
                             .frame(minHeight: geo.size.height - 10)
                             .padding(.horizontal, 20)
                             .padding(.vertical, 70)
-                    }.padding(.bottom, 50)
+                    }
+                    .padding(.bottom, 50)
                 }
+            }
+        }
+        .onChange(of: viewModel.isSuccess) {
+            if viewModel.isSuccess {
+                print("Register Success")
             }
         }
     }
 }
-
 
 #Preview {
     RegisterView()

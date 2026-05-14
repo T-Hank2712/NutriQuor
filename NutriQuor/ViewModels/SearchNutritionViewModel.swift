@@ -51,6 +51,7 @@ final class SearchNutritionViewModel: ObservableObject {
 
             case .nutrient:
                 data = try await nutrientService.fetchNutrients().map { $0.toSearchDTO() }
+                print(data)
 
             case .ingredient:
                 data = try await ingredientService.fetchIngredients().map { $0.toSearchDTO() }

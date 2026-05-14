@@ -12,6 +12,7 @@ struct InputField: View {
     let title: String
     let placeholder: String
     let icon: String
+    var isSecure: Bool = false
     
     @Binding var text: String
     
@@ -29,11 +30,17 @@ struct InputField: View {
                     .foregroundStyle(Color(hex: "#9C7F87"))
                     .frame(width: 26)
                 
-                TextField(placeholder, text: $text)
-                    .font(.text)
+                if(isSecure){
+                    SecureField(placeholder, text: $text)
+                        .font(.body)
+                }
+                else {
+                    TextField(placeholder, text: $text)
+                        .font(.text)
+                }
             }
             .padding(.horizontal)
-            .frame(minHeight: 60)
+            .frame(height: 60)
             .background(
                 RoundedRectangle(cornerRadius: .cardRadius)
                     .fill(Color(.inputField))
@@ -51,6 +58,7 @@ struct InputField: View {
         title: "First Name",
         placeholder: "Jane",
         icon: "person",
+        isSecure: false,
         text: .constant("")
     )
 }
