@@ -31,12 +31,7 @@ struct ContentView: View {
                     .tabItem {
                         Label("Setting", systemImage: "person")
                     }
-                
-                RegisterView()
-                    .tabItem {
-                        Label("Register", systemImage: "lock")
-                    }
-            }.accentColor(Color(.primary))
+            }.accentColor(Color(.colorPrimary))
             CameraButton()
 
         }

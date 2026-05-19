@@ -10,21 +10,20 @@ import SwiftUI
 struct RegisterView: View {
     
     @StateObject private var viewModel = RegisterViewModel()
-    
-    @State private var firstName = ""
-    @State private var lastName = ""
-    @State private var email = ""
-    @State private var password = ""
-    @State private var confirmPassword = ""
+    @EnvironmentObject var appState: AppState
+    @State private var showSuccessAlert = false
+    @State private var navigateToLogin = false
     
     var body: some View {
+        
         GeometryReader { geo in
             
             ZStack {
+                
                 LinearGradient(
                     colors: [
-                        Color(.primary),
-                        Color(.primary).opacity(0.05),
+                        Color(.colorPrimary),
+                        Color(.colorPrimary).opacity(0.05),
                         Color.blue.opacity(0.15)
                     ],
                     startPoint: .topLeading,
@@ -36,20 +35,21 @@ struct RegisterView: View {
                     
                     VStack {
                         
-                        RoundedRectangle(cornerRadius: .cardRadius)
-                            .fill(Color(.systemBackground).opacity(0.92))
+                        RoundedRectangle(cornerRadius: 50)
+                            .fill(Color(.systemBackground).opacity(0.4))
                             .overlay {
                                 
-                                VStack(spacing: 24) {
+                                VStack {
                                     
-                                    VStack(spacing: 24) {
+                                    VStack {
                                         
                                         ZStack {
+                                            
                                             Circle()
-                                                .fill(Color(.primary).opacity(0.5))
+                                                .fill(Color(.colorPrimary).opacity(0.5))
                                                 .frame(width: 100, height: 100)
                                                 .shadow(
-                                                    color: .pink.opacity(0.25),
+                                                    color: .colorPrimary.opacity(0.25),
                                                     radius: 10
                                                 )
                                             
@@ -71,71 +71,117 @@ struct RegisterView: View {
                                             .frame(maxWidth: .infinity)
                                             .lineLimit(nil)
                                             .fixedSize(horizontal: false, vertical: true)
+                                            .padding(.bottom, 2)
                                     }
                                     
                                     VStack(spacing: 24) {
                                         
-                                        InputField(
-                                            title: "First Name",
-                                            placeholder: "Jane",
-                                            icon: "person",
-                                            isSecure: false,
-                                            text: $firstName
-                                        )
+                                        VStack(alignment: .leading, spacing: 6) {
+
+                                            InputField(
+                                                title: "First Name",
+                                                placeholder: "Jane",
+                                                icon: "person",
+                                                text: $viewModel.firstName.value
+                                            )
+
+                                            if let error = viewModel.firstName.error {
+
+                                                Text(error)
+                                                    .font(.caption)
+                                                    .foregroundStyle(.red)
+                                                    .padding(.leading, 4)
+                                            }
+                                        }
                                         
-                                        InputField(
-                                            title: "Last Name",
-                                            placeholder: "Doe",
-                                            icon: "person.text.rectangle",
-                                            isSecure: false,
-                                            text: $lastName
-                                        )
+                                        VStack(alignment: .leading, spacing: 6) {
+
+                                            InputField(
+                                                title: "Last Name",
+                                                placeholder: "Doe",
+                                                icon: "person.text.rectangle",
+                                                text: $viewModel.lastName.value
+                                            )
+
+                                            if let error = viewModel.lastName.error {
+
+                                                Text(error)
+                                                    .font(.caption)
+                                                    .foregroundStyle(.red)
+                                                    .padding(.leading, 4)
+                                            }
+                                        }
                                         
-                                        InputField(
-                                            title: "Email",
-                                            placeholder: "jane@example.com",
-                                            icon: "envelope",
-                                            isSecure: false,
-                                            text: $email
-                                        )
+                                        VStack(alignment: .leading, spacing: 6) {
+
+                                            InputField(
+                                                title: "Email",
+                                                placeholder: "jane@example.com",
+                                                icon: "envelope",
+                                                text: $viewModel.email.value
+                                            )
+
+                                            if let error = viewModel.email.error {
+
+                                                Text(error)
+                                                    .font(.caption)
+                                                    .foregroundStyle(.red)
+                                                    .padding(.leading, 4)
+                                            }
+                                        }
                                         
-                                        InputField(
-                                            title: "Password",
-                                            placeholder: "Password",
-                                            icon: "lock",
-                                            isSecure: true,
-                                            text: $password
-                                        )
+                                        VStack(alignment: .leading, spacing: 6) {
+
+                                            SecureInputField(
+                                                title: "Password",
+                                                placeholder: "Password",
+                                                icon: "lock",
+                                                text: $viewModel.password.value
+                                            )
+
+                                            if let error = viewModel.password.error {
+
+                                                Text(error)
+                                                    .font(.caption)
+                                                    .foregroundStyle(.red)
+                                                    .padding(.leading, 4)
+                                            }
+                                        }
                                         
-                                        InputField(
-                                            title: "Confirm Password",
-                                            placeholder: "Confirm Password",
-                                            icon: "lock",
-                                            isSecure: true,
-                                            text: $confirmPassword
-                                        )
+                                        VStack(alignment: .leading, spacing: 6) {
+
+                                            SecureInputField(
+                                                title: "Confirm Password",
+                                                placeholder: "Confirm Password",
+                                                icon: "lock",
+                                                text: $viewModel.confirmPassword.value
+                                            )
+
+                                            if let error = viewModel.confirmPassword.error {
+
+                                                Text(error)
+                                                    .font(.caption)
+                                                    .foregroundStyle(.red)
+                                                    .padding(.leading, 4)
+                                            }
+                                        }
                                     }
-                                    .padding(.top, 10)
                                     
                                     ZStack {
                                         
                                         SubmitButton(title: "Sign Up") {
-                                            
-                                            if password != confirmPassword {
-                                                viewModel.errorMessage = "Passwords do not match"
-                                                return
-                                            }
-                                            
+
                                             Task {
-                                                await viewModel.register(
-                                                    firstName: firstName,
-                                                    lastName: lastName,
-                                                    email: email,
-                                                    password: password,
-                                                    confirmPassword: confirmPassword
-                                                )
+                                                await viewModel.register()
+
+                                                await MainActor.run {
+                                                    if viewModel.isSuccess {
+                                                        showSuccessAlert = true
+                                                    }
+                                                }
                                             }
                                         }
+                                        .disabled(viewModel.isLoading)
                                         
                                         if viewModel.isLoading {
                                             ProgressView()
@@ -150,33 +196,65 @@ struct RegisterView: View {
                                     }
                                     
                                     HStack(spacing: 4) {
-                                                
+                                        
                                         Text("Already have an account?")
                                             .foregroundStyle(.gray)
-                                                
-                                        Button("Log in") {
-                                                    
+                                        
+                                        Button {
+                                            DispatchQueue.main.async {
+                                                appState.authState = .login
+                                            }
+                                        } label: {
+                                            Text("Log in")
+                                                .fontWeight(.semibold)
+                                                .foregroundStyle(Color(.heading))
                                         }
-                                        .foregroundStyle(Color(.heading))
-                                        .fontWeight(.semibold)
                                     }
                                     .font(.system(size: 18))
                                     .padding(.bottom, 20)
                                 }
-                                .padding()
+                                .padding(.horizontal, 20)
                             }
-                            .frame(minHeight: geo.size.height - 10)
+                            .frame(minHeight: geo.size.height + 200)
                             .padding(.horizontal, 20)
-                            .padding(.vertical, 70)
                     }
                     .padding(.bottom, 50)
                 }
             }
         }
+        .alert(
+            "Register Successfully",
+            isPresented: $showSuccessAlert
+        ) {
+        } message: {
+            Text("Redirecting to login...")
+        }
         .onChange(of: viewModel.isSuccess) {
             if viewModel.isSuccess {
-                print("Register Success")
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                    appState.authState = .login
+                }
             }
+        }
+        .onChange(of: viewModel.firstName.value) {
+            viewModel.validateFirstName()
+        }
+
+        .onChange(of: viewModel.lastName.value) {
+            viewModel.validateLastName()
+        }
+
+        .onChange(of: viewModel.email.value) {
+            viewModel.validateEmail()
+        }
+
+        .onChange(of: viewModel.password.value) {
+            viewModel.validatePassword()
+            viewModel.validateConfirmPassword()
+        }
+
+        .onChange(of: viewModel.confirmPassword.value) {
+            viewModel.validateConfirmPassword()
         }
     }
 }

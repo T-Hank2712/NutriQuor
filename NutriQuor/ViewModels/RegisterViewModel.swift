@@ -12,35 +12,51 @@ import Combine
 
 final class RegisterViewModel: ObservableObject {
     
+    @Published var firstName = FormField()
+    @Published var lastName = FormField()
+    @Published var email = FormField()
+    @Published var password = FormField()
+    @Published var confirmPassword = FormField()
+    
+    @Published var isFormValid = false
+    
+    @Published var cancellables = Set<AnyCancellable>()
+    
     @Published var isLoading: Bool = false
     @Published var errorMessage: String?
     @Published var isSuccess: Bool = false
-    func register(
-        firstName: String,
-        lastName: String,
-        email: String,
-        password: String,
-        confirmPassword: String
-    ) async {
+    
+//    init(){
+//        setupValidation()
+//    }
+    
+    func register() async {
+        validate()
+        
         isLoading = true
         errorMessage = nil
+        
         do {
-            let response = try await AuthService.shared.register(
-                firstName: firstName,
-                lastName: lastName,
-                email: email,
-                password: password,
-                confirmPassword: confirmPassword
+            try await AuthService.shared.register(
+                firstName: firstName.value,
+                lastName: lastName.value,
+                email: email.value,
+                password: password.value,
+                confirmPassword: confirmPassword.value
             )
-            
             isSuccess = true
-            print(response)
-            
         } catch {
-            print(error.localizedDescription)
             errorMessage = error.localizedDescription
         }
-        
         isLoading = false
+    }
+}
+
+struct FormField {
+    var value: String = ""
+    var error: String?
+    var isTouched = false
+    var isValid: Bool {
+        error == nil
     }
 }

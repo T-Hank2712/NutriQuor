@@ -17,7 +17,7 @@ struct CircleButton: View {
                 .frame(width:50,height:50)
                 .overlay(
                     Circle()
-                        .stroke(Color(.primary), lineWidth: 2)
+                        .stroke(Color(.colorPrimary), lineWidth: 2)
                 )
             
             Image(systemName: icon)

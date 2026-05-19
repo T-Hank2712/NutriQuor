@@ -5,7 +5,7 @@ struct CameraFrame: View {
     var body: some View {
         
         RoundedRectangle(cornerRadius: .cardRadius)
-            .stroke(Color.primary, lineWidth: 2)
+            .stroke(Color.colorPrimary, lineWidth: 2)
             .frame(height: frameHeight)
     }
 }

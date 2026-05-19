@@ -23,7 +23,7 @@ struct CameraButton: View {
                     .frame(width: 64, height: 64)
                     .background(
                         Circle()
-                            .fill(Color(.primary))
+                            .fill(Color(.colorPrimary))
                             .shadow(radius: 10)
                     )
             }

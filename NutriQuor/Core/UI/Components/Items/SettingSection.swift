@@ -21,7 +21,7 @@ struct SettingsSection<Content: View>: View {
         VStack(alignment: .leading, spacing: 10) {
             Text(title)
                 .font(.title3)
-                .foregroundColor(Color(.primary))
+                .foregroundColor(Color(.colorPrimary))
                 .padding(.horizontal)
             
             VStack(spacing: 16) {
@@ -40,12 +40,12 @@ struct SettingsSection<Content: View>: View {
 #Preview {
     VStack(spacing: 20){
         SettingsSection(title: "Test") {
-            OptionCard(title: "Thêm vào yêu thích", icon: "heart", color: Color(.primary))
-            OptionCard(title: "Thêm vào yêu thích", icon: "heart", color: Color(.primary))
+            OptionCard(title: "Thêm vào yêu thích", icon: "heart", color: Color(.colorPrimary))
+            OptionCard(title: "Thêm vào yêu thích", icon: "heart", color: Color(.colorPrimary))
         }
         SettingsSection(title: "Test") {
-            OptionCard(title: "Thêm vào yêu thích", icon: "heart", color: Color(.primary))
-            OptionCard(title: "Thêm vào yêu thích", icon: "heart", color: Color(.primary))
+            OptionCard(title: "Thêm vào yêu thích", icon: "heart", color: Color(.colorPrimary))
+            OptionCard(title: "Thêm vào yêu thích", icon: "heart", color: Color(.colorPrimary))
         }
     }
 }

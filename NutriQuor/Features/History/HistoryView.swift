@@ -17,7 +17,7 @@ struct HistoryView: View {
                 Text("Lịch sử")
                     .font(.largeTitle)
                     .bold()
-                    .foregroundStyle(Color(.primary))
+                    .foregroundStyle(Color(.colorPrimary))
                 
                 ScrollView {
                     if let errorMessage {

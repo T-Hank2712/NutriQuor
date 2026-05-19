@@ -45,7 +45,7 @@ struct AnalystView: View {
                         .font(.title2)
                         .bold()
                     HStack(spacing: 20){
-                        ContainCard(title: "Ingredients", good: "6 Healthy", bad: "2 To Limit", color: Color(.primary))
+                        ContainCard(title: "Ingredients", good: "6 Healthy", bad: "2 To Limit", color: Color(.colorPrimary))
                         ContainCard(title: "Additives", good: "", bad: "6 adds", color: Color(.badHealth))
                     }
                     Button {
@@ -68,11 +68,11 @@ struct AnalystView: View {
                     
                     OptionCard(title: "Thêm vào yêu thích",
                                icon: "heart",
-                               color: Color(.primary))
+                               color: Color(.colorPrimary))
                     
                     OptionCard(title: "Chia sẻ",
                                icon: "square.and.arrow.up",
-                               color: Color(.primary))
+                               color: Color(.colorPrimary))
                 }
                 .padding(.horizontal, 20)
                 

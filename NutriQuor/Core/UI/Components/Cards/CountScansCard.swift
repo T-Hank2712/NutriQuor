@@ -23,7 +23,7 @@ struct CountScansCard: View {
                 
                 Text("+4 vs avg")
                     .font(.caption)
-                    .foregroundColor(Color(.primary))
+                    .foregroundColor(Color(.colorPrimary))
             }
         }
         .padding()

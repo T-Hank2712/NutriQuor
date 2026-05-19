@@ -15,7 +15,7 @@ struct InsightCard: View {
             
             HStack {
                 Image(systemName: "lightbulb.fill")
-                    .foregroundColor(Color(.primary))
+                    .foregroundColor(Color(.colorPrimary))
                 
                 Text("INSIGHT OF THE DAY")
                     .font(.caption)
@@ -37,7 +37,7 @@ struct InsightCard: View {
                 Text("LEARN MORE")
                     .padding(.horizontal, 20)
                     .padding(.vertical, 10)
-                    .background(Color(.primary))
+                    .background(Color(.colorPrimary))
                     .foregroundColor(.black)
                     .cornerRadius(.smallRadius)
             }
@@ -46,7 +46,7 @@ struct InsightCard: View {
         .padding()
         .background(
             LinearGradient(
-                colors: [.black, Color(.primary).opacity(.opacityStrong)],
+                colors: [.black, Color(.colorPrimary).opacity(.opacityStrong)],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )

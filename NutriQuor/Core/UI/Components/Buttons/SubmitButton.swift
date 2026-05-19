@@ -32,7 +32,7 @@ struct SubmitButton: View {
                     .fill(Color(.heading))
             )
             .shadow(
-                color: Color(.primary).opacity(0.35),
+                color: Color(.colorPrimary).opacity(0.35),
                 radius: .cardRadius,
                 y: 10
             )

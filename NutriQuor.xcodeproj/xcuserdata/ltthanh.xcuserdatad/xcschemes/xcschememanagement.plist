@@ -4,6 +4,11 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>NutriQuor 1.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
 		<key>NutriQuor.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
@@ -14,6 +19,8 @@
 	<dict>
 		<key>7D420D072F15429C00099B0A</key>
 		<dict>
+			<key>colorPrimary</key>
+			<true/>
 			<key>primary</key>
 			<true/>
 		</dict>

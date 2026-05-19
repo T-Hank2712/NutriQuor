@@ -14,7 +14,7 @@
             buildForArchiving = "YES"
             buildForAnalyzing = "YES">
             <BuildableReference
-               BuildableIdentifier = "colorPrimary"
+               BuildableIdentifier = "primary"
                BlueprintIdentifier = "7D420D072F15429C00099B0A"
                BuildableName = "NutriQuor.app"
                BlueprintName = "NutriQuor"
@@ -43,7 +43,7 @@
       <BuildableProductRunnable
          runnableDebuggingMode = "0">
          <BuildableReference
-            BuildableIdentifier = "colorPrimary"
+            BuildableIdentifier = "primary"
             BlueprintIdentifier = "7D420D072F15429C00099B0A"
             BuildableName = "NutriQuor.app"
             BlueprintName = "NutriQuor"
@@ -60,7 +60,7 @@
       <BuildableProductRunnable
          runnableDebuggingMode = "0">
          <BuildableReference
-            BuildableIdentifier = "colorPrimary"
+            BuildableIdentifier = "primary"
             BlueprintIdentifier = "7D420D072F15429C00099B0A"
             BuildableName = "NutriQuor.app"
             BlueprintName = "NutriQuor"

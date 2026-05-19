@@ -21,7 +21,7 @@ struct ProfileView: View {
         ScrollView {
             VStack(spacing: 20) {
 
-                PrimaryGoalsCard(
+                colorPrimaryGoalsCard(
                     goals: healthGoals,
                     onAdd: { showHealthGoalPicker = true},
                     onDelete: { healthGoal in
