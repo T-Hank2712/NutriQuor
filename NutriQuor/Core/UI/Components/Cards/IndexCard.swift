@@ -17,12 +17,12 @@ struct IndexCard: View {
                        .foregroundColor(.gray)
                    
                    ProgressView(value: 0.7)
-                       .tint(Color(.primary))
+                       .tint(Color(.colorPrimary))
                    
                    HStack {
                        Text("8 SAFE")
                            .font(.caption)
-                           .foregroundColor(Color(.primary))
+                           .foregroundColor(Color(.colorPrimary))
                        
                        Spacer()
                        

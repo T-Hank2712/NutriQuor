@@ -20,11 +20,11 @@ struct CategoryCard: View {
             ZStack {
                 
                 RoundedRectangle(cornerRadius: .smallRadius)
-                    .fill(Color(active ? Color(.primary).opacity(.opacityMedium) : Color(.systemGray6)))
+                    .fill(Color(active ? Color(.colorPrimary).opacity(.opacityMedium) : Color(.systemGray6)))
                     .frame(width: 40, height: 40)
                 
                 Image(systemName: icon)
-                    .foregroundColor(active ? Color(.primary) : .gray)
+                    .foregroundColor(active ? Color(.colorPrimary) : .gray)
             }
             
             Text(title)
@@ -37,7 +37,7 @@ struct CategoryCard: View {
         .cornerRadius(16)
         .overlay(
             RoundedRectangle(cornerRadius: .cardRadius)
-                .stroke(active ? Color(.primary) : Color.clear, lineWidth: 1)
+                .stroke(active ? Color(.colorPrimary) : Color.clear, lineWidth: 1)
         )
         .shadow(color: Color.black.opacity(.opacityLight), radius: 6, x: 0, y: 3)
     }

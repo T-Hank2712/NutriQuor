@@ -16,11 +16,11 @@ struct OptionCard: View {
            HStack{
                Image(systemName: icon)
                    .font(.system(size: 24))
-                   .foregroundStyle(.primary)
+                   .foregroundStyle(.colorPrimary)
                Text(title)
                    .font(.system(size: 18))
                    .fontWeight(.medium)
-                   .foregroundColor(.primary)
+                   .foregroundColor(.colorPrimary)
 
                Spacer()
                
@@ -38,5 +38,5 @@ struct OptionCard: View {
 }
 
 #Preview {
-    OptionCard(title: "Thêm vào yêu thích", icon: "heart", color: Color(.primary))
+    OptionCard(title: "Thêm vào yêu thích", icon: "heart", color: Color(.colorPrimary))
 }

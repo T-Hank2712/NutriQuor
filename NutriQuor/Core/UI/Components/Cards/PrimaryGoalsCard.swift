@@ -1,5 +1,5 @@
 //
-//  PrimaryGoalsCard.swift
+//  colorPrimaryGoalsCard.swift
 //  NutriQuor
 //
 //  Created by Lâm Tấn Thành on 9/3/26.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct PrimaryGoalsCard: View {
+struct colorPrimaryGoalsCard: View {
     
     let goals: [HealthGoal]
 
@@ -26,7 +26,7 @@ struct PrimaryGoalsCard: View {
                 Image(systemName: "target")
                     .foregroundStyle(.green)
                 
-                Text("Primary Health Goals")
+                Text("colorPrimary Health Goals")
                     .fontWeight(.bold)
                 
                 Spacer()
@@ -36,7 +36,7 @@ struct PrimaryGoalsCard: View {
                 } label: {
                     Image(systemName: "plus.circle.fill")
                         .font(.title)
-                        .foregroundStyle(Color(.primary))
+                        .foregroundStyle(Color(.colorPrimary))
                 }
             }
             
@@ -82,7 +82,7 @@ struct PrimaryGoalsCard: View {
 }
 
 #Preview {
-    PrimaryGoalsCard(
+    colorPrimaryGoalsCard(
         goals: [
             HealthGoal(id: 1, name: "Lose Weight"),
             HealthGoal(id: 2, name: "Build Muscle")

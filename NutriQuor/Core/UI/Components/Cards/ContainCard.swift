@@ -20,7 +20,7 @@ struct ContainCard: View {
                     .fontWeight(.semibold)
             }
             Text(good)
-                .foregroundColor(Color(.primary))
+                .foregroundColor(Color(.colorPrimary))
             Text(bad)
                 .foregroundColor(Color(.badHealth))
         }

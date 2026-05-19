@@ -47,10 +47,10 @@ struct SearchBar: View {
                 )
         )
         .overlay(
-            RoundedRectangle(cornerRadius: 15)
+            RoundedRectangle(cornerRadius: .cardRadius)
                 .stroke(Color.white.opacity(0.3), lineWidth: 1)
         )
-        .shadow(color: .black.opacity(0.1), radius: 5, y: 3)
+        .shadow(color: .black.opacity(0.1), radius: .cardRadius, y: 3)
         .onTapGesture {
             isFocused = true
         }

@@ -24,7 +24,7 @@ struct CaptureButton: View {
                 .frame(width:70,height:70)
                 .overlay(
                     Circle()
-                        .stroke(Color(.primary), lineWidth: 2)
+                        .stroke(Color(.colorPrimary), lineWidth: 2)
                 )
         }
     }

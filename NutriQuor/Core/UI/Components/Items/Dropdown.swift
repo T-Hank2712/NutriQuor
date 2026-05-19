@@ -38,7 +38,7 @@ struct Dropdown: View {
                         }
                     }
                     .padding()
-                    .foregroundColor(.primary)
+                    .foregroundColor(.colorPrimary)
                 }
                 
                 if mode != modes.last {

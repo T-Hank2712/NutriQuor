@@ -45,12 +45,12 @@ struct TopBarCamera: View {
                         .font(.system(size: 12, weight: .bold))
                         .rotationEffect(.degrees(showDropdown ? 180 : 0))
                 }
-                .foregroundColor(Color(.primary)) // 👈 thêm lại
+                .foregroundColor(Color(.colorPrimary)) // 👈 thêm lại
                 .padding(.horizontal, 18)
                 .padding(.vertical, 8)
                 .background(
                     Capsule()
-                        .stroke(Color(.primary), lineWidth: 2) // 👈 giống code cũ
+                        .stroke(Color(.colorPrimary), lineWidth: 2) // 👈 giống code cũ
                 )
             }
             .overlay(alignment: .top) {
@@ -100,7 +100,7 @@ struct DropdownModes: View {
                         }
                     }
                     .padding()
-                    .foregroundColor(.primary)
+                    .foregroundColor(.colorPrimary)
                 }
                 
                 if mode != modes.last {

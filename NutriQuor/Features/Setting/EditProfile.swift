@@ -62,7 +62,7 @@ struct EditProfile: View {
                     .pickerStyle(.menu)
                 }
                 
-                PrimaryGoalsCard(
+                colorPrimaryGoalsCard(
                     goals: [
                     ],
                     onAdd: {},

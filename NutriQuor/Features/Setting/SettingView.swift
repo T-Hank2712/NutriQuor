@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SettingView: View {
     @AppStorage("app_theme") private var appTheme: String = AppearanceMode.system.rawValue
+    @EnvironmentObject var appState: AppState
     
     var body: some View {
         NavigationStack{
@@ -33,13 +34,13 @@ struct SettingView: View {
                             .fontWeight(.bold)
                             .padding(.horizontal, 6)
                             .padding(.vertical, 3)
-                            .background(Color(.primary))
+                            .background(Color(.colorPrimary))
                             .foregroundColor(.white)
                             .clipShape(Capsule())
                             .offset(x: 6, y: 6)
                         }
 
-                        Text("Lâm Tấn Thành")
+                        Text("\(appState.profile?.lastName ?? "Lâm") \(appState.profile?.firstName ?? "Thành")")
                             .font(.title3)
                             .fontWeight(.bold)
                     }
@@ -53,13 +54,13 @@ struct SettingView: View {
                             OptionCard(
                                 title: "Edit Profile",
                                 icon: "person.circle",
-                                color: Color(.primary)
+                                color: Color(.colorPrimary)
                             )
                         }.buttonStyle(.plain)
                         OptionCard(
                             title: "Change Your Password",
                             icon: "lock.circle",
-                            color: Color(.primary)
+                            color: Color(.colorPrimary)
                         )
                     }
                     
@@ -84,17 +85,20 @@ struct SettingView: View {
                         OptionCard(
                             title: "Help Center",
                             icon: "questionmark.circle",
-                            color: Color(.primary)
+                            color: Color(.colorPrimary)
                         )
                         OptionCard(
                             title: "Privacy Policy",
                             icon: "shield.pattern.checkered",
-                            color: Color(.primary)
+                            color: Color(.colorPrimary)
                         )
                     }
                     
                     // Logout Button
-                    Button(action: {}) {
+                    Button(action: {
+                        appState.logout()
+                        appState.authState = .login
+                    }) {
                         HStack {
                             Image(systemName: "arrow.right.square")
                             Text("Log Out")
@@ -121,5 +125,5 @@ struct SettingView: View {
 }
 
 #Preview {
-    SettingView()
+    SettingView().environmentObject(AppState())
 }

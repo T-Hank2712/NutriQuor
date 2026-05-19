@@ -25,7 +25,7 @@ struct AppearanceButton: View {
             .foregroundColor(selected == mode ? .white : .black)
             .padding(.vertical, 8)
             .frame(maxWidth: .infinity, minHeight: 60)
-            .background(selected == mode ? Color(.primary) : Color.gray.opacity(0.2))
+            .background(selected == mode ? Color(.colorPrimary) : Color.gray.opacity(0.2))
             .cornerRadius(20)
         }
     }

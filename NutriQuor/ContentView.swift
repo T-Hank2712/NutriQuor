@@ -31,7 +31,7 @@ struct ContentView: View {
                     .tabItem {
                         Label("Setting", systemImage: "person")
                     }
-            }.accentColor(Color(.primary))
+            }.accentColor(Color(.colorPrimary))
             CameraButton()
 
         }
