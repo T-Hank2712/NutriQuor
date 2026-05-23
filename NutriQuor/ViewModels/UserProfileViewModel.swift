@@ -12,6 +12,7 @@ final class UserProfileViewModel: ObservableObject {
     @Published var allergyList: [Allergy] = []
     @Published var diseaseList: [Disease] = []
     @Published var healthGoals: [HealthGoal] = []
+    @Published var selectedHealthGoals: [HealthGoal] = []
     private let userProfileService = UserProfileAPIService()
     func loadAllergies() async{
         do {
@@ -38,6 +39,40 @@ final class UserProfileViewModel: ObservableObject {
             print(healthGoals)
         } catch {
             print("Error loading data:", error)
+        }
+    }
+    
+    func loadProfileGoals(profileId: Int) async {
+        
+        do {
+            
+            selectedHealthGoals = try await userProfileService
+                .getHealthGoalsByUser(profileId: profileId)
+            
+        } catch {
+            print(error)
+        }
+    }
+    
+    func addHealthGoal(profileId: Int, healthGoalId: Int) async {
+        do {
+            
+            selectedHealthGoals = try await userProfileService
+                .addHealthGoal(profileId: profileId, healthGoalId: healthGoalId)
+            
+        } catch {
+            print(error)
+        }
+    }
+    
+    func deleteHealthGoal(profileId: Int, healthGoalId: Int) async {
+        do {
+            
+            selectedHealthGoals = try await userProfileService
+                .deleteHealthGoal(profileId: profileId, healthGoalId: healthGoalId)
+            
+        } catch {
+            print(error)
         }
     }
 }

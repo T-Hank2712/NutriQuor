@@ -12,12 +12,22 @@ struct GoalPicker: View {
     @StateObject var viewModel = UserProfileViewModel()
     @Environment(\.dismiss) private var dismiss
 
+    // Các goal đã có của user
+    let selectedGoals: [HealthGoal]
+
     var onSelect: (HealthGoal) -> Void
-    
+
+    // Filter bỏ các goal đã tồn tại
+    private var availableGoals: [HealthGoal] {
+        viewModel.healthGoals.filter { goal in
+            !selectedGoals.contains(where: { $0.id == goal.id })
+        }
+    }
+
     var body: some View {
         NavigationStack {
 
-            List(viewModel.healthGoals) { healthGoal in
+            List(availableGoals) { healthGoal in
                 Button {
                     onSelect(healthGoal)
                     dismiss()
@@ -28,11 +38,15 @@ struct GoalPicker: View {
             .navigationTitle("Select Health Goal")
         }
         .task {
-            print("LOAD ALLERGIES IN PICKER")
             await viewModel.loadHealthGoals()
         }
     }
 }
+
 #Preview {
-    GoalPicker(onSelect: { _ in })
+    GoalPicker(
+        selectedGoals: []
+    ) { _ in
+        
+    }
 }

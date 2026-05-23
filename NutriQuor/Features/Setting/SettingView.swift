@@ -40,7 +40,7 @@ struct SettingView: View {
                             .offset(x: 6, y: 6)
                         }
 
-                        Text("\(appState.profile?.lastName ?? "Lâm") \(appState.profile?.firstName ?? "Thành")")
+                        Text("\(appState.profile?.lastName ?? "User") \(appState.profile?.firstName ?? "1")")
                             .font(.title3)
                             .fontWeight(.bold)
                     }
@@ -56,7 +56,8 @@ struct SettingView: View {
                                 icon: "person.circle",
                                 color: Color(.colorPrimary)
                             )
-                        }.buttonStyle(.plain)
+                        }
+                        .buttonStyle(.plain)
                         OptionCard(
                             title: "Change Your Password",
                             icon: "lock.circle",

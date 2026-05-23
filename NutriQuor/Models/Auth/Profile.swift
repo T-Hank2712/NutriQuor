@@ -18,11 +18,11 @@ struct Profile: Codable {
     
     let avatar: String?
     
-    let healthGoals: [String]
+    let healthGoals: [HealthGoal]
     
-    let diseases: [String]
+    let diseases: [Disease]
     
-    let allergies: [String]
+    let allergies: [Allergy]
     
     let familyMembers: [Profile]
     
