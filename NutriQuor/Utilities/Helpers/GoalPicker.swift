@@ -9,7 +9,7 @@ import SwiftUI
 
 struct GoalPicker: View {
     
-    @StateObject var viewModel = UserProfileViewModel()
+    @ObservedObject var viewModel = UserProfileViewModel()
     @Environment(\.dismiss) private var dismiss
 
     // Các goal đã có của user

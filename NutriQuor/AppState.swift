@@ -40,8 +40,8 @@ final class AppState: ObservableObject {
 
             let me = try await AuthService.shared.getMe()
 
-            self.user = me.user
-            self.profile = me.profile
+            self.user = me.data.user
+            self.profile = me.data.profile
 
             self.authState = .loggedIn
 

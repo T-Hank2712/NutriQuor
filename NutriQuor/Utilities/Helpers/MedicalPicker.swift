@@ -8,31 +8,44 @@
 import SwiftUI
 
 struct MedicalPicker: View {
-    @StateObject var viewModel = UserProfileViewModel()
+    @ObservedObject var viewModel = UserProfileViewModel()
     @Environment(\.dismiss) private var dismiss
 
+    // Các disease đã có của user
+    let selectedDiseases: [Disease]
+
     var onSelect: (Disease) -> Void
-    
+
+    // Filter bỏ các disease đã tồn tại
+    private var availableDiseases: [Disease] {
+        viewModel.diseaseList.filter { disease in
+            !selectedDiseases.contains(where: { $0.id == disease.id })
+        }
+    }
+
     var body: some View {
         NavigationStack {
 
-            List(viewModel.diseaseList) { allergy in
+            List(availableDiseases) { disease in
                 Button {
-                    onSelect(allergy)
+                    onSelect(disease)
                     dismiss()
                 } label: {
-                    Text(allergy.name)
+                    Text(disease.name)
                 }
             }
-            .navigationTitle("Select Disease")
+            .navigationTitle("Select Diseases")
         }
         .task {
-            print("LOAD DISEASE IN PICKER")
             await viewModel.loadDiseases()
         }
     }
 }
 #Preview {
-    MedicalPicker(onSelect: { _ in })
+    MedicalPicker(
+        selectedDiseases: []
+    ) { _ in
+        
+    }
 }
 

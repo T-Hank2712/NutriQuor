@@ -13,6 +13,7 @@ final class UserProfileViewModel: ObservableObject {
     @Published var diseaseList: [Disease] = []
     @Published var healthGoals: [HealthGoal] = []
     @Published var selectedHealthGoals: [HealthGoal] = []
+    @Published var selectedDisease: [Disease] = []
     private let userProfileService = UserProfileAPIService()
     func loadAllergies() async{
         do {
@@ -42,6 +43,8 @@ final class UserProfileViewModel: ObservableObject {
         }
     }
     
+    // MARK: - Profile
+    // Health Goals
     func loadProfileGoals(profileId: Int) async {
         
         do {
@@ -70,6 +73,41 @@ final class UserProfileViewModel: ObservableObject {
             
             selectedHealthGoals = try await userProfileService
                 .deleteHealthGoal(profileId: profileId, healthGoalId: healthGoalId)
+            
+        } catch {
+            print(error)
+        }
+    }
+    
+    // Diseases
+    func loadProfileDiseases(profileId: Int) async {
+        
+        do {
+            
+            selectedDisease = try await userProfileService
+                .getDiseaseProfiles(profileId: profileId)
+            
+        } catch {
+            print(error)
+        }
+    }
+    
+    func addDisease(profileId: Int, diseaseId: Int) async {
+        do {
+            
+            selectedDisease = try await userProfileService
+                .addDisease(profileId: profileId, diseaseId: diseaseId)
+            
+        } catch {
+            print(error)
+        }
+    }
+    
+    func deleteDisease(profileId: Int, diseaseId: Int) async {
+        do {
+            
+            selectedDisease = try await userProfileService
+                .deleteDisease(profileId: profileId, diseaseId: diseaseId)
             
         } catch {
             print(error)

@@ -15,10 +15,6 @@ struct ProfileView: View {
     @State private var showDiseasePicker = false
     @State private var showHealthGoalPicker = false
     
-    @State private var allergies: [Allergy] = []
-    @State private var diseases: [Disease] = []
-    @State private var healthGoals: [HealthGoal] = []
-    
     var profileId: Int {
         appState.profile?.profileId ?? 0
     }
@@ -53,25 +49,36 @@ struct ProfileView: View {
 
                 // MARK: Medical Conditions
                 MedicalConditionsCard(
-                    diseases: diseases,
+                    diseases: viewModel.selectedDisease,
                     onAdd: {
                         showDiseasePicker = true
                     },
                     onDelete: { disease in
-                        diseases.removeAll { $0.id == disease.id }
+                        
+                        Task {
+                            
+                            await viewModel.deleteDisease(
+                                profileId: profileId,
+                                diseaseId: disease.id
+                            )
+                            
+                            await viewModel.loadProfileDiseases(
+                                profileId: profileId
+                            )
+                        }
                     }
                 )
 
                 // MARK: Allergies
-                AllergiesCard(
-                    allergies: allergies,
-                    onAdd: {
-                        showAllergyPicker = true
-                    },
-                    onDelete: { allergy in
-                        allergies.removeAll { $0.id == allergy.id }
-                    }
-                )
+//                AllergiesCard(
+//                    allergies: allergies,
+//                    onAdd: {
+//                        showAllergyPicker = true
+//                    },
+//                    onDelete: { allergy in
+////                        allergies.removeAll { $0.id == allergy.id }
+//                    }
+//                )
 
                 FamilyProfilesCard()
             }
@@ -85,9 +92,9 @@ struct ProfileView: View {
                 profileId: profileId
             )
             
-//            await viewModel.loadProfileDiseases(
-//                profileId: profileId
-//            )
+            await viewModel.loadProfileDiseases(
+                profileId: profileId
+            )
 //            
 //            await viewModel.loadProfileAllergies(
 //                profileId: profileId
@@ -95,23 +102,35 @@ struct ProfileView: View {
         }
 
 
-        // MARK: Allergy Picker
-        .sheet(isPresented: $showAllergyPicker) {
-            AllergyPicker { allergy in
-                allergies.append(allergy)
-                showAllergyPicker = false
-            }
-        }
+        // MARK: - Allergy Picker
+//        .sheet(isPresented: $showAllergyPicker) {
+//            AllergyPicker { allergy in
+//                allergies.append(allergy)
+//                showAllergyPicker = false
+//            }
+//        }
 
-        // MARK: Disease Picker
+        // MARK: - Disease Picker
         .sheet(isPresented: $showDiseasePicker) {
-            MedicalPicker { disease in
-                diseases.append(disease)
-                showDiseasePicker = false
+            MedicalPicker(
+                selectedDiseases: viewModel.selectedDisease
+            ) { disease in
+                
+                Task {
+                    
+                    await viewModel.addDisease(
+                        profileId: profileId,
+                        diseaseId: disease.id
+                    )
+                    
+                    await viewModel.loadProfileDiseases(
+                        profileId: profileId
+                    )
+                }
             }
         }
         
-        // MARK: Health Goal Picker
+        // MARK: - Health Goal Picker
         .sheet(isPresented: $showHealthGoalPicker) {
             
             GoalPicker(

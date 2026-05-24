@@ -120,7 +120,7 @@ final class AuthService{
             from: data
         )
     }
-    func getMe() async throws -> MeResponse {
+    func getMe() async throws -> APIResponse<MeResponse> {
         
         guard let token =
                 TokenStorage.shared.getAccessToken() else {
@@ -167,9 +167,13 @@ final class AuthService{
                 ]
             )
         }
-        print(String(data: data, encoding: .utf8) ?? "")
-        return try JSONDecoder().decode(
-            MeResponse.self,
+        
+        let decoder = JSONDecoder()
+        
+        decoder.dateDecodingStrategy = .iso8601
+        
+        return try decoder.decode(
+            APIResponse<MeResponse>.self,
             from: data
         )
     }
