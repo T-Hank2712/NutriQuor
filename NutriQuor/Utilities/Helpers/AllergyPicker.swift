@@ -8,15 +8,25 @@
 import SwiftUI
 
 struct AllergyPicker: View {
-    @StateObject var viewModel = UserProfileViewModel()
+    @ObservedObject var viewModel = UserProfileViewModel()
     @Environment(\.dismiss) private var dismiss
 
+    // Các allergy đã có của user
+    let selectedAllergies: [Allergy]
+
     var onSelect: (Allergy) -> Void
+
+    // Filter bỏ các allergy đã tồn tại
+    private var availableAllergies: [Allergy] {
+        viewModel.allergyList.filter { allergy in
+            !selectedAllergies.contains(where: { $0.id == allergy.id })
+        }
+    }
 
     var body: some View {
         NavigationStack {
 
-            List(viewModel.allergyList) { allergy in
+            List(availableAllergies) { allergy in
                 Button {
                     onSelect(allergy)
                     dismiss()
@@ -24,15 +34,18 @@ struct AllergyPicker: View {
                     Text(allergy.name)
                 }
             }
-            .navigationTitle("Select Allergy")
+            .navigationTitle("Select Allergies")
         }
         .task {
-            print("LOAD ALLERGIES IN PICKER")
             await viewModel.loadAllergies()
         }
     }
 }
 
 #Preview {
-    AllergyPicker(onSelect: { _ in })
+    AllergyPicker(
+        selectedAllergies: []
+    ) { _ in
+        
+    }
 }

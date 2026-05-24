@@ -119,10 +119,6 @@ struct LoginView: View {
                 }
                 .padding(.bottom, 50)
             }
-        }.onChange(of: viewModel.isSuccess) {
-            if viewModel.isSuccess {
-                appState.authState = .loggedIn
-            }
         }
     }
 }

@@ -49,16 +49,11 @@ final class LoginViewModel: ObservableObject {
                 password: password
             )
 
-            TokenStorage.shared.saveAccessToken(
-                response.data.accessToken
+            await appState.loginSuccess(
+                accessToken: response.data.accessToken,
+                refreshToken: response.data.refreshToken
             )
 
-            TokenStorage.shared.saveRefreshToken(
-                response.data.refreshToken
-            )
-            isSuccess = true
-            appState.isAuthenticated = true
-            await appState.loadCurrentUser()
             print("Login Success")
 
         } catch {

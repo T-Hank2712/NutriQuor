@@ -8,6 +8,7 @@
 import Foundation
 
 enum AuthState {
+    case loading
     case login
     case register
     case loggedIn

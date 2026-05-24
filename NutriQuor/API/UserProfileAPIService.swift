@@ -8,6 +8,8 @@
 import Foundation
 
 final class UserProfileAPIService{
+    
+    // MARK: - Fetch All System Data
     func fetchAllergies() async throws -> [Allergy] {
         let url = URL(string: "\(AppConfig.shared.devBaseURL)/api/v0/allergies")!
         
@@ -38,11 +40,360 @@ final class UserProfileAPIService{
 
         return health_goals
     }
-    func addAllergy(name: String) async throws {
-        let url = URL(string: "\(AppConfig.shared.devBaseURL)/api/v0/allergies")!
-        
+    
+    // Load the data of the current user profile.
+    // MARK: - Health Goal Profile
+    func getHealthGoalProfile(profileId: Int) async throws -> [HealthGoal] {
+
+        let url = URL(
+            string:
+            "\(AppConfig.shared.devBaseURL)/api/v0/user-profiles/\(profileId)/health-goals"
+        )!
+
         var request = URLRequest(url: url)
+
+        request.httpMethod = "GET"
+
+        if let token = TokenStorage.shared.getAccessToken() {
+            request.setValue(
+                "Bearer \(token)",
+                forHTTPHeaderField: "Authorization"
+            )
+        }
+
+        let (data, _) = try await URLSession.shared.data(for: request)
+
+        print(String(data: data, encoding: .utf8)!)
+
+        let decoder = JSONDecoder()
+
+        let response = try decoder.decode(
+            APIResponse<[HealthGoal]>.self,
+            from: data
+        )
+
+        return response.data
+    }
+    
+    func addHealthGoal(
+        profileId: Int,
+        healthGoalId: Int
+    ) async throws -> [HealthGoal] {
+
+        let url = URL(
+            string:
+            "\(AppConfig.shared.devBaseURL)/api/v0/user-profiles/\(profileId)/health-goals/\(healthGoalId)"
+        )!
+
+        var request = URLRequest(url: url)
+
         request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        if let token = TokenStorage.shared.getAccessToken() {
+            request.setValue(
+                "Bearer \(token)",
+                forHTTPHeaderField: "Authorization"
+            )
+        }
+
+        let (data, _) = try await URLSession.shared.data(
+            for: request
+        )
+
+        print(String(data: data, encoding: .utf8)!)
+
+        let decoder = JSONDecoder()
+
+        let response = try decoder.decode(
+            APIResponse<[HealthGoal]>.self,
+            from: data
+        )
+
+        return response.data
+    }
+    
+    func deleteHealthGoal(
+        profileId: Int,
+        healthGoalId: Int
+    ) async throws -> [HealthGoal] {
+
+        let url = URL(
+            string:
+            "\(AppConfig.shared.devBaseURL)/api/v0/user-profiles/\(profileId)/health-goals/\(healthGoalId)"
+        )!
+
+        var request = URLRequest(url: url)
+
+        request.httpMethod = "DELETE"
+
+        if let token = TokenStorage.shared.getAccessToken() {
+            request.setValue(
+                "Bearer \(token)",
+                forHTTPHeaderField: "Authorization"
+            )
+        }
+
+        let (data, response) = try await URLSession.shared.data(
+            for: request
+        )
+
+        if let httpResponse = response as? HTTPURLResponse {
+
+            if !(200...299).contains(httpResponse.statusCode) {
+
+                print(String(data: data, encoding: .utf8)!)
+
+                throw URLError(.badServerResponse)
+            }
+        }
+
+        print(String(data: data, encoding: .utf8)!)
+
+        let decoder = JSONDecoder()
+
+        let apiResponse = try decoder.decode(
+            APIResponse<[HealthGoal]>.self,
+            from: data
+        )
+
+        return apiResponse.data
+    }
+    
+    // MARK: - Disease Profile
+    func getDiseaseProfile(
+        profileId: Int
+    ) async throws -> [Disease] {
+        
+        let url = URL(
+            string:
+            "\(AppConfig.shared.devBaseURL)/api/v0/user-profiles/\(profileId)/diseases"
+        )!
+
+        var request = URLRequest(url: url)
+
+        request.httpMethod = "GET"
+
+        if let token = TokenStorage.shared.getAccessToken() {
+            request.setValue(
+                "Bearer \(token)",
+                forHTTPHeaderField: "Authorization"
+            )
+        }
+
+        let (data, _) = try await URLSession.shared.data(for: request)
+
+        print(String(data: data, encoding: .utf8)!)
+
+        let decoder = JSONDecoder()
+
+        let response = try decoder.decode(
+            APIResponse<[Disease]>.self,
+            from: data
+        )
+
+        return response.data
+    }
+    
+    func addDisease(
+        profileId: Int,
+        diseaseId: Int
+    ) async throws -> [Disease] {
+
+        let url = URL(
+            string:
+            "\(AppConfig.shared.devBaseURL)/api/v0/user-profiles/\(profileId)/diseases/\(diseaseId)"
+        )!
+
+        var request = URLRequest(url: url)
+
+        request.httpMethod = "POST"
+
+        if let token = TokenStorage.shared.getAccessToken() {
+            request.setValue(
+                "Bearer \(token)",
+                forHTTPHeaderField: "Authorization"
+            )
+        }
+
+        let (data, _) = try await URLSession.shared.data(
+            for: request
+        )
+
+        print(String(data: data, encoding: .utf8)!)
+
+        let decoder = JSONDecoder()
+
+        let response = try decoder.decode(
+            APIResponse<[Disease]>.self,
+            from: data
+        )
+
+        return response.data
+    }
+    
+    func deleteDisease(
+        profileId: Int,
+        diseaseId: Int
+    ) async throws -> [Disease] {
+
+        let url = URL(
+            string:
+            "\(AppConfig.shared.devBaseURL)/api/v0/user-profiles/\(profileId)/diseases/\(diseaseId)"
+        )!
+
+        var request = URLRequest(url: url)
+
+        request.httpMethod = "DELETE"
+
+        if let token = TokenStorage.shared.getAccessToken() {
+            request.setValue(
+                "Bearer \(token)",
+                forHTTPHeaderField: "Authorization"
+            )
+        }
+
+        let (data, response) = try await URLSession.shared.data(
+            for: request
+        )
+
+        if let httpResponse = response as? HTTPURLResponse {
+
+            if !(200...299).contains(httpResponse.statusCode) {
+
+                print(String(data: data, encoding: .utf8)!)
+
+                throw URLError(.badServerResponse)
+            }
+        }
+
+        print(String(data: data, encoding: .utf8)!)
+
+        let decoder = JSONDecoder()
+
+        let apiResponse = try decoder.decode(
+            APIResponse<[Disease]>.self,
+            from: data
+        )
+
+        return apiResponse.data
+    }
+    
+    // MARK: - Allergy Profile
+    func getAllergyProfile(
+        profileId: Int
+    ) async throws -> [Allergy] {
+        
+        let url = URL(
+            string:
+            "\(AppConfig.shared.devBaseURL)/api/v0/user-profiles/\(profileId)/allergies"
+        )!
+
+        var request = URLRequest(url: url)
+
+        request.httpMethod = "GET"
+
+        if let token = TokenStorage.shared.getAccessToken() {
+            request.setValue(
+                "Bearer \(token)",
+                forHTTPHeaderField: "Authorization"
+            )
+        }
+
+        let (data, _) = try await URLSession.shared.data(for: request)
+
+        print(String(data: data, encoding: .utf8)!)
+
+        let decoder = JSONDecoder()
+
+        let response = try decoder.decode(
+            APIResponse<[Allergy]>.self,
+            from: data
+        )
+
+        return response.data
+    }
+    
+    func addAllergy(
+        profileId: Int,
+        allergyId: Int
+    ) async throws -> [Allergy] {
+
+        let url = URL(
+            string:
+            "\(AppConfig.shared.devBaseURL)/api/v0/user-profiles/\(profileId)/allergies/\(allergyId)"
+        )!
+
+        var request = URLRequest(url: url)
+
+        request.httpMethod = "POST"
+
+        if let token = TokenStorage.shared.getAccessToken() {
+            request.setValue(
+                "Bearer \(token)",
+                forHTTPHeaderField: "Authorization"
+            )
+        }
+
+        let (data, _) = try await URLSession.shared.data(
+            for: request
+        )
+
+        print(String(data: data, encoding: .utf8)!)
+
+        let decoder = JSONDecoder()
+
+        let response = try decoder.decode(
+            APIResponse<[Allergy]>.self,
+            from: data
+        )
+
+        return response.data
+    }
+    
+    func deleteAllergy(
+        profileId: Int,
+        allergyId: Int
+    ) async throws -> [Allergy] {
+
+        let url = URL(
+            string:
+            "\(AppConfig.shared.devBaseURL)/api/v0/user-profiles/\(profileId)/allergies/\(allergyId)"
+        )!
+
+        var request = URLRequest(url: url)
+
+        request.httpMethod = "DELETE"
+
+        if let token = TokenStorage.shared.getAccessToken() {
+            request.setValue(
+                "Bearer \(token)",
+                forHTTPHeaderField: "Authorization"
+            )
+        }
+
+        let (data, response) = try await URLSession.shared.data(
+            for: request
+        )
+
+        if let httpResponse = response as? HTTPURLResponse {
+
+            if !(200...299).contains(httpResponse.statusCode) {
+
+                print(String(data: data, encoding: .utf8)!)
+
+                throw URLError(.badServerResponse)
+            }
+        }
+
+        print(String(data: data, encoding: .utf8)!)
+
+        let decoder = JSONDecoder()
+
+        let apiResponse = try decoder.decode(
+            APIResponse<[Allergy]>.self,
+            from: data
+        )
+
+        return apiResponse.data
     }
 }

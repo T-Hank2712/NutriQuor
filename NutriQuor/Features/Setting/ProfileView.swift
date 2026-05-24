@@ -8,45 +8,86 @@
 import SwiftUI
 
 struct ProfileView: View {
+    
+    @EnvironmentObject private var appState: AppState
 
     @State private var showAllergyPicker = false
     @State private var showDiseasePicker = false
     @State private var showHealthGoalPicker = false
     
-    @State private var allergies: [Allergy] = []
-    @State private var diseases: [Disease] = []
-    @State private var healthGoals: [HealthGoal] = []
+    var profileId: Int {
+        appState.profile?.profileId ?? 0
+    }
     
+    @StateObject private var viewModel = UserProfileViewModel()
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
 
                 colorPrimaryGoalsCard(
-                    goals: healthGoals,
-                    onAdd: { showHealthGoalPicker = true},
-                    onDelete: { healthGoal in
-                        healthGoals.removeAll { $0.id == healthGoal.id } }
+                    goals: viewModel.selectedHealthGoals,
+                    
+                    onAdd: {
+                        showHealthGoalPicker = true
+                    },
+                    
+                    onDelete: { goal in
+                        
+                        Task {
+                            
+                            await viewModel.deleteHealthGoal(
+                                profileId: profileId,
+                                healthGoalId: goal.id
+                            )
+                            
+                            await viewModel.loadProfileGoals(
+                                profileId: profileId
+                            )
+                        }
+                    }
                 )
 
                 // MARK: Medical Conditions
                 MedicalConditionsCard(
-                    diseases: diseases,
+                    diseases: viewModel.selectedDiseases,
                     onAdd: {
                         showDiseasePicker = true
                     },
                     onDelete: { disease in
-                        diseases.removeAll { $0.id == disease.id }
+                        
+                        Task {
+                            
+                            await viewModel.deleteDisease(
+                                profileId: profileId,
+                                diseaseId: disease.id
+                            )
+                            
+                            await viewModel.loadProfileDiseases(
+                                profileId: profileId
+                            )
+                        }
                     }
                 )
 
                 // MARK: Allergies
                 AllergiesCard(
-                    allergies: allergies,
+                    allergies: viewModel.selectedAllergies,
                     onAdd: {
                         showAllergyPicker = true
                     },
                     onDelete: { allergy in
-                        allergies.removeAll { $0.id == allergy.id }
+                        
+                        Task {
+                            
+                            await viewModel.deleteAllergy(
+                                profileId: profileId,
+                                allergyId: allergy.id
+                            )
+                            
+                            await viewModel.loadProfileAllergies(
+                                profileId: profileId
+                            )
+                        }
                     }
                 )
 
@@ -54,33 +95,87 @@ struct ProfileView: View {
             }
             .padding()
         }
+        .task {
+            
+            guard profileId != 0 else { return }
+            print(profileId)
+            await viewModel.loadProfileGoals(
+                profileId: profileId
+            )
+            
+            await viewModel.loadProfileDiseases(
+                profileId: profileId
+            )
+            
+            await viewModel.loadProfileAllergies(
+                profileId: profileId
+            )
+        }
 
-        // MARK: Allergy Picker
+
+        // MARK: - Allergy Picker
         .sheet(isPresented: $showAllergyPicker) {
-            AllergyPicker { allergy in
-                allergies.append(allergy)
-                showAllergyPicker = false
+            AllergyPicker(
+                selectedAllergies: viewModel.selectedAllergies
+            ) { allergy in
+                
+                Task {
+                    
+                    await viewModel.addAllergy(
+                        profileId: profileId,
+                        allergyId: allergy.id
+                    )
+                    
+                    await viewModel.loadProfileAllergies(
+                        profileId: profileId
+                    )
+                }
             }
         }
 
-        // MARK: Disease Picker
+        // MARK: - Disease Picker
         .sheet(isPresented: $showDiseasePicker) {
-            MedicalPicker { disease in
-                diseases.append(disease)
-                showDiseasePicker = false
+            MedicalPicker(
+                selectedDiseases: viewModel.selectedDiseases
+            ) { disease in
+                
+                Task {
+                    
+                    await viewModel.addDisease(
+                        profileId: profileId,
+                        diseaseId: disease.id
+                    )
+                    
+                    await viewModel.loadProfileDiseases(
+                        profileId: profileId
+                    )
+                }
             }
         }
         
-        // MARK: Health Goal Picker
+        // MARK: - Health Goal Picker
         .sheet(isPresented: $showHealthGoalPicker) {
-            GoalPicker { healthGoal in
-                healthGoals.append(healthGoal)
-                showHealthGoalPicker = false
+            
+            GoalPicker(
+                selectedGoals: viewModel.selectedHealthGoals
+            ) { goal in
+                
+                Task {
+                    
+                    await viewModel.addHealthGoal(
+                        profileId: profileId,
+                        healthGoalId: goal.id
+                    )
+                    
+                    await viewModel.loadProfileGoals(
+                        profileId: profileId
+                    )
+                }
             }
         }
     }
 }
 
 #Preview {
-    ProfileView()
+    ProfileView().environmentObject(AppState())
 }

@@ -26,11 +26,9 @@ struct NutriQuorApp: App {
                 }
                 .onAppear {
                     applyTheme(appTheme)
-                    appState.loadSession()
                     Task {
-                        await appState.loadCurrentUser()
+                        await appState.bootstrap()
                     }
-                    print(appState.profile ?? "nil")
                 }
         }
     }
@@ -65,6 +63,9 @@ struct RootView: View {
     var body: some View {
         Group {
             switch appState.authState {
+            
+            case .loading:
+                ProgressView()
                 
             case .login:
                 LoginView(appState: appState)
@@ -75,9 +76,6 @@ struct RootView: View {
             case .loggedIn:
                 ContentView()
             }
-        }
-        .task {
-            await appState.loadCurrentUser()
         }
         .animation(.easeInOut, value: appState.authState)
     }

@@ -30,10 +30,19 @@ struct OptionCard: View {
            }
            .padding(.horizontal, 16)
            .padding(.vertical, 14)
+           .frame(maxWidth: .infinity)
            .background(
-               Capsule()
-                .stroke(color.opacity(.opacityMedium), lineWidth: 1)
+            Capsule()
+                .fill(Color.white)
+                .overlay(
+                    Capsule()
+                        .stroke(
+                            color.opacity(.opacityMedium),
+                            lineWidth: 1
+                        )
+                )
            )
+           .contentShape(Capsule())
        }
 }
 
