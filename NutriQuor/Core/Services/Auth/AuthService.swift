@@ -46,11 +46,7 @@ final class AuthService {
     // GET ME
     func getMe() async throws -> APIResponse<MeResponse> {
 
-        guard let token = TokenStorage.shared.getAccessToken() else {
-            throw URLError(.userAuthenticationRequired)
-        }
-
-        let request = try AuthAPI.meRequest(token: token)
+        let request = try AuthAPI.meRequest()
 
         return try await APIClient.shared.request(
             request,
@@ -67,7 +63,7 @@ final class AuthService {
 
         let request = try AuthAPI.refreshAccessTokenRequest(refreshToken: refreshToken)
 
-        let response = try await APIClient.shared.request(
+        let response = try await APIClient.shared.requestWithoutRetry(
             request,
             responseType: APIResponse<RefreshData>.self
         )

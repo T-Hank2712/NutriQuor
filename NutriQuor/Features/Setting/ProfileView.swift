@@ -23,6 +23,72 @@ struct ProfileView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
+                
+                VStack(spacing: 16) {
+                    
+                    ZStack(alignment: .bottomTrailing) {
+                        
+                        // Avatar
+                        ZStack {
+                            Circle()
+                                .fill(
+                                    LinearGradient(
+                                        colors: [
+                                            Color.blue.opacity(0.15),
+                                            Color.purple.opacity(0.12)
+                                        ],
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    )
+                                )
+                                .frame(width: 130, height: 130)
+                                .shadow(color: .black.opacity(0.08), radius: 12, y: 6)
+                            
+                            Image(systemName: "person.fill")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 55, height: 55)
+                                .foregroundStyle(
+                                    LinearGradient(
+                                        colors: [.blue, .purple],
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    )
+                                )
+                        }
+                        
+                        // Camera Button
+                        Button {
+                            print("Change avatar")
+                        } label: {
+                            ZStack {
+                                Circle()
+                                    .fill(.blue)
+                                    .frame(width: 38, height: 38)
+                                
+                                Image(systemName: "camera.fill")
+                                    .font(.system(size: 16, weight: .semibold))
+                                    .foregroundStyle(.white)
+                            }
+                            .shadow(color: .blue.opacity(0.3), radius: 8, y: 4)
+                        }
+                    }
+                }
+                
+                HStack {
+                    InputField(
+                        title: "First Name",
+                        placeholder: "Thanh",
+                        icon: "person",
+                        text: .constant("")
+                    )
+                    InputField(
+                        title: "Last Name",
+                        placeholder: "Lam",
+                        icon: "person",
+                        text: .constant("")
+                    )
+                }
 
                 colorPrimaryGoalsCard(
                     goals: viewModel.selectedHealthGoals,
@@ -92,8 +158,12 @@ struct ProfileView: View {
                 )
 
                 FamilyProfilesCard()
+                
+                SubmitButton(title: "Save Information") {
+                }
             }
             .padding()
+            .padding(.bottom, 20)
         }
         .task {
             

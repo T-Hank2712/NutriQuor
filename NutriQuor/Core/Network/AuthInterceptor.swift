@@ -41,8 +41,10 @@ final class AuthInterceptor {
             TokenStorage.shared.saveAccessToken(response.data.accessToken)
 
             return true
-        } catch {
+        } catch APIError.unauthorized {
             TokenStorage.shared.clearTokens()
+            return false
+        } catch {
             return false
         }
     }

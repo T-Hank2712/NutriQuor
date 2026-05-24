@@ -61,10 +61,9 @@ struct AllergiesCard: View {
         .background(Color(.systemBackground))
         .overlay(
             RoundedRectangle(cornerRadius: .cardRadius)
-                .stroke(Color.gray.opacity(.opacityLight), lineWidth: 1)
+                .stroke(Color(.colorPrimary), lineWidth: 1)
         )
         .cornerRadius(.cardRadius)
-        .shadow(radius: 2)
 
         // MARK: - Delete Alert
         .alert("Remove Allergy?", isPresented: $showDeleteAlert) {

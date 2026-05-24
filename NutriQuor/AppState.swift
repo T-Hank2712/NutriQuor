@@ -26,12 +26,27 @@ final class AppState: ObservableObject {
 
     func bootstrap() async {
 
-        guard TokenStorage.shared.getAccessToken() != nil else {
-            authState = .login
+        if TokenStorage.shared.getAccessToken() != nil {
+            await loadCurrentUser()
             return
         }
 
-        await loadCurrentUser()
+        if TokenStorage.shared.getRefreshToken() != nil {
+
+            let refreshed = await AuthInterceptor.shared.refresh()
+
+            if refreshed {
+                await loadCurrentUser()
+            } else if TokenStorage.shared.getRefreshToken() == nil {
+                logout()
+            } else {
+                authState = .login
+            }
+
+            return
+        }
+
+        authState = .login
     }
 
     func loadCurrentUser() async {

@@ -39,7 +39,7 @@ struct HistoryItem: View {
         }
         .overlay(
             RoundedRectangle(cornerRadius: .cardRadius)
-                .stroke(Color.gray.opacity(.opacityMedium), lineWidth: 1.5)
+                .stroke(Color(.colorPrimary).opacity(.opacityMedium), lineWidth: 1.5)
         )
     }
 }

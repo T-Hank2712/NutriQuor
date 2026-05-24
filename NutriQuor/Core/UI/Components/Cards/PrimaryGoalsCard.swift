@@ -59,10 +59,9 @@ struct colorPrimaryGoalsCard: View {
         .background(Color(.systemBackground))
         .overlay(
             RoundedRectangle(cornerRadius: .cardRadius)
-                .stroke(Color.gray.opacity(.opacityMedium), lineWidth: 1)
+                .stroke(Color(.colorPrimary), lineWidth: 1)
         )
         .cornerRadius(.cardRadius)
-        .shadow(radius: 2)
         
         // Delete confirm
         .alert("Remove Goal?", isPresented: $showDeleteAlert) {

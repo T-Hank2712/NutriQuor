@@ -57,7 +57,7 @@ enum AuthAPI {
         return request
     }
 
-    static func meRequest(token: String) throws -> URLRequest {
+    static func meRequest() throws -> URLRequest {
         guard let url = URL(
             string: "\(AppConfig.shared.devBaseURL)/api/v0/user-profiles/me"
         ) else {
@@ -66,7 +66,6 @@ enum AuthAPI {
 
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
-        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
 
         return request
     }
