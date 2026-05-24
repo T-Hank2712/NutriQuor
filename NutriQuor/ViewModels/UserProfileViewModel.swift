@@ -13,7 +13,8 @@ final class UserProfileViewModel: ObservableObject {
     @Published var diseaseList: [Disease] = []
     @Published var healthGoals: [HealthGoal] = []
     @Published var selectedHealthGoals: [HealthGoal] = []
-    @Published var selectedDisease: [Disease] = []
+    @Published var selectedDiseases: [Disease] = []
+    @Published var selectedAllergies: [Allergy] = []
     private let userProfileService = UserProfileAPIService()
     func loadAllergies() async{
         do {
@@ -44,13 +45,13 @@ final class UserProfileViewModel: ObservableObject {
     }
     
     // MARK: - Profile
-    // Health Goals
+    // Health Goals Profile
     func loadProfileGoals(profileId: Int) async {
         
         do {
             
             selectedHealthGoals = try await userProfileService
-                .getHealthGoalsByUser(profileId: profileId)
+                .getHealthGoalProfile(profileId: profileId)
             
         } catch {
             print(error)
@@ -79,13 +80,13 @@ final class UserProfileViewModel: ObservableObject {
         }
     }
     
-    // Diseases
+    // Diseases Profile
     func loadProfileDiseases(profileId: Int) async {
         
         do {
             
-            selectedDisease = try await userProfileService
-                .getDiseaseProfiles(profileId: profileId)
+            selectedDiseases = try await userProfileService
+                .getDiseaseProfile(profileId: profileId)
             
         } catch {
             print(error)
@@ -95,7 +96,7 @@ final class UserProfileViewModel: ObservableObject {
     func addDisease(profileId: Int, diseaseId: Int) async {
         do {
             
-            selectedDisease = try await userProfileService
+            selectedDiseases = try await userProfileService
                 .addDisease(profileId: profileId, diseaseId: diseaseId)
             
         } catch {
@@ -106,8 +107,43 @@ final class UserProfileViewModel: ObservableObject {
     func deleteDisease(profileId: Int, diseaseId: Int) async {
         do {
             
-            selectedDisease = try await userProfileService
+            selectedDiseases = try await userProfileService
                 .deleteDisease(profileId: profileId, diseaseId: diseaseId)
+            
+        } catch {
+            print(error)
+        }
+    }
+    
+    // Allergies Profile
+    func loadProfileAllergies(profileId: Int) async {
+        
+        do {
+            
+            selectedAllergies = try await userProfileService
+                .getAllergyProfile(profileId: profileId)
+            
+        } catch {
+            print(error)
+        }
+    }
+    
+    func addAllergy(profileId: Int, allergyId: Int) async {
+        do {
+            
+            selectedAllergies = try await userProfileService
+                .addAllergy(profileId: profileId, allergyId: allergyId)
+            
+        } catch {
+            print(error)
+        }
+    }
+    
+    func deleteAllergy(profileId: Int, allergyId: Int) async {
+        do {
+            
+            selectedAllergies = try await userProfileService
+                .deleteAllergy(profileId: profileId, allergyId: allergyId)
             
         } catch {
             print(error)

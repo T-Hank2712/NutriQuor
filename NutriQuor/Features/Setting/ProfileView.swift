@@ -49,7 +49,7 @@ struct ProfileView: View {
 
                 // MARK: Medical Conditions
                 MedicalConditionsCard(
-                    diseases: viewModel.selectedDisease,
+                    diseases: viewModel.selectedDiseases,
                     onAdd: {
                         showDiseasePicker = true
                     },
@@ -70,15 +70,26 @@ struct ProfileView: View {
                 )
 
                 // MARK: Allergies
-//                AllergiesCard(
-//                    allergies: allergies,
-//                    onAdd: {
-//                        showAllergyPicker = true
-//                    },
-//                    onDelete: { allergy in
-////                        allergies.removeAll { $0.id == allergy.id }
-//                    }
-//                )
+                AllergiesCard(
+                    allergies: viewModel.selectedAllergies,
+                    onAdd: {
+                        showAllergyPicker = true
+                    },
+                    onDelete: { allergy in
+                        
+                        Task {
+                            
+                            await viewModel.deleteAllergy(
+                                profileId: profileId,
+                                allergyId: allergy.id
+                            )
+                            
+                            await viewModel.loadProfileAllergies(
+                                profileId: profileId
+                            )
+                        }
+                    }
+                )
 
                 FamilyProfilesCard()
             }
@@ -95,25 +106,37 @@ struct ProfileView: View {
             await viewModel.loadProfileDiseases(
                 profileId: profileId
             )
-//            
-//            await viewModel.loadProfileAllergies(
-//                profileId: profileId
-//            )
+            
+            await viewModel.loadProfileAllergies(
+                profileId: profileId
+            )
         }
 
 
         // MARK: - Allergy Picker
-//        .sheet(isPresented: $showAllergyPicker) {
-//            AllergyPicker { allergy in
-//                allergies.append(allergy)
-//                showAllergyPicker = false
-//            }
-//        }
+        .sheet(isPresented: $showAllergyPicker) {
+            AllergyPicker(
+                selectedAllergies: viewModel.selectedAllergies
+            ) { allergy in
+                
+                Task {
+                    
+                    await viewModel.addAllergy(
+                        profileId: profileId,
+                        allergyId: allergy.id
+                    )
+                    
+                    await viewModel.loadProfileAllergies(
+                        profileId: profileId
+                    )
+                }
+            }
+        }
 
         // MARK: - Disease Picker
         .sheet(isPresented: $showDiseasePicker) {
             MedicalPicker(
-                selectedDiseases: viewModel.selectedDisease
+                selectedDiseases: viewModel.selectedDiseases
             ) { disease in
                 
                 Task {
