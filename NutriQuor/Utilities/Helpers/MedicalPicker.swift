@@ -31,7 +31,7 @@ struct MedicalPicker: View {
                     onSelect(disease)
                     dismiss()
                 } label: {
-                    Text(disease.name)
+                    Text(disease.name).foregroundStyle(Color(.colorPrimary))
                 }
             }
             .navigationTitle("Select Diseases")

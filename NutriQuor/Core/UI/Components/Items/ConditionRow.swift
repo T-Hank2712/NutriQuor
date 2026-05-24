@@ -37,7 +37,7 @@ struct ConditionRow: View {
             }
         }
         .padding(10)
-        .background(color.opacity(.opacityLight))
+        .background(color)
         .clipShape(RoundedRectangle(cornerRadius: .cardRadius))
         
         .alert("Delete Condition?", isPresented: $showDeleteAlert) {
@@ -60,12 +60,12 @@ struct ConditionRow: View {
         
         ConditionRow(
             title: "Type II Diabetes",
-            color: .blue
+            color: .colorPrimary
         )
         
         ConditionRow(
             title: "Hypertension",
-            color: .gray
+            color: .gray.opacity(.opacityLight)
         )
         
     }

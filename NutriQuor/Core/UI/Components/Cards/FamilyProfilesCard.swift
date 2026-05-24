@@ -50,11 +50,10 @@ struct FamilyProfilesCard: View {
                 .padding()
                 .background(Color(.systemBackground))
                 .overlay(
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(Color.gray.opacity(.opacityMedium), lineWidth: 1)
+                    RoundedRectangle(cornerRadius: .cardRadius)
+                        .stroke(Color(.colorPrimary), lineWidth: 1)
                 )
                 .cornerRadius(.cardRadius)
-                .shadow(radius: 2)
     }
 }
 

@@ -38,7 +38,7 @@ struct MedicalConditionsCard: View {
             ForEach(diseases) { disease in
                 ConditionRow(
                     title: disease.name,
-                    color: .blue
+                    color: .colorPrimary.opacity(.opacityMedium)
                 ) {
                     onDelete(disease)
                 }
@@ -49,10 +49,9 @@ struct MedicalConditionsCard: View {
         .background(Color(.systemBackground))
         .overlay(
             RoundedRectangle(cornerRadius: .cardRadius)
-                .stroke(Color.gray.opacity(.opacityMedium))
+                .stroke(Color(.colorPrimary))
         )
         .cornerRadius(.cardRadius)
-        .shadow(radius: 2)
     }
 }
 

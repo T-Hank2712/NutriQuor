@@ -35,7 +35,7 @@ struct CountScansCard: View {
                 .stroke(Color.gray.opacity(.opacityLight), lineWidth: 1)
         )
 
-        .shadow(color: Color.black.opacity(.opacityLight), radius: 6, x: 0, y: 3)
+        .shadow(color: Color.black.opacity(.opacityLight), radius: 1, x: 0, y: 3)
     }
 }
 

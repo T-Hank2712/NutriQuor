@@ -20,6 +20,14 @@ final class APIClient {
         return try await perform(request, responseType: responseType, retry: true)
     }
 
+    func requestWithoutRetry<T: Decodable>(
+        _ request: URLRequest,
+        responseType: T.Type
+    ) async throws -> T {
+
+        return try await perform(request, responseType: responseType, retry: false)
+    }
+
     // MARK: - CASE 2: API KHÔNG RETURN DATA
     func request(
         _ request: URLRequest
