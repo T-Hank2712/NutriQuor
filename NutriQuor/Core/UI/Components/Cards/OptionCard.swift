@@ -33,7 +33,7 @@ struct OptionCard: View {
            .frame(maxWidth: .infinity)
            .background(
             Capsule()
-                .fill(Color.white)
+                .fill(Color(.systemBackground))
                 .overlay(
                     Capsule()
                         .stroke(
