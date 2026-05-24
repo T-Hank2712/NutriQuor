@@ -7,13 +7,14 @@
 
 import SwiftUI
 
-import SwiftUI
-
 struct AllergiesCard: View {
     let allergies: [Allergy]
 
     var onAdd: () -> Void
     var onDelete: (Allergy) -> Void
+
+    @State private var showDeleteAlert = false
+    @State private var selectedAllergy: Allergy?
 
     var body: some View {
 
@@ -31,7 +32,8 @@ struct AllergiesCard: View {
 
                 ForEach(allergies) { allergy in
                     Button {
-                        onDelete(allergy)
+                        selectedAllergy = allergy
+                        showDeleteAlert = true
                     } label: {
                         TagWithXmark(text: allergy.name, color: .orange)
                     }
@@ -63,6 +65,21 @@ struct AllergiesCard: View {
         )
         .cornerRadius(.cardRadius)
         .shadow(radius: 2)
+
+        // MARK: - Delete Alert
+        .alert("Remove Allergy?", isPresented: $showDeleteAlert) {
+
+            Button("Cancel", role: .cancel) {}
+
+            Button("Delete", role: .destructive) {
+                if let allergy = selectedAllergy {
+                    onDelete(allergy)
+                }
+            }
+
+        } message: {
+            Text("Are you sure you want to remove this allergy?")
+        }
     }
 }
 
