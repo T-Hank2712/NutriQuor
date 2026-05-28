@@ -9,6 +9,8 @@ import SwiftUI
 
 struct ProfileView: View {
     
+    @Environment(\.dismiss) private var dismiss
+    
     @EnvironmentObject private var appState: AppState
 
     @State private var showAllergyPicker = false
@@ -175,15 +177,19 @@ struct ProfileView: View {
                 
                 SubmitButton(title: "Save Information") {
                     Task {
-                            await viewModel.updateUserProfile(
-                                profileId: profileId,
-                                firstName: firstName,
-                                lastName: lastName,
-                                avatar: avatar
-                            )
+                        if let updatedProfile = await viewModel.updateUserProfile(
+                            profileId: profileId,
+                            firstName: firstName,
+                            lastName: lastName,
+                            avatar: avatar
+                        ) {
+                            await MainActor.run {
+                                appState.profile = updatedProfile
+                                dismiss()
+                            }
                         }
-                }
-            }
+                    }
+                }            }
             .padding()
             .padding(.bottom, 20)
         }

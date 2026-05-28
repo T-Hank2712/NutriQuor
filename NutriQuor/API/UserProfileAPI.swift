@@ -194,6 +194,15 @@ enum UserProfileAPI {
         var request = URLRequest(url: url)
         request.httpMethod = "PATCH"
         
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        var body: [String: Any] = [:]
+        if let firstName { body["first_name"] = firstName }
+        if let lastName  { body["last_name"]  = lastName  }
+        if let avatar    { body["avatar"]     = avatar    }
+        
+        request.httpBody = try JSONSerialization.data(withJSONObject: body)
+        
         return request
     }
 }

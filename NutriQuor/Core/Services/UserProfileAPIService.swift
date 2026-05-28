@@ -194,8 +194,8 @@ final class UserProfileAPIService {
                 avatar: avatar
             )
         
-        let response = try await APIClient.shared.request(request, responseType: APIResponse<MeResponse>.self)
+        let response = try await APIClient.shared.request(request, responseType: APIResponse<Profile>.self)
         
-        return response.data.profile
+        return response.data
     }
 }

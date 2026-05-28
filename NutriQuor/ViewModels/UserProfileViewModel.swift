@@ -152,14 +152,15 @@ final class UserProfileViewModel: ObservableObject {
     }
     
     // MARK: - Profile Information
-    func updateUserProfile(profileId: Int, firstName: String?, lastName: String?, avatar: String?) async {
+    func updateUserProfile(profileId: Int, firstName: String?, lastName: String?, avatar: String?) async -> Profile? {
         do {
-            
             let updatedProfile = try await userProfileService
                 .updateProfile(profileId: profileId, firstName: firstName, lastName: lastName, avatar: avatar)
             self.currentProfile = updatedProfile
+            return updatedProfile 
         } catch {
             print(error)
+            return nil
         }
     }
 }
