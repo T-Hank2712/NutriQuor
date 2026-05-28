@@ -9,6 +9,7 @@ import Foundation
 import Combine
 
 final class UserProfileViewModel: ObservableObject {
+    @Published var currentProfile: Profile?
     @Published var allergyList: [Allergy] = []
     @Published var diseaseList: [Disease] = []
     @Published var healthGoals: [HealthGoal] = []
@@ -145,6 +146,18 @@ final class UserProfileViewModel: ObservableObject {
             selectedAllergies = try await userProfileService
                 .deleteAllergy(profileId: profileId, allergyId: allergyId)
             
+        } catch {
+            print(error)
+        }
+    }
+    
+    // MARK: - Profile Information
+    func updateUserProfile(profileId: Int, firstName: String?, lastName: String?, avatar: String?) async {
+        do {
+            
+            let updatedProfile = try await userProfileService
+                .updateProfile(profileId: profileId, firstName: firstName, lastName: lastName, avatar: avatar)
+            self.currentProfile = updatedProfile
         } catch {
             print(error)
         }

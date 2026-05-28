@@ -7,45 +7,40 @@
 
 import Foundation
 
-final class AuthInterceptor {
+actor AuthInterceptor {
 
     static let shared = AuthInterceptor()
 
-    private var isRefreshing = false
-    private var pendingRequests: [(Bool) -> Void] = []
-
-    // MARK: - Handle 401
-    func handleUnauthorized(completion: @escaping (Bool) -> Void) {
-
-        pendingRequests.append(completion)
-
-        guard !isRefreshing else { return }
-
-        isRefreshing = true
-
-        Task {
-            let success = await refresh()
-
-            isRefreshing = false
-
-            pendingRequests.forEach { $0(success) }
-            pendingRequests.removeAll()
-        }
-    }
+    private var refreshTask: Task<Bool, Never>?
 
     // MARK: - Refresh token
     func refresh() async -> Bool {
-        do {
-            let response = try await AuthService.shared.refreshAccessToken()
-
-            TokenStorage.shared.saveAccessToken(response.data.accessToken)
-
-            return true
-        } catch APIError.unauthorized {
-            TokenStorage.shared.clearTokens()
-            return false
-        } catch {
-            return false
+        if let refreshTask {
+            return await refreshTask.value
         }
+
+        let task = Task { () -> Bool in
+            do {
+                let response = try await AuthService.shared.refreshAccessToken()
+
+                TokenStorage.shared.saveAccessToken(response.data.accessToken)
+                if let refreshToken = response.data.refreshToken {
+                    TokenStorage.shared.saveRefreshToken(refreshToken)
+                }
+
+                return true
+            } catch APIError.unauthorized {
+                TokenStorage.shared.clearTokens()
+                return false
+            } catch {
+                return false
+            }
+        }
+
+        refreshTask = task
+        let result = await task.value
+        refreshTask = nil
+
+        return result
     }
 }

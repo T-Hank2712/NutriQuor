@@ -15,6 +15,11 @@ struct ProfileView: View {
     @State private var showDiseasePicker = false
     @State private var showHealthGoalPicker = false
     
+    @State private var firstName: String = ""
+    @State private var lastName: String = ""
+    @State private var email: String = ""
+    @State private var avatar: String = ""
+    
     var profileId: Int {
         appState.profile?.profileId ?? 0
     }
@@ -80,15 +85,24 @@ struct ProfileView: View {
                         title: "First Name",
                         placeholder: "Thanh",
                         icon: "person",
-                        text: .constant("")
+                        text: $firstName
                     )
                     InputField(
                         title: "Last Name",
                         placeholder: "Lam",
                         icon: "person",
-                        text: .constant("")
+                        text: $lastName
                     )
                 }
+                
+                InputField(
+                    title: "Email",
+                    placeholder: "user@gmail.com",
+                    icon: "envelope",
+                    text: $email
+                )
+                .disabled(true)
+                .opacity(.opacityStrong)
 
                 colorPrimaryGoalsCard(
                     goals: viewModel.selectedHealthGoals,
@@ -160,15 +174,28 @@ struct ProfileView: View {
                 FamilyProfilesCard()
                 
                 SubmitButton(title: "Save Information") {
+                    Task {
+                            await viewModel.updateUserProfile(
+                                profileId: profileId,
+                                firstName: firstName,
+                                lastName: lastName,
+                                avatar: avatar
+                            )
+                        }
                 }
             }
             .padding()
             .padding(.bottom, 20)
         }
         .task {
+            firstName = appState.profile?.firstName ?? ""
+            lastName = appState.profile?.lastName ?? ""
+            email = appState.user?.email ?? ""
+            
             
             guard profileId != 0 else { return }
             print(profileId)
+            
             await viewModel.loadProfileGoals(
                 profileId: profileId
             )
