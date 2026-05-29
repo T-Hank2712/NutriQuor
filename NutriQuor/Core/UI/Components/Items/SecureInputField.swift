@@ -27,7 +27,7 @@ struct SecureInputField: View {
                 
                 Image(systemName: icon)
                     .font(.system(size: 22))
-                    .foregroundStyle(Color(hex: "#9C7F87"))
+                    .foregroundStyle(Color("MutedMauve"))
                     .frame(width: 26)
                 
                 Group {

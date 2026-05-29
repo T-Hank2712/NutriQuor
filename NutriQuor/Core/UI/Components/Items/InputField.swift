@@ -26,7 +26,7 @@ struct InputField: View {
                 
                 Image(systemName: icon)
                     .font(.text)
-                    .foregroundStyle(Color(hex: "#9C7F87"))
+                        .foregroundStyle(Color("MutedMauve"))
                     .frame(width: 26)
                 
                 TextField(placeholder, text: $text)
