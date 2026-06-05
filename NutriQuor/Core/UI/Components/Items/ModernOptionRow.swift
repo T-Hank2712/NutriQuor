@@ -40,6 +40,8 @@ struct ModernOptionRow: View {
                 .foregroundStyle(.tertiary)
         }
         .padding(.vertical, 10)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .contentShape(Rectangle())
     }
 }
 

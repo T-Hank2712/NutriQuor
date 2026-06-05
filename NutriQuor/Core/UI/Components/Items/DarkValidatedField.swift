@@ -56,17 +56,17 @@ struct DarkValidatedField: View {
                     .animation(.easeInOut(duration: 0.2), value: isFocused)
             )
 
-            if let error {
-                HStack(spacing: 4) {
-                    Image(systemName: "xmark.circle.fill")
-                        .font(.system(size: 11))
-                    Text(error)
-                        .font(.system(size: 11, weight: .medium))
-                }
-                .foregroundStyle(Color("ColorPrimary"))
-                .padding(.leading, 2)
-                .transition(.opacity.combined(with: .move(edge: .top)))
+            HStack(spacing: 4) {
+                Image(systemName: "xmark.circle.fill")
+                    .font(.system(size: 11))
+                Text(error ?? " ")
+                    .font(.system(size: 11, weight: .medium))
             }
+            .foregroundStyle(Color("ColorPrimary"))
+            .opacity(error == nil ? 0 : 1)
+            .padding(.leading, 2)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .frame(minHeight: 14)
         }
         .frame(maxWidth: .infinity)
         .animation(.easeInOut(duration: 0.2), value: error)

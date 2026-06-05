@@ -173,7 +173,7 @@ struct ProfileView: View {
                     }
                 )
 
-                FamilyProfilesCard()
+                FamilyProfilesCard(members: appState.profile?.familyMembers ?? [])
                 
                 SubmitButton(title: "Save Information") {
                     Task {

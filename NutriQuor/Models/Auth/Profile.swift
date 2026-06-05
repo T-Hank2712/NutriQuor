@@ -11,7 +11,7 @@ struct Profile: Codable {
     
     let profileId: Int
     
-    let userId: Int
+    let userId: Int?
     
     let firstName: String
     let lastName: String
