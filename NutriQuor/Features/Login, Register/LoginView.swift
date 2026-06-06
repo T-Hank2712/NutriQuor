@@ -133,48 +133,9 @@ struct LoginView: View {
                             }
 
                             // Login Button
-                            Button {
+                            SubmitButton(title: "Đăng nhập") {
                                 Task { await viewModel.login() }
-                            } label: {
-                                HStack(spacing: 10) {
-                                    if viewModel.isLoading {
-                                        ProgressView()
-                                            .tint(.primary)
-                                            .scaleEffect(0.85)
-                                    } else {
-                                        Text("Đăng nhập")
-                                            .font(.system(size: 17, weight: .bold, design: .rounded))
-                                        Image(systemName: "arrow.right")
-                                            .font(.system(size: 15, weight: .bold))
-                                    }
-                                }
-                                .foregroundStyle(Color(.systemBackground))
-                                .frame(maxWidth: .infinity)
-                                .padding(.vertical, 17)
-                                .background(
-                                    Group {
-                                        if viewModel.isLoading {
-                                            RoundedRectangle(cornerRadius: 16)
-                                                .fill(Color("ColorPrimary").opacity(0.5))
-                                        } else {
-                                            RoundedRectangle(cornerRadius: 16)
-                                                .fill(
-                                                    LinearGradient(
-                                                        colors: [Color("ColorPrimary"), Color("ColorPrimary").opacity(0.75)],
-                                                        startPoint: .leading,
-                                                        endPoint: .trailing
-                                                    )
-                                                )
-                                        }
-                                    }
-                                )
-                                .shadow(
-                                    color: viewModel.isLoading ? .clear : Color("ColorPrimary").opacity(0.45),
-                                    radius: 16,
-                                    y: 6
-                                )
                             }
-                            .disabled(viewModel.isLoading)
 
                             // Divider
                             HStack(spacing: 12) {
@@ -209,7 +170,7 @@ struct LoginView: View {
                             RoundedRectangle(cornerRadius: 28, style: .continuous)
                                 .fill(.ultraThinMaterial)
                                 .overlay(
-                                    RoundedRectangle(cornerRadius: 28, style: .continuous)
+                                    RoundedRectangle(cornerRadius: .cardRadius, style: .continuous)
                                         .stroke(Color.primary.opacity(0.06), lineWidth: 1)
                                 )
                         )

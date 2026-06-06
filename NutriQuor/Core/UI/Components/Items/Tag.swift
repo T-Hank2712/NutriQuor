@@ -8,20 +8,35 @@
 import SwiftUI
 
 struct Tag: View {
-    var text: String
-    var color: Color
-    
+    let text: String
+    let color: Color
+
     var body: some View {
-        Text(text)
-            .font(.headline)
-            .padding(.horizontal, 8)
-            .padding(.vertical, 4)
-            .background(color.opacity(.opacityLight))
-            .foregroundColor(color)
-            .cornerRadius(.smallRadius)
+        HStack(spacing: 6) {
+            Circle()
+                .fill(color)
+                .frame(width: 6, height: 6)
+
+            Text(text)
+                .font(.caption.weight(.medium))
+        }
+        .foregroundStyle(.primary)
+        .padding(.horizontal, 12)
+        .padding(.vertical, 8)
+        .background(.ultraThinMaterial)
+        .clipShape(Capsule())
+        .overlay {
+            Capsule()
+                .stroke(.gray.opacity(0.15), lineWidth: 1)
+        }
     }
 }
 
 #Preview {
-    Tag(text: "Vegan", color: Color.green)
+    VStack(spacing: 12) {
+        Tag(text: "Vegan", color: .green)
+        Tag(text: "High Protein", color: .blue)
+        Tag(text: "Low Sugar", color: .orange)
+    }
+    .padding()
 }

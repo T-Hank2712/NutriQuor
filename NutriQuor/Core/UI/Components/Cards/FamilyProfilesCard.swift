@@ -9,9 +9,12 @@ import SwiftUI
 
 struct FamilyProfilesCard: View {
     @StateObject private var viewModel: FamilyProfilesViewModel
+    
+    var onAddMember: () -> Void
 
-    init(members: [Profile]) {
+    init(members: [Profile], onAddMember: @escaping () -> Void = {}) {
         _viewModel = StateObject(wrappedValue: FamilyProfilesViewModel(members: members))
+        self.onAddMember = onAddMember
     }
 
     var body: some View {
@@ -45,17 +48,19 @@ struct FamilyProfilesCard: View {
                         }
                     }
 
-                    VStack(spacing: 8) {
-                        Circle()
-                            .stroke(style: StrokeStyle(lineWidth: 2, dash: [5]))
-                            .frame(width: 56, height: 56)
-                            .overlay(
-                                Image(systemName: "plus")
-                            )
+                    Button(action: onAddMember) {
+                        VStack(spacing: 8) {
+                            Circle()
+                                .stroke(style: StrokeStyle(lineWidth: 2, dash: [5]))
+                                .frame(width: 56, height: 56)
+                                .overlay(
+                                    Image(systemName: "plus")
+                                )
 
-                        Text("Add")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
+                            Text("Add")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
                     }
                 }
             }

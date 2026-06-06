@@ -16,11 +16,22 @@ struct ProfileView: View {
     @State private var showAllergyPicker = false
     @State private var showDiseasePicker = false
     @State private var showHealthGoalPicker = false
+    @State private var showEditNameSheet = false
+    @State private var showAddFamilySheet = false
     
     @State private var firstName: String = ""
     @State private var lastName: String = ""
     @State private var email: String = ""
     @State private var avatar: String = ""
+    
+    // Temporary fields used inside the edit sheet
+    @State private var editFirstName: String = ""
+    @State private var editLastName: String = ""
+    
+    // Temporary fields for add family member
+    @State private var newFamilyFirstName: String = ""
+    @State private var newFamilyLastName: String = ""
+    @State private var newFamilyAvatar: String = ""
     
     var profileId: Int {
         appState.profile?.profileId ?? 0
@@ -28,171 +39,234 @@ struct ProfileView: View {
     
     @StateObject private var viewModel = UserProfileViewModel()
     var body: some View {
-        ScrollView {
-            VStack(spacing: 20) {
-                
-                VStack(spacing: 16) {
+        ZStack {
+            ScrollView {
+                VStack(spacing: 20) {
                     
-                    ZStack(alignment: .bottomTrailing) {
+                    VStack(spacing: 16) {
                         
-                        // Avatar
-                        ZStack {
-                            Circle()
-                                .fill(
-                                    LinearGradient(
-                                        colors: [
-                                            Color.blue.opacity(0.15),
-                                            Color.purple.opacity(0.12)
-                                        ],
-                                        startPoint: .topLeading,
-                                        endPoint: .bottomTrailing
-                                    )
-                                )
-                                .frame(width: 130, height: 130)
-                                .shadow(color: .black.opacity(0.08), radius: 12, y: 6)
+                        ZStack(alignment: .bottomTrailing) {
                             
-                            Image(systemName: "person.fill")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 55, height: 55)
-                                .foregroundStyle(
-                                    LinearGradient(
-                                        colors: [.blue, .purple],
-                                        startPoint: .topLeading,
-                                        endPoint: .bottomTrailing
-                                    )
-                                )
-                        }
-                        
-                        // Camera Button
-                        Button {
-                            print("Change avatar")
-                        } label: {
+                            // Avatar
                             ZStack {
                                 Circle()
-                                    .fill(.blue)
-                                    .frame(width: 38, height: 38)
+                                    .fill(
+                                        LinearGradient(
+                                            colors: [
+                                                Color.blue.opacity(0.15),
+                                                Color.purple.opacity(0.12)
+                                            ],
+                                            startPoint: .topLeading,
+                                            endPoint: .bottomTrailing
+                                        )
+                                    )
+                                    .frame(width: 130, height: 130)
+                                    .shadow(color: .black.opacity(0.08), radius: 12, y: 6)
                                 
-                                Image(systemName: "camera.fill")
-                                    .font(.system(size: 16, weight: .semibold))
-                                    .foregroundStyle(.white)
+                                Image(systemName: "person.fill")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 55, height: 55)
+                                    .foregroundStyle(
+                                        LinearGradient(
+                                            colors: [.blue, .purple],
+                                            startPoint: .topLeading,
+                                            endPoint: .bottomTrailing
+                                        )
+                                    )
                             }
-                            .shadow(color: .blue.opacity(0.3), radius: 8, y: 4)
-                        }
-                    }
-                }
-                
-                HStack {
-                    InputField(
-                        title: "First Name",
-                        placeholder: "Thanh",
-                        icon: "person",
-                        text: $firstName
-                    )
-                    InputField(
-                        title: "Last Name",
-                        placeholder: "Lam",
-                        icon: "person",
-                        text: $lastName
-                    )
-                }
-                
-                InputField(
-                    title: "Email",
-                    placeholder: "user@gmail.com",
-                    icon: "envelope",
-                    text: $email
-                )
-                .disabled(true)
-                .opacity(.opacityStrong)
-
-                colorPrimaryGoalsCard(
-                    goals: viewModel.selectedHealthGoals,
-                    
-                    onAdd: {
-                        showHealthGoalPicker = true
-                    },
-                    
-                    onDelete: { goal in
-                        
-                        Task {
                             
-                            await viewModel.deleteHealthGoal(
-                                profileId: profileId,
-                                healthGoalId: goal.id
-                            )
-                            
-                            await viewModel.loadProfileGoals(
-                                profileId: profileId
-                            )
-                        }
-                    }
-                )
-
-                // MARK: Medical Conditions
-                MedicalConditionsCard(
-                    diseases: viewModel.selectedDiseases,
-                    onAdd: {
-                        showDiseasePicker = true
-                    },
-                    onDelete: { disease in
-                        
-                        Task {
-                            
-                            await viewModel.deleteDisease(
-                                profileId: profileId,
-                                diseaseId: disease.id
-                            )
-                            
-                            await viewModel.loadProfileDiseases(
-                                profileId: profileId
-                            )
-                        }
-                    }
-                )
-
-                // MARK: Allergies
-                AllergiesCard(
-                    allergies: viewModel.selectedAllergies,
-                    onAdd: {
-                        showAllergyPicker = true
-                    },
-                    onDelete: { allergy in
-                        
-                        Task {
-                            
-                            await viewModel.deleteAllergy(
-                                profileId: profileId,
-                                allergyId: allergy.id
-                            )
-                            
-                            await viewModel.loadProfileAllergies(
-                                profileId: profileId
-                            )
-                        }
-                    }
-                )
-
-                FamilyProfilesCard(members: appState.profile?.familyMembers ?? [])
-                
-                SubmitButton(title: "Save Information") {
-                    Task {
-                        if let updatedProfile = await viewModel.updateUserProfile(
-                            profileId: profileId,
-                            firstName: firstName,
-                            lastName: lastName,
-                            avatar: avatar
-                        ) {
-                            await MainActor.run {
-                                appState.profile = updatedProfile
-                                dismiss()
+                            // Camera Button
+                            Button {
+                                print("Change avatar")
+                            } label: {
+                                ZStack {
+                                    Circle()
+                                        .fill(.blue)
+                                        .frame(width: 38, height: 38)
+                                    
+                                    Image(systemName: "camera.fill")
+                                        .font(.system(size: 16, weight: .semibold))
+                                        .foregroundStyle(.white)
+                                }
+                                .shadow(color: .blue.opacity(0.3), radius: 8, y: 4)
                             }
                         }
                     }
-                }            }
-            .padding()
-            .padding(.bottom, 20)
-        }
+                    
+                    // Display name + edit button
+                    VStack(spacing: 6) {
+                        Text("\(firstName) \(lastName)".trimmingCharacters(in: .whitespaces).isEmpty ? "Chưa có tên" : "\(firstName) \(lastName)")
+                            .font(.title2)
+                            .fontWeight(.semibold)
+                        
+                        Text(email)
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                        
+                        Button {
+                            editFirstName = firstName
+                            editLastName = lastName
+                            showEditNameSheet = true
+                        } label: {
+                            Label("Chỉnh sửa thông tin", systemImage: "pencil")
+                                .font(.subheadline.weight(.medium))
+                                .foregroundStyle(.white)
+                                .padding(.horizontal, 18)
+                                .padding(.vertical, 9)
+                                .background(
+                                    LinearGradient(
+                                        colors: [.blue, .purple],
+                                        startPoint: .leading,
+                                        endPoint: .trailing
+                                    )
+                                )
+                                .clipShape(Capsule())
+                                .shadow(color: .blue.opacity(0.3), radius: 6, y: 3)
+                        }
+                        .padding(.top, 6)
+                    }
+
+                    colorPrimaryGoalsCard(
+                        goals: viewModel.selectedHealthGoals,
+                        
+                        onAdd: {
+                            showHealthGoalPicker = true
+                        },
+                        
+                        onDelete: { goal in
+                            
+                            Task {
+                                
+                                await viewModel.deleteHealthGoal(
+                                    profileId: profileId,
+                                    healthGoalId: goal.id
+                                )
+                                
+                                await viewModel.loadProfileGoals(
+                                    profileId: profileId
+                                )
+                            }
+                        }
+                    )
+
+                    // MARK: Medical Conditions
+                    MedicalConditionsCard(
+                        diseases: viewModel.selectedDiseases,
+                        onAdd: {
+                            showDiseasePicker = true
+                        },
+                        onDelete: { disease in
+                            
+                            Task {
+                                
+                                await viewModel.deleteDisease(
+                                    profileId: profileId,
+                                    diseaseId: disease.id
+                                )
+                                
+                                await viewModel.loadProfileDiseases(
+                                    profileId: profileId
+                                )
+                            }
+                        }
+                    )
+
+                    // MARK: Allergies
+                    AllergiesCard(
+                        allergies: viewModel.selectedAllergies,
+                        onAdd: {
+                            showAllergyPicker = true
+                        },
+                        onDelete: { allergy in
+                            
+                            Task {
+                                
+                                await viewModel.deleteAllergy(
+                                    profileId: profileId,
+                                    allergyId: allergy.id
+                                )
+                                
+                                await viewModel.loadProfileAllergies(
+                                    profileId: profileId
+                                )
+                            }
+                        }
+                    )
+
+                    FamilyProfilesCard(
+                        members: appState.profile?.familyMembers ?? [],
+                        onAddMember: {
+                            newFamilyFirstName = ""
+                            newFamilyLastName = ""
+                            newFamilyAvatar = ""
+                            showAddFamilySheet = true
+                        }
+                    )
+
+                }
+                .padding()
+                .padding(.bottom, 20)
+            }
+
+            // MARK: - Edit Name Popup
+            if showEditNameSheet {
+                Color.black.opacity(0.4)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        showEditNameSheet = false
+                    }
+
+                EditNamePopup(
+                    firstName: $editFirstName,
+                    lastName: $editLastName,
+                    onClose: {
+                        showEditNameSheet = false
+                    },
+                    onSave: {
+                        Task {
+                            if let updatedProfile = await viewModel.updateUserProfile(
+                                profileId: profileId,
+                                firstName: editFirstName,
+                                lastName: editLastName,
+                                avatar: avatar
+                            ) {
+                                await MainActor.run {
+                                    appState.profile = updatedProfile
+                                    firstName = editFirstName
+                                    lastName = editLastName
+                                    showEditNameSheet = false
+                                }
+                            }
+                        }
+                    }
+                )
+            }
+
+            // MARK: - Add Family Member Popup
+            if showAddFamilySheet {
+                Color.black.opacity(0.4)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        showAddFamilySheet = false
+                    }
+
+                AddFamilyMemberPopup(
+                    firstName: $newFamilyFirstName,
+                    lastName: $newFamilyLastName,
+                    avatar: $newFamilyAvatar,
+                    onClose: {
+                        showAddFamilySheet = false
+                    },
+                    onSave: {
+                        // TODO: Gọi API để thêm family member
+                        print("Add family member: \(newFamilyFirstName) \(newFamilyLastName)")
+                        showAddFamilySheet = false
+                    }
+                )
+            }
+
+        } // end ZStack
         .task {
             firstName = appState.profile?.firstName ?? ""
             lastName = appState.profile?.lastName ?? ""
@@ -214,6 +288,7 @@ struct ProfileView: View {
                 profileId: profileId
             )
         }
+
 
 
         // MARK: - Allergy Picker
@@ -282,3 +357,4 @@ struct ProfileView: View {
 #Preview {
     ProfileView().environmentObject(AppState())
 }
+

@@ -19,14 +19,14 @@ struct SubmitButton: View {
             HStack(spacing: 12) {
                 
                 Text(title)
-                    .font(.heading3)
+                    .font(.title)
                 
                 Image(systemName: "arrow.right")
                     .font(.text)
             }
             .foregroundStyle(.white)
             .frame(maxWidth: .infinity)
-            .frame(height: 65)
+            .frame(height: 50)
             .background(
                 RoundedRectangle(cornerRadius: .cardRadius)
                     .fill(Color(.heading))

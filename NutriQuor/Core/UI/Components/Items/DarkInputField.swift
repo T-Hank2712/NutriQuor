@@ -44,7 +44,7 @@ struct DarkInputField: View {
                 RoundedRectangle(cornerRadius: 14)
                     .fill(Color(.tertiarySystemBackground))
                     .overlay(
-                        RoundedRectangle(cornerRadius: 14)
+                        RoundedRectangle(cornerRadius: .smallRadius)
                             .stroke(
                                 isFocused ? Color("ColorPrimary") : Color.primary.opacity(0.12),
                                 lineWidth: 1.5

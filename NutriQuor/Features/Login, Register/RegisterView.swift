@@ -161,47 +161,9 @@ struct RegisterView: View {
                         }
 
                         // Submit button
-                        Button {
-                            Task {
-                                await viewModel.register()
-                                await MainActor.run {
-                                    if viewModel.isSuccess { showSuccessAlert = true }
-                                }
-                            }
-                        } label: {
-                            HStack(spacing: 10) {
-                                if viewModel.isLoading {
-                                    ProgressView()
-                                            .tint(.primary)
-                                        .scaleEffect(0.85)
-                                } else {
-                                    Text("Đăng ký")
-                                        .font(.system(size: 17, weight: .bold, design: .rounded))
-                                    Image(systemName: "arrow.right")
-                                        .font(.system(size: 15, weight: .bold))
-                                }
-                            }
-                            .foregroundStyle(Color(.systemBackground))
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 17)
-                            .background(
-                                RoundedRectangle(cornerRadius: 16)
-                                    .fill(
-                                        viewModel.isLoading
-                                        ? AnyShapeStyle(Color("ColorPrimary").opacity(0.5))
-                                        : AnyShapeStyle(LinearGradient(
-                                            colors: [Color("ColorPrimary"), Color("ColorPrimary").opacity(0.75)],
-                                            startPoint: .leading,
-                                            endPoint: .trailing
-                                        ))
-                                    )
-                            )
-                            .shadow(
-                                color: viewModel.isLoading ? .clear : Color("ColorPrimary").opacity(0.45),
-                                radius: 16, y: 6
-                            )
+                        SubmitButton(title: "Đăng ký") {
+                            Task { await viewModel.register() }
                         }
-                        .disabled(viewModel.isLoading)
 
                         // Divider
                         HStack(spacing: 12) {
@@ -231,7 +193,7 @@ struct RegisterView: View {
                     }
                     .padding(24)
                     .background(
-                        RoundedRectangle(cornerRadius: 28, style: .continuous)
+                        RoundedRectangle(cornerRadius: .cardRadius, style: .continuous)
                             .fill(.ultraThinMaterial)
                             .overlay(
                                 RoundedRectangle(cornerRadius: 28, style: .continuous)
