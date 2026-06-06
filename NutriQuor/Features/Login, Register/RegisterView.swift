@@ -8,227 +8,211 @@
 import SwiftUI
 
 struct RegisterView: View {
-    
+
     @StateObject private var viewModel = RegisterViewModel()
     @EnvironmentObject var appState: AppState
     @State private var showSuccessAlert = false
-    @State private var navigateToLogin = false
-    
+
     var body: some View {
-        
-        GeometryReader { geo in
-            
-            ZStack {
-                
-                LinearGradient(
-                    colors: [
-                        Color(.colorPrimary),
-                        Color(.colorPrimary).opacity(0.05),
-                        Color.blue.opacity(0.15)
-                    ],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
-                .ignoresSafeArea()
-                
-                ScrollView(showsIndicators: false) {
-                    
-                    VStack {
-                        
-                        RoundedRectangle(cornerRadius: 50)
-                            .fill(Color(.systemBackground).opacity(0.4))
-                            .overlay {
-                                
-                                VStack {
-                                    
-                                    VStack {
-                                        
-                                        ZStack {
-                                            
-                                            Circle()
-                                                .fill(Color(.colorPrimary).opacity(0.5))
-                                                .frame(width: 100, height: 100)
-                                                .shadow(
-                                                    color: .colorPrimary.opacity(0.25),
-                                                    radius: 10
-                                                )
-                                            
-                                            Image(systemName: "heart")
-                                                .font(
-                                                    .system(
-                                                        size: 38,
-                                                        weight: .medium
-                                                    )
-                                                )
-                                                .foregroundStyle(Color(.heading))
-                                        }
-                                        .padding(.top, 20)
-                                        
-                                        Text("Know What’s In Your Food")
-                                            .font(.heading1)
-                                            .foregroundStyle(Color(.heading))
-                                            .multilineTextAlignment(.center)
-                                            .frame(maxWidth: .infinity)
-                                            .lineLimit(nil)
-                                            .fixedSize(horizontal: false, vertical: true)
-                                            .padding(.bottom, 2)
-                                    }
-                                    
-                                    VStack(spacing: 24) {
-                                        
-                                        VStack(alignment: .leading, spacing: 6) {
+        ZStack {
+            LinearGradient(
+                colors: [
+                    Color(.systemBackground),
+                    Color("ColorPrimary").opacity(0.12)
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            .ignoresSafeArea()
 
-                                            InputField(
-                                                title: "First Name",
-                                                placeholder: "Jane",
-                                                icon: "person",
-                                                text: $viewModel.firstName.value
-                                            )
+            Circle()
+                .fill(Color("ColorPrimary").opacity(0.16))
+                .frame(width: 360)
+                .blur(radius: 90)
+                .offset(x: 100, y: -300)
 
-                                            if let error = viewModel.firstName.error {
+            Circle()
+                .fill(Color("ColorPrimary").opacity(0.12))
+                .frame(width: 260)
+                .blur(radius: 80)
+                .offset(x: -120, y: 320)
 
-                                                Text(error)
-                                                    .font(.caption)
-                                                    .foregroundStyle(.red)
-                                                    .padding(.leading, 4)
-                                            }
-                                        }
-                                        
-                                        VStack(alignment: .leading, spacing: 6) {
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 24) {
+                    VStack(spacing: 14) {
+                        ZStack {
+                            Circle()
+                                .fill(
+                                    LinearGradient(
+                                        colors: [Color("ColorPrimary"), Color("ColorPrimary").opacity(0.7)],
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    )
+                                )
+                                .frame(width: 78, height: 78)
+                                .shadow(color: Color("ColorPrimary").opacity(0.4), radius: 18, y: 8)
 
-                                            InputField(
-                                                title: "Last Name",
-                                                placeholder: "Doe",
-                                                icon: "person.text.rectangle",
-                                                text: $viewModel.lastName.value
-                                            )
+                            Image(systemName: "heart.fill")
+                                .font(.system(size: 28, weight: .bold))
+                                .foregroundStyle(Color(.systemBackground))
+                        }
 
-                                            if let error = viewModel.lastName.error {
+                        VStack(spacing: 6) {
+                            Text("Tạo tài khoản")
+                                .font(.system(size: 28, weight: .black, design: .rounded))
+                                .foregroundStyle(.primary)
+                                .kerning(-0.4)
 
-                                                Text(error)
-                                                    .font(.caption)
-                                                    .foregroundStyle(.red)
-                                                    .padding(.leading, 4)
-                                            }
-                                        }
-                                        
-                                        VStack(alignment: .leading, spacing: 6) {
-
-                                            InputField(
-                                                title: "Email",
-                                                placeholder: "jane@example.com",
-                                                icon: "envelope",
-                                                text: $viewModel.email.value
-                                            )
-
-                                            if let error = viewModel.email.error {
-
-                                                Text(error)
-                                                    .font(.caption)
-                                                    .foregroundStyle(.red)
-                                                    .padding(.leading, 4)
-                                            }
-                                        }
-                                        
-                                        VStack(alignment: .leading, spacing: 6) {
-
-                                            SecureInputField(
-                                                title: "Password",
-                                                placeholder: "Password",
-                                                icon: "lock",
-                                                text: $viewModel.password.value
-                                            )
-
-                                            if let error = viewModel.password.error {
-
-                                                Text(error)
-                                                    .font(.caption)
-                                                    .foregroundStyle(.red)
-                                                    .padding(.leading, 4)
-                                            }
-                                        }
-                                        
-                                        VStack(alignment: .leading, spacing: 6) {
-
-                                            SecureInputField(
-                                                title: "Confirm Password",
-                                                placeholder: "Confirm Password",
-                                                icon: "lock",
-                                                text: $viewModel.confirmPassword.value
-                                            )
-
-                                            if let error = viewModel.confirmPassword.error {
-
-                                                Text(error)
-                                                    .font(.caption)
-                                                    .foregroundStyle(.red)
-                                                    .padding(.leading, 4)
-                                            }
-                                        }
-                                    }
-                                    
-                                    ZStack {
-                                        
-                                        SubmitButton(title: "Sign Up") {
-
-                                            Task {
-                                                await viewModel.register()
-
-                                                await MainActor.run {
-                                                    if viewModel.isSuccess {
-                                                        showSuccessAlert = true
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        .disabled(viewModel.isLoading)
-                                        
-                                        if viewModel.isLoading {
-                                            ProgressView()
-                                        }
-                                    }
-                                    
-                                    if let error = viewModel.errorMessage {
-                                        Text(error)
-                                            .foregroundStyle(.red)
-                                            .font(.system(size: 14))
-                                            .multilineTextAlignment(.center)
-                                    }
-                                    
-                                    HStack(spacing: 4) {
-                                        
-                                        Text("Already have an account?")
-                                            .foregroundStyle(.gray)
-                                        
-                                        Button {
-                                            DispatchQueue.main.async {
-                                                appState.authState = .login
-                                            }
-                                        } label: {
-                                            Text("Log in")
-                                                .fontWeight(.semibold)
-                                                .foregroundStyle(Color(.heading))
-                                        }
-                                    }
-                                    .font(.system(size: 18))
-                                    .padding(.bottom, 20)
-                                }
-                                .padding(.horizontal, 20)
-                            }
-                            .frame(minHeight: geo.size.height + 200)
-                            .padding(.horizontal, 20)
+                            Text("Bắt đầu hành trình dinh dưỡng của bạn")
+                                .font(.system(size: 13, weight: .medium))
+                                .foregroundStyle(.secondary)
+                                .multilineTextAlignment(.center)
+                        }
                     }
-                    .padding(.bottom, 50)
+                    .padding(.top, 52)
+
+                    VStack(spacing: 20) {
+
+                        // Name row
+                        HStack(spacing: 12) {
+                            DarkValidatedField(
+                                title: "Tên",
+                                placeholder: "Jane",
+                                icon: "person.fill",
+                                text: $viewModel.firstName.value,
+                                error: viewModel.firstName.error
+                            )
+                            DarkValidatedField(
+                                title: "Họ",
+                                placeholder: "Doe",
+                                icon: "person.fill",
+                                text: $viewModel.lastName.value,
+                                error: viewModel.lastName.error
+                            )
+                        }
+
+                        DarkValidatedField(
+                            title: "Email",
+                            placeholder: "jane@example.com",
+                            icon: "envelope.fill",
+                            text: $viewModel.email.value,
+                            error: viewModel.email.error,
+                            keyboard: .emailAddress
+                        )
+
+                        DarkValidatedSecureField(
+                            title: "Mật khẩu",
+                            placeholder: "Tối thiểu 8 ký tự",
+                            icon: "lock.fill",
+                            text: $viewModel.password.value,
+                            error: viewModel.password.error
+                        )
+
+                        DarkValidatedSecureField(
+                            title: "Xác nhận mật khẩu",
+                            placeholder: "Nhập lại mật khẩu",
+                            icon: "lock.shield.fill",
+                            text: $viewModel.confirmPassword.value,
+                            error: viewModel.confirmPassword.error
+                        )
+
+                        // Global error
+                        if let error = viewModel.errorMessage {
+                            HStack(spacing: 8) {
+                                Image(systemName: "exclamationmark.triangle.fill")
+                                    .font(.system(size: 13))
+                                Text(error)
+                                    .font(.system(size: 13, weight: .medium))
+                            }
+                            .foregroundStyle(Color("ColorPrimary"))
+                            .padding(.horizontal, 14)
+                            .padding(.vertical, 10)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .fill(Color("ColorPrimary").opacity(0.08))
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 12)
+                                            .stroke(Color("ColorPrimary").opacity(0.2), lineWidth: 1)
+                                    )
+                            )
+                        }
+
+                        // Success banner
+                        if viewModel.isSuccess {
+                            HStack(spacing: 8) {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .font(.system(size: 13))
+                                Text("Đăng ký thành công! Đang chuyển hướng...")
+                                    .font(.system(size: 13, weight: .medium))
+                            }
+                            .foregroundStyle(Color("SuccessTeal"))
+                            .padding(.horizontal, 14)
+                            .padding(.vertical, 10)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .fill(Color("SuccessTeal").opacity(0.08))
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 12)
+                                            .stroke(Color("SuccessTeal").opacity(0.2), lineWidth: 1)
+                                    )
+                            )
+                        }
+
+                        // Submit button
+                        SubmitButton(title: "Đăng ký") {
+                            Task { await viewModel.register() }
+                        }
+
+                        // Divider
+                        HStack(spacing: 12) {
+                            Rectangle().fill(Color.primary.opacity(0.08)).frame(height: 1)
+                            Text("hoặc")
+                                .font(.system(size: 12, weight: .medium))
+                                .foregroundStyle(.tertiary)
+                            Rectangle().fill(Color.primary.opacity(0.08)).frame(height: 1)
+                        }
+
+                        // Login link
+                        HStack(spacing: 6) {
+                            Text("Đã có tài khoản?")
+                                .foregroundStyle(.secondary)
+                                .font(.system(size: 15))
+
+                            Button {
+                                DispatchQueue.main.async {
+                                    appState.authState = .login
+                                }
+                            } label: {
+                                Text("Đăng nhập")
+                                    .font(.system(size: 15, weight: .bold, design: .rounded))
+                                    .foregroundStyle(Color("ColorPrimary"))
+                            }
+                        }
+                    }
+                    .padding(24)
+                    .background(
+                        RoundedRectangle(cornerRadius: .cardRadius, style: .continuous)
+                            .fill(.ultraThinMaterial)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 28, style: .continuous)
+                                    .stroke(Color.primary.opacity(0.06), lineWidth: 1)
+                            )
+                    )
+                    .padding(.horizontal, 20)
+                    .padding(.bottom, 48)
                 }
             }
         }
-        .alert(
-            "Register Successfully",
-            isPresented: $showSuccessAlert
-        ) {
-        } message: {
-            Text("Redirecting to login...")
+        .onChange(of: viewModel.firstName.value) { viewModel.validateFirstName() }
+        .onChange(of: viewModel.lastName.value) { viewModel.validateLastName() }
+        .onChange(of: viewModel.email.value) { viewModel.validateEmail() }
+        .onChange(of: viewModel.password.value) {
+            viewModel.validatePassword()
+            viewModel.validateConfirmPassword()
         }
+        .onChange(of: viewModel.confirmPassword.value) { viewModel.validateConfirmPassword() }
         .onChange(of: viewModel.isSuccess) {
             if viewModel.isSuccess {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
@@ -236,29 +220,9 @@ struct RegisterView: View {
                 }
             }
         }
-        .onChange(of: viewModel.firstName.value) {
-            viewModel.validateFirstName()
-        }
-
-        .onChange(of: viewModel.lastName.value) {
-            viewModel.validateLastName()
-        }
-
-        .onChange(of: viewModel.email.value) {
-            viewModel.validateEmail()
-        }
-
-        .onChange(of: viewModel.password.value) {
-            viewModel.validatePassword()
-            viewModel.validateConfirmPassword()
-        }
-
-        .onChange(of: viewModel.confirmPassword.value) {
-            viewModel.validateConfirmPassword()
-        }
     }
 }
 
 #Preview {
-    RegisterView()
+    RegisterView().environmentObject(AppState())
 }

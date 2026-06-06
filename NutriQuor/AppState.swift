@@ -24,7 +24,23 @@ final class AppState: ObservableObject {
     @Published var user: User?
     @Published var profile: Profile?
 
+    private let hasLoggedInKey = "has_logged_in"
+
+    private var hasLoggedInBefore: Bool {
+        UserDefaults.standard.bool(forKey: hasLoggedInKey)
+    }
+
+    private func setHasLoggedInBefore(_ value: Bool) {
+        UserDefaults.standard.set(value, forKey: hasLoggedInKey)
+    }
+
     func bootstrap() async {
+
+        if TokenStorage.shared.getAccessToken() != nil, !hasLoggedInBefore {
+            TokenStorage.shared.clearTokens()
+            authState = .login
+            return
+        }
 
         if TokenStorage.shared.getAccessToken() != nil {
             await loadCurrentUser()
@@ -60,9 +76,15 @@ final class AppState: ObservableObject {
 
             self.authState = .loggedIn
 
+        } catch APIError.unauthorized {
+            if TokenStorage.shared.getRefreshToken() == nil {
+                logout()
+            } else {
+                authState = .login
+            }
         } catch {
             print(error)
-            logout()
+            authState = .login
         }
     }
 
@@ -74,6 +96,7 @@ final class AppState: ObservableObject {
         authState = .loading
         TokenStorage.shared.saveAccessToken(accessToken)
         TokenStorage.shared.saveRefreshToken(refreshToken)
+        setHasLoggedInBefore(true)
 
         await loadCurrentUser()
     }
@@ -81,6 +104,7 @@ final class AppState: ObservableObject {
     func logout() {
 
         TokenStorage.shared.clearTokens()
+        setHasLoggedInBefore(false)
 
         user = nil
         profile = nil

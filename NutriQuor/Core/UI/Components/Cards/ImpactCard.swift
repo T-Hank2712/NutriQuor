@@ -39,5 +39,5 @@ struct ImpactCard: View {
 }
 
 #Preview {
-    ImpactCard(icon: "Weight Loss", title: "Weight Loss", text: "Chẳng có gì cả", color: .gray)
+    ImpactCard(icon: "flame", title: "Weight Loss", text: "Chẳng có gì cả", color: .gray)
 }

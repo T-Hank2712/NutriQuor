@@ -10,116 +10,204 @@ import SwiftUI
 struct SettingView: View {
     @AppStorage("app_theme") private var appTheme: String = AppearanceMode.system.rawValue
     @EnvironmentObject var appState: AppState
-    
+
     var body: some View {
-        NavigationStack{
+        NavigationStack {
             ScrollView {
-                VStack(alignment: .leading, spacing: 30) {
-                    
-                    // Header
-                    VStack{
-                        ZStack(alignment: .bottomTrailing) {
+                VStack(spacing: 0) {
 
-                            Image(systemName: "person.crop.circle")
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 96, height: 96)
-                                .clipShape(Circle())
+                    // MARK: - Hero Header
+                    ZStack {
+                        LinearGradient(
+                            colors: [
+                                Color("DeepNavyDark"),
+                                Color("DeepNavyMid"),
+                                Color("DeepNavy")
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                        .ignoresSafeArea(edges: .top)
 
-                            HStack(spacing: 4) {
-                                Image(systemName: "star.fill")
-                                Text("Premium")
+                        // Decorative blobs
+                        Circle()
+                            .fill(Color.white.opacity(0.04))
+                            .frame(width: 220)
+                            .offset(x: -90, y: -30)
+                        Circle()
+                            .fill(Color("AccentPink").opacity(0.12))
+                            .frame(width: 160)
+                            .offset(x: 110, y: 40)
+
+                        VStack(spacing: 14) {
+                            // Avatar
+                            ZStack(alignment: .bottomTrailing) {
+                                ZStack {
+                                    Circle()
+                                        .fill(
+                                            LinearGradient(
+                                                colors: [
+                                                    Color("AccentPink").opacity(0.9),
+                                                    Color("DeepNavy")
+                                                ],
+                                                startPoint: .topLeading,
+                                                endPoint: .bottomTrailing
+                                            )
+                                        )
+                                        .frame(width: 96, height: 96)
+                                        .shadow(color: Color("AccentPink").opacity(0.35), radius: 20, y: 8)
+
+                                    Image(systemName: "person.fill")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 40)
+                                        .foregroundStyle(.white.opacity(0.9))
+                                }
+
+                                // Premium Badge
+                                HStack(spacing: 3) {
+                                    Image(systemName: "star.fill")
+                                        .font(.system(size: 9, weight: .bold))
+                                    Text("PRO")
+                                        .font(.system(size: 9, weight: .black, design: .rounded))
+                                        .kerning(0.5)
+                                }
+                                .padding(.horizontal, 7)
+                                .padding(.vertical, 4)
+                                .background(
+                                    Capsule()
+                                        .fill(Color("AccentPink"))
+                                        .shadow(color: Color("AccentPink").opacity(0.5), radius: 6, y: 2)
+                                )
+                                .foregroundStyle(.white)
+                                .offset(x: 8, y: 8)
                             }
-                            .font(.caption2)
-                            .fontWeight(.bold)
-                            .padding(.horizontal, 6)
-                            .padding(.vertical, 3)
-                            .background(Color(.colorPrimary))
-                            .foregroundColor(.white)
-                            .clipShape(Capsule())
-                            .offset(x: 6, y: 6)
-                        }
 
-                        Text("\(appState.profile?.lastName ?? "User") \(appState.profile?.firstName ?? "1")")
-                            .font(.title3)
-                            .fontWeight(.bold)
+                            VStack(spacing: 4) {
+                                Text("\(appState.profile?.lastName ?? "") \(appState.profile?.firstName ?? "Người dùng")")
+                                    .font(.system(size: 22, weight: .bold, design: .rounded))
+                                    .foregroundStyle(.white)
+
+                                Text(appState.user?.email ?? "")
+                                    .font(.system(size: 13, weight: .medium))
+                                    .foregroundStyle(.white.opacity(0.5))
+                            }
+                        }
+                        .padding(.vertical, 40)
                     }
                     .frame(maxWidth: .infinity)
-                    
-                    // Sections
-                    SettingsSection(title: "Account") {
-                        NavigationLink {
-                            ProfileView()
-                        } label: {
-                            OptionCard(
-                                title: "Edit Profile",
-                                icon: "person.circle",
-                                color: Color(.colorPrimary)
+
+                    // MARK: - Content
+                    VStack(spacing: 24) {
+
+                        // Account
+                        ModernSection(title: "TÀI KHOẢN", icon: "person.crop.circle") {
+                            NavigationLink {
+                                ProfileView()
+                            } label: {
+                                ModernOptionRow(
+                                    title: "Chỉnh sửa hồ sơ",
+                                    subtitle: "Tên, ảnh đại diện, thông tin cá nhân",
+                                    icon: "person.text.rectangle.fill",
+                                    iconColor: Color("AccentPink")
+                                )
+                            }
+                            .buttonStyle(.plain)
+
+                            Divider().padding(.leading, 56)
+
+                            ModernOptionRow(
+                                title: "Đổi mật khẩu",
+                                subtitle: "Cập nhật mật khẩu bảo mật",
+                                icon: "lock.fill",
+                                iconColor: Color("DeepNavy")
                             )
                         }
-                        .buttonStyle(.plain)
-                        OptionCard(
-                            title: "Change Your Password",
-                            icon: "lock.circle",
-                            color: Color(.colorPrimary)
-                        )
-                    }
-                    
-                    SettingsSection(title: "App Preferences") {
-                        
-                        VStack(alignment: .leading, spacing: 12) {
-                            
-                            Text("Appearance")
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
-                            
-                            Picker("Appearance", selection: $appTheme) {
-                                Text("System").tag(AppearanceMode.system.rawValue)
-                                Text("Light").tag(AppearanceMode.light.rawValue)
-                                Text("Dark").tag(AppearanceMode.dark.rawValue)
+
+                        // App Preferences
+                        ModernSection(title: "GIAO DIỆN", icon: "paintbrush") {
+                            VStack(alignment: .leading, spacing: 12) {
+                                HStack(spacing: 14) {
+                                    ZStack {
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .fill(Color("AccentPurple").opacity(0.15))
+                                            .frame(width: 36, height: 36)
+                                        Image(systemName: "circle.lefthalf.filled")
+                                            .font(.system(size: 16, weight: .semibold))
+                                            .foregroundStyle(Color("AccentPurple"))
+                                    }
+                                    VStack(alignment: .leading, spacing: 2) {
+                                        Text("Chế độ hiển thị")
+                                            .font(.system(size: 15, weight: .semibold, design: .rounded))
+                                        Text("Sáng, tối hoặc theo hệ thống")
+                                            .font(.system(size: 12))
+                                            .foregroundStyle(.secondary)
+                                    }
+                                }
+
+                                Picker("Appearance", selection: $appTheme) {
+                                    Text("Hệ thống").tag(AppearanceMode.system.rawValue)
+                                    Text("Sáng").tag(AppearanceMode.light.rawValue)
+                                    Text("Tối").tag(AppearanceMode.dark.rawValue)
+                                }
+                                .pickerStyle(.segmented)
                             }
-                            .pickerStyle(.segmented)
+                            .padding(.vertical, 4)
                         }
-                    }
-                    
-                    SettingsSection(title: "Support & Legal") {
-                        OptionCard(
-                            title: "Help Center",
-                            icon: "questionmark.circle",
-                            color: Color(.colorPrimary)
-                        )
-                        OptionCard(
-                            title: "Privacy Policy",
-                            icon: "shield.pattern.checkered",
-                            color: Color(.colorPrimary)
-                        )
-                    }
-                    
-                    // Logout Button
-                    Button(action: {
-                        appState.logout()
-                        appState.authState = .login
-                    }) {
-                        HStack {
-                            Image(systemName: "arrow.right.square")
-                            Text("Log Out")
-                                .fontWeight(.medium)
+
+                        // Support
+                        ModernSection(title: "HỖ TRỢ & PHÁP LÝ", icon: "info.circle") {
+                            ModernOptionRow(
+                                title: "Trung tâm trợ giúp",
+                                subtitle: "Câu hỏi thường gặp và hướng dẫn",
+                                icon: "questionmark.circle.fill",
+                                iconColor: Color("InfoBlue")
+                            )
+
+                            Divider().padding(.leading, 56)
+
+                            ModernOptionRow(
+                                title: "Chính sách bảo mật",
+                                subtitle: "Điều khoản và quyền riêng tư",
+                                icon: "shield.fill",
+                                iconColor: Color("SuccessTeal")
+                            )
                         }
-                        .foregroundColor(.red)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 12)
-                                .stroke(Color.red, lineWidth: 1.5)
-                        )
+
+                        // Logout
+                        Button {
+                            appState.logout()
+                            appState.authState = .login
+                        } label: {
+                            HStack(spacing: 12) {
+                                Image(systemName: "rectangle.portrait.and.arrow.right")
+                                    .font(.system(size: 16, weight: .semibold))
+                                Text("Đăng xuất")
+                                    .font(.system(size: 16, weight: .bold, design: .rounded))
+                            }
+                            .foregroundStyle(Color("AccentPink"))
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 16)
+                            .background(
+                                RoundedRectangle(cornerRadius: 16)
+                                    .fill(Color("AccentPink").opacity(0.08))
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 16)
+                                            .stroke(Color("AccentPink").opacity(0.25), lineWidth: 1.5)
+                                    )
+                            )
+                        }
+
+                        Text("NutriQuor v1.0.0")
+                            .font(.system(size: 12))
+                            .foregroundStyle(.tertiary)
+                            .padding(.bottom, 20)
                     }
-                    .padding(.horizontal)
-                    .padding(.top, 10)
-                    
+                    .padding(.horizontal, 20)
+                    .padding(.top, 28)
                 }
-                .padding(.vertical)
             }
-            .padding()
+            .ignoresSafeArea(edges: .top)
             .background(Color(.systemBackground))
         }
     }

@@ -8,116 +8,176 @@
 import SwiftUI
 
 struct LoginView: View {
-    
+
     @StateObject private var viewModel: LoginViewModel
     @EnvironmentObject var appState: AppState
-    
+
     init(appState: AppState) {
         _viewModel = StateObject(wrappedValue: LoginViewModel(appState: appState))
     }
+
     var body: some View {
-        
-        NavigationStack{
+        NavigationStack {
             ZStack {
-                
                 LinearGradient(
                     colors: [
-                        Color(.colorPrimary),
-                        Color(.colorPrimary).opacity(0.05),
-                        Color.blue.opacity(0.15)
+                        Color(.systemBackground),
+                        Color("ColorPrimary").opacity(0.12)
                     ],
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
                 )
                 .ignoresSafeArea()
-                
-                VStack {
-                    
-                    RoundedRectangle(cornerRadius: .cardRadius)
-                        .fill(Color(.systemBackground).opacity(0.92))
-                        .overlay {
-                            
-                            VStack(spacing: 24) {
-                                
-                                VStack(spacing: 24) {
-                                    
-                                    ZStack {
-                                        
-                                        Circle()
-                                            .fill(Color(.colorPrimary).opacity(0.5))
-                                            .frame(width: 100, height: 100)
-                                        
-                                        Image(systemName: "heart")
-                                            .font(
-                                                .system(
-                                                    size: 38,
-                                                    weight: .medium
-                                                )
-                                            )
-                                            .foregroundStyle(Color(.heading))
-                                    }
-                                    
-                                    Text("Know What’s In Your Food")
-                                        .font(.heading1)
-                                        .foregroundStyle(Color(.heading))
-                                        .multilineTextAlignment(.center)
-                                }
-                                
-                                VStack(spacing: 24) {
-                                    
-                                    InputField(
-                                        title: "Email",
-                                        placeholder: "jane@example.com",
-                                        icon: "envelope",
-                                        text: $viewModel.email
+
+                Circle()
+                    .fill(Color("ColorPrimary").opacity(0.18))
+                    .frame(width: 360)
+                    .blur(radius: 90)
+                    .offset(x: -90, y: -320)
+
+                Circle()
+                    .fill(Color("ColorPrimary").opacity(0.12))
+                    .frame(width: 260)
+                    .blur(radius: 80)
+                    .offset(x: 120, y: 260)
+
+                ScrollView(showsIndicators: false) {
+                    VStack(spacing: 24) {
+                        VStack(spacing: 16) {
+                            ZStack {
+                                Circle()
+                                    .fill(
+                                        LinearGradient(
+                                            colors: [
+                                                Color("ColorPrimary"),
+                                                Color("ColorPrimary").opacity(0.7)
+                                            ],
+                                            startPoint: .topLeading,
+                                            endPoint: .bottomTrailing
+                                        )
                                     )
-                                    
-                                    SecureInputField(
-                                        title: "Password",
-                                        placeholder: "Password",
-                                        icon: "lock",
-                                        text: $viewModel.password
-                                    )
-                                }
-                                .padding(.top, 10)
-                                
-                                if let error = viewModel.errorMessage {
-                                    Text(error)
-                                        .foregroundStyle(.red)
-                                        .font(.subheadline)
-                                }
-                                
-                                SubmitButton(
-                                     title: viewModel.isLoading ? "Loading..." : "Log in"
-                                 ) {
-                                     Task {
-                                         await viewModel.login()
-                                     }
-                                 }
-                                 .disabled(viewModel.isLoading)
-                                
-                                HStack(spacing: 4) {
-                                    
-                                    Text("Don't have an account?")
-                                        .foregroundStyle(.gray)
-                                    
-                                    Button {
-                                        appState.authState = .register
-                                    } label: {
-                                        Text("Sign Up")
-                                            .fontWeight(.semibold)
-                                            .foregroundStyle(Color(.heading))
-                                    }
-                                }
-                                .font(.system(size: 18))
-                                .padding(.bottom, 20)
+                                    .frame(width: 84, height: 84)
+                                    .shadow(color: Color("ColorPrimary").opacity(0.4), radius: 22, y: 8)
+
+                                Image(systemName: "heart.fill")
+                                    .font(.system(size: 32, weight: .bold))
+                                    .foregroundStyle(Color(.systemBackground))
                             }
-                            .padding()
+
+                            VStack(spacing: 6) {
+                                Text("NutriQuor")
+                                    .font(.system(size: 32, weight: .black, design: .rounded))
+                                    .foregroundStyle(.primary)
+                                    .kerning(-0.5)
+
+                                Text("Know What's In Your Food")
+                                    .font(.system(size: 14, weight: .medium))
+                                    .foregroundStyle(.secondary)
+                                    .kerning(0.2)
+                            }
                         }
+                        .padding(.top, 56)
+
+                        VStack(spacing: 22) {
+
+                            // Title
+                            VStack(spacing: 6) {
+                                Text("Chào mừng trở lại")
+                                    .font(.system(size: 24, weight: .bold, design: .rounded))
+                                    .foregroundStyle(.primary)
+
+                                Text("Đăng nhập để tiếp tục")
+                                    .font(.system(size: 13, weight: .medium))
+                                    .foregroundStyle(.secondary)
+                            }
+                            .frame(maxWidth: .infinity, alignment: .leading)
+
+                            // Fields
+                            VStack(spacing: 16) {
+                                DarkInputField(
+                                    title: "Email",
+                                    placeholder: "jane@example.com",
+                                    icon: "envelope.fill",
+                                    text: $viewModel.email,
+                                    keyboard: .emailAddress
+                                )
+
+                                DarkSecureField(
+                                    title: "Mật khẩu",
+                                    placeholder: "Nhập mật khẩu",
+                                    icon: "lock.fill",
+                                    text: $viewModel.password
+                                )
+                            }
+
+                            // Error
+                            if let error = viewModel.errorMessage {
+                                HStack(spacing: 8) {
+                                    Image(systemName: "exclamationmark.triangle.fill")
+                                        .font(.system(size: 13))
+                                    Text(error)
+                                        .font(.system(size: 13, weight: .medium))
+                                }
+                                .foregroundStyle(Color("ColorPrimary"))
+                                .padding(.horizontal, 14)
+                                .padding(.vertical, 10)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .fill(Color("ColorPrimary").opacity(0.08))
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 12)
+                                                .stroke(Color("ColorPrimary").opacity(0.2), lineWidth: 1)
+                                        )
+                                )
+                            }
+
+                            // Login Button
+                            SubmitButton(title: "Đăng nhập") {
+                                Task { await viewModel.login() }
+                            }
+
+                            // Divider
+                            HStack(spacing: 12) {
+                                Rectangle()
+                                    .fill(Color.primary.opacity(0.08))
+                                    .frame(height: 1)
+                                Text("hoặc")
+                                    .font(.system(size: 12, weight: .medium))
+                                    .foregroundStyle(.tertiary)
+                                Rectangle()
+                                    .fill(Color.primary.opacity(0.08))
+                                    .frame(height: 1)
+                            }
+
+                            // Sign up
+                            HStack(spacing: 6) {
+                                Text("Chưa có tài khoản?")
+                                    .foregroundStyle(.secondary)
+                                    .font(.system(size: 15))
+
+                                Button {
+                                    appState.authState = .register
+                                } label: {
+                                    Text("Đăng ký ngay")
+                                        .font(.system(size: 15, weight: .bold, design: .rounded))
+                                        .foregroundStyle(Color("ColorPrimary"))
+                                }
+                            }
+                        }
+                        .padding(24)
+                        .background(
+                            RoundedRectangle(cornerRadius: 28, style: .continuous)
+                                .fill(.ultraThinMaterial)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: .cardRadius, style: .continuous)
+                                        .stroke(Color.primary.opacity(0.06), lineWidth: 1)
+                                )
+                        )
                         .padding(.horizontal, 20)
-                        .padding(.vertical, 70)
+                        .padding(.bottom, 40)
+                    }
                 }
-                .padding(.bottom, 50)
             }
         }
     }
@@ -125,7 +185,6 @@ struct LoginView: View {
 
 #Preview {
     let appState = AppState()
-
     return LoginView(appState: appState)
         .environmentObject(appState)
 }

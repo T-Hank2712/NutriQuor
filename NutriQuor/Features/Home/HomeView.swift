@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct HomeView: View {
+
+    @EnvironmentObject var appState: AppState
+
     let items: [History] = [
         History(
             image: Image("Example"),
@@ -28,57 +31,96 @@ struct HomeView: View {
             )!
         )
     ]
+
     var body: some View {
-        NavigationStack{
-            ScrollView {
-                VStack(alignment: .leading, spacing: 24) {
+        NavigationStack {
+            ScrollView(showsIndicators: false) {
+                VStack(alignment: .leading, spacing: 28) {
 
-                    // HEADER
-                    HStack {
-                        Image(systemName: "person.crop.circle.fill")
-                            .resizable()
-                            .frame(width: 44, height: 44)
-
+                    // MARK: - Header
+                    HStack(alignment: .center) {
                         VStack(alignment: .leading, spacing: 4) {
-                            Text("Xin chào,")
-                                .foregroundColor(.secondary)
-                            Text("Thành Lâm")
-                                .fontWeight(.semibold)
+                            Text("Xin chào 👋")
+                                .font(.system(size: 14, weight: .medium))
+                                .foregroundStyle(.secondary)
+                            Text("\(appState.profile?.lastName ?? "") \(appState.profile?.firstName ?? "Người dùng")")
+                                .font(.system(size: 24, weight: .black, design: .rounded))
+                                .foregroundStyle(.primary)
+                                .kerning(-0.3)
+                        }
+
+                        Spacer()
+
+                        ZStack {
+                            Circle()
+                                .fill(
+                                    LinearGradient(
+                                        colors: [Color("ColorPrimary"), Color("AccentPinkLight")],
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    )
+                                )
+                                .frame(width: 46, height: 46)
+                                .shadow(color: Color("ColorPrimary").opacity(0.5), radius: 10, y: 4)
+
+                            Image(systemName: "person.fill")
+                                .font(.system(size: 18, weight: .semibold))
+                                .foregroundStyle(.white)
                         }
                     }
-                    Text("Scans")
-                        .font(.title)
-                        .fontWeight(.bold)
-                    HStack(spacing: 20){
-                        CountScansCard()
-                        IndexCard()
-                    }
-                    InsightCard()
-                    
-                    Text("Scans")
-                        .font(.title)
-                        .fontWeight(.bold)
-                    ForEach(items) { item in
-                        NavigationLink {
-                            AnalystView(
-                                nutriItem: item,
-                                onDismiss: {}
-                            )
-                        } label: {
-                            HistoryItem(record: item)
+                    .padding(.top, 8)
+
+                    // MARK: - Stats Section
+                    VStack(alignment: .leading, spacing: 14) {
+                        HomeSectionLabel(text: "THỐNG KÊ HÔM NAY")
+
+                        HStack(spacing: 14) {
+                            CountScansCard()
+                            IndexCard()
                         }
-                        .buttonStyle(.plain)
+                    }
+
+                    // MARK: - Insight
+                    VStack(alignment: .leading, spacing: 14) {
+                        HomeSectionLabel(text: "GỢI Ý CHO BẠN")
+                        InsightCard()
+                    }
+
+                    // MARK: - Recent Scans
+                    VStack(alignment: .leading, spacing: 14) {
+                        HStack {
+                            HomeSectionLabel(text: "LỊCH SỬ QUÉT GẦN ĐÂY")
+                            Spacer()
+                            Button {
+                                // view all
+                            } label: {
+                                Text("Xem tất cả")
+                                    .font(.system(size: 12, weight: .semibold, design: .rounded))
+                                    .foregroundStyle(Color("ColorPrimary"))
+                            }
+                        }
+
+                        VStack(spacing: 12) {
+                            ForEach(items) { item in
+                                NavigationLink {
+                                    AnalystView(nutriItem: item, onDismiss: {})
+                                } label: {
+                                    HomeHistoryItem(record: item)
+                                }
+                                .buttonStyle(.plain)
+                            }
+                        }
                     }
                 }
-                .padding()
+                .padding(.horizontal, 20)
+                .padding(.bottom, 32)
             }
-            .background(Color(.systemBackground))
+            .background(Color(.systemGroupedBackground))
         }
     }
 }
 
 // MARK: - Preview
 #Preview {
-    HomeView()
+    HomeView().environmentObject(AppState())
 }
-

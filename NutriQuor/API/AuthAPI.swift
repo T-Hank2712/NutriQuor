@@ -71,20 +71,19 @@ enum AuthAPI {
     }
     
     static func refreshAccessTokenRequest(refreshToken: String) throws -> URLRequest {
-        guard let url = URL(
+        var components = URLComponents(
             string: "\(AppConfig.shared.devBaseURL)/api/v0/auth/refresh"
-        ) else {
+        )
+        components?.queryItems = [
+            URLQueryItem(name: "refresh_token", value: refreshToken)
+        ]
+
+        guard let url = components?.url else {
             throw URLError(.badURL)
         }
 
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-
-        let body = [
-            "refresh_token": refreshToken
-        ]
-        request.httpBody = try JSONEncoder().encode(body)
 
         return request
     }

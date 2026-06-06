@@ -8,55 +8,104 @@
 import SwiftUI
 
 struct FamilyProfilesCard: View {
+    @StateObject private var viewModel: FamilyProfilesViewModel
+    
+    var onAddMember: () -> Void
+
+    init(members: [Profile], onAddMember: @escaping () -> Void = {}) {
+        _viewModel = StateObject(wrappedValue: FamilyProfilesViewModel(members: members))
+        self.onAddMember = onAddMember
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-                    
-                    HStack {
-                        Image(systemName: "person.2.fill").foregroundStyle(.yellow)
-                        Text("Family Profiles")
-                            .fontWeight(.bold)
-                    }
-                    
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        
-                        HStack(spacing: 20) {
-                            
-                            VStack {
-                                Image(systemName: "person.crop.circle")
-                                    .resizable()
-                                    .frame(width: 56, height: 56)
-                                    .clipShape(Circle())
-                                
-                                Text("Leo")
-                                    .font(.headline)
-                                    .fontWeight(.bold)
-                            }
-                            
-                            VStack {
+
+            HStack(spacing: 8) {
+                Image(systemName: "person.2.fill")
+                    .foregroundStyle(Color("ColorPrimary"))
+                Text("Family Profiles")
+                    .fontWeight(.bold)
+            }
+
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 20) {
+                    ForEach(viewModel.members, id: \.profileId) { member in
+                        VStack(spacing: 8) {
+                            ZStack {
                                 Circle()
-                                    .stroke(style: StrokeStyle(lineWidth: 2, dash: [5]))
+                                    .fill(Color("ColorPrimary").opacity(0.12))
                                     .frame(width: 56, height: 56)
-                                    .overlay(
-                                        Image(systemName: "plus")
-                                    )
-                                
-                                Text("Add")
-                                    .font(.caption)
-                                    .foregroundColor(.gray)
+
+                                Text(initials(for: member))
+                                    .font(.system(size: 18, weight: .bold, design: .rounded))
+                                    .foregroundStyle(Color("ColorPrimary"))
                             }
+
+                            Text("\(member.lastName) \(member.firstName)")
+                                .font(.caption)
+                                .fontWeight(.semibold)
+                                .lineLimit(1)
+                        }
+                    }
+
+                    Button(action: onAddMember) {
+                        VStack(spacing: 8) {
+                            Circle()
+                                .stroke(style: StrokeStyle(lineWidth: 2, dash: [5]))
+                                .frame(width: 56, height: 56)
+                                .overlay(
+                                    Image(systemName: "plus")
+                                )
+
+                            Text("Add")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
                         }
                     }
                 }
-                .padding()
-                .background(Color(.systemBackground))
-                .overlay(
-                    RoundedRectangle(cornerRadius: .cardRadius)
-                        .stroke(Color(.colorPrimary), lineWidth: 1)
-                )
-                .cornerRadius(.cardRadius)
+            }
+        }
+        .padding()
+        .background(Color(.systemBackground))
+        .overlay(
+            RoundedRectangle(cornerRadius: .cardRadius)
+                .stroke(Color("ColorPrimary").opacity(0.2), lineWidth: 1)
+        )
+        .cornerRadius(.cardRadius)
+    }
+
+    private func initials(for profile: Profile) -> String {
+        let f = profile.firstName.first.map(String.init) ?? ""
+        let l = profile.lastName.first.map(String.init) ?? ""
+        return (f + l).uppercased()
     }
 }
 
 #Preview {
-    FamilyProfilesCard()
+    FamilyProfilesCard(members: [
+        Profile(
+            profileId: 1,
+            userId: 1,
+            firstName: "Thanh",
+            lastName: "Lam",
+            avatar: nil,
+            healthGoals: [],
+            diseases: [],
+            allergies: [],
+            familyMembers: [],
+            parentProfileId: nil
+        ),
+        Profile(
+            profileId: 2,
+            userId: 1,
+            firstName: "Mai",
+            lastName: "Le",
+            avatar: nil,
+            healthGoals: [],
+            diseases: [],
+            allergies: [],
+            familyMembers: [],
+            parentProfileId: nil
+        )
+    ])
 }

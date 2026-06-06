@@ -25,7 +25,12 @@ final class APIClient {
         responseType: T.Type
     ) async throws -> T {
 
-        return try await perform(request, responseType: responseType, retry: false)
+        return try await perform(
+            request,
+            responseType: responseType,
+            retry: false,
+            attachAccessToken: false
+        )
     }
 
     // MARK: - CASE 2: API KHÔNG RETURN DATA
@@ -40,12 +45,15 @@ final class APIClient {
     private func perform<T: Decodable>(
         _ request: URLRequest,
         responseType: T.Type,
-        retry: Bool
+        retry: Bool,
+        attachAccessToken: Bool = true
     ) async throws -> T {
 
         do {
             var req = request
-            attachToken(&req)
+            if attachAccessToken {
+                attachToken(&req)
+            }
 
             let (data, response) = try await URLSession.shared.data(for: req)
 
@@ -63,11 +71,8 @@ final class APIClient {
                 let refreshed = await AuthInterceptor.shared.refresh()
 
                 if refreshed {
-                    var retryRequest = request
-                    attachToken(&retryRequest)
-
                     return try await perform(
-                        retryRequest,
+                        request,
                         responseType: responseType,
                         retry: false
                     )
