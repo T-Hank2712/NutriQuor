@@ -27,23 +27,28 @@ struct FamilyProfilesCard: View {
                 HStack(spacing: 20) {
 
                     ForEach(members, id: \.profileId) { member in
-                        VStack(spacing: 8) {
+                        NavigationLink {
+                            FamilyMemberProfile(profile: member)
+                        } label: {
+                            VStack(spacing: 8) {
 
-                            ZStack {
-                                Circle()
-                                    .fill(Color("ColorPrimary").opacity(0.12))
-                                    .frame(width: 56, height: 56)
+                                ZStack {
+                                    Circle()
+                                        .fill(Color("ColorPrimary").opacity(0.12))
+                                        .frame(width: 56, height: 56)
 
-                                Text(initials(for: member))
-                                    .font(.system(size: 18, weight: .bold, design: .rounded))
-                                    .foregroundStyle(Color("ColorPrimary"))
+                                    Text(initials(for: member))
+                                        .font(.system(size: 18, weight: .bold, design: .rounded))
+                                        .foregroundStyle(Color("ColorPrimary"))
+                                }
+
+                                Text("\(member.lastName) \(member.firstName)")
+                                    .font(.caption)
+                                    .fontWeight(.semibold)
+                                    .lineLimit(1)
                             }
-
-                            Text("\(member.lastName) \(member.firstName)")
-                                .font(.caption)
-                                .fontWeight(.semibold)
-                                .lineLimit(1)
                         }
+                        .buttonStyle(.plain)
                     }
 
                     Button(action: onAddMember) {

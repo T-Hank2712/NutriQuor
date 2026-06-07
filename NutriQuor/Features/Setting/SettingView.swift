@@ -175,27 +175,14 @@ struct SettingView: View {
                         }
 
                         // Logout
-                        Button {
+                        
+                        DangerButton(
+                            title: "Đăng xuất",
+                            icon: "rectangle.portrait.and.arrow.right",
+                            color: Color("AccentPink")
+                        ) {
                             appState.logout()
                             appState.authState = .login
-                        } label: {
-                            HStack(spacing: 12) {
-                                Image(systemName: "rectangle.portrait.and.arrow.right")
-                                    .font(.system(size: 16, weight: .semibold))
-                                Text("Đăng xuất")
-                                    .font(.system(size: 16, weight: .bold, design: .rounded))
-                            }
-                            .foregroundStyle(Color("AccentPink"))
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 16)
-                            .background(
-                                RoundedRectangle(cornerRadius: 16)
-                                    .fill(Color("AccentPink").opacity(0.08))
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 16)
-                                            .stroke(Color("AccentPink").opacity(0.25), lineWidth: 1.5)
-                                    )
-                            )
                         }
 
                         Text("NutriQuor v1.0.0")

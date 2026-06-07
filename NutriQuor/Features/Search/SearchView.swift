@@ -94,7 +94,7 @@ struct SearchView: View {
 
             // Category chips
             VStack(alignment: .leading, spacing: 12) {
-                HomeSectionLabel(text: "DANH MỤC")
+                SectionLabel(text: "DANH MỤC")
 
                 LazyVGrid(
                     columns: [GridItem(.flexible()), GridItem(.flexible())],
@@ -114,7 +114,7 @@ struct SearchView: View {
             // List
             VStack(alignment: .leading, spacing: 12) {
                 HStack {
-                    HomeSectionLabel(text: "KẾT QUẢ")
+                    SectionLabel(text: "KẾT QUẢ")
                     Spacer()
                     if !viewModel.filteredList.isEmpty {
                         Text("\(viewModel.filteredList.count) mục")
@@ -148,7 +148,7 @@ struct SearchView: View {
     private var searchResults: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
-                HomeSectionLabel(text: "KẾT QUẢ TÌM KIẾM")
+                SectionLabel(text: "KẾT QUẢ TÌM KIẾM")
                 Spacer()
                 if !viewModel.filteredList.isEmpty {
                     Text("\(viewModel.filteredList.count) mục")
