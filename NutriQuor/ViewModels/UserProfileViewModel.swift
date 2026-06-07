@@ -16,12 +16,14 @@ final class UserProfileViewModel: ObservableObject {
     @Published var selectedHealthGoals: [HealthGoal] = []
     @Published var selectedDiseases: [Disease] = []
     @Published var selectedAllergies: [Allergy] = []
+    
+    @Published var profiles: [Profile] = []
+    @Published var members: [Profile] = []
     private let userProfileService = UserProfileAPIService()
     func loadAllergies() async{
         do {
             let result = try await userProfileService.fetchAllergies()
             allergyList = result
-            print(allergyList)
         } catch {
             print("Error loading data:", error)
         }
@@ -30,7 +32,6 @@ final class UserProfileViewModel: ObservableObject {
         do {
             let result = try await userProfileService.fetchDiseases()
             diseaseList = result
-            print(diseaseList)
         } catch {
             print("Error loading data:", error)
         }
@@ -39,7 +40,6 @@ final class UserProfileViewModel: ObservableObject {
         do {
             let result = try await userProfileService.fetchHealthGoals()
             healthGoals = result
-            print(healthGoals)
         } catch {
             print("Error loading data:", error)
         }
@@ -161,6 +161,37 @@ final class UserProfileViewModel: ObservableObject {
         } catch {
             print(error)
             return nil
+        }
+    }
+    
+    func loadFamilyMembers(profileId: Int) async {
+        do {
+            
+            members = try await userProfileService
+                .getFamilyMembers(profileId: profileId)
+            
+        } catch {
+            print(error)
+        }
+    }
+    
+    func addUserProfile(firstName: String?, lastName: String?, avatar: String?) async {
+        do {
+            profiles = try await userProfileService
+                .createProfile(firstName: firstName, lastName: lastName, avatar: avatar)
+
+        } catch {
+            print(error)
+        }
+    }
+    
+    func deleteProfile(profileId: Int) async -> Bool {
+        do {
+            profiles = try await userProfileService.deleteProfile(profileId: profileId)
+            return true
+        } catch {
+            print(error)
+            return false
         }
     }
 }

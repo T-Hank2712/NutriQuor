@@ -184,7 +184,7 @@ enum UserProfileAPI {
     }
     
     // MARK: - Profile Information
-    static func updateUserProfile(profileId: Int, firstName: String?, lastName: String?, avatar: String?) throws -> URLRequest {
+    static func updateUserProfileRequest(profileId: Int, firstName: String?, lastName: String?, avatar: String?) throws -> URLRequest {
         guard let url = URL(
             string: "\(AppConfig.shared.devBaseURL)/api/v0/user-profiles/\(profileId)"
         ) else {
@@ -203,6 +203,61 @@ enum UserProfileAPI {
         
         request.httpBody = try JSONSerialization.data(withJSONObject: body)
         
+        return request
+    }
+    
+    static func familyMembersRequest(profileId: Int) throws -> URLRequest {
+        guard let url = URL(
+            string: "\(AppConfig.shared.devBaseURL)/api/v0/user-profiles/\(profileId)/family-members"
+        ) else {
+            throw URLError(.badURL)
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+
+        return request
+    }
+    
+    static func addFamilyMembersRequest(
+        firstName: String?,
+        lastName: String?,
+        avatar: String?
+    ) throws -> URLRequest {
+        guard let url = URL(
+            string: "\(AppConfig.shared.devBaseURL)/api/v0/user-profiles/family-members"
+        ) else {
+            throw URLError(.badURL)
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        let body: [String: Any?] = [
+            "first_name": firstName,
+            "last_name": lastName,
+            "avatar": avatar
+        ]
+
+        request.httpBody = try JSONSerialization.data(withJSONObject: body)
+
+        return request
+    }
+    
+    static func deleteProfileRequest(
+        profileId: Int
+    ) throws -> URLRequest {
+        
+        guard let url = URL(
+            string: "\(AppConfig.shared.devBaseURL)/api/v0/user-profiles/\(profileId)"
+        ) else {
+            throw URLError(.badURL)
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+
         return request
     }
 }

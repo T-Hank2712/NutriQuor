@@ -72,7 +72,7 @@ struct HomeView: View {
 
                     // MARK: - Stats Section
                     VStack(alignment: .leading, spacing: 14) {
-                        HomeSectionLabel(text: "THỐNG KÊ HÔM NAY")
+                        SectionLabel(text: "THỐNG KÊ HÔM NAY")
 
                         HStack(spacing: 14) {
                             CountScansCard()
@@ -82,14 +82,14 @@ struct HomeView: View {
 
                     // MARK: - Insight
                     VStack(alignment: .leading, spacing: 14) {
-                        HomeSectionLabel(text: "GỢI Ý CHO BẠN")
+                        SectionLabel(text: "GỢI Ý CHO BẠN")
                         InsightCard()
                     }
 
                     // MARK: - Recent Scans
                     VStack(alignment: .leading, spacing: 14) {
                         HStack {
-                            HomeSectionLabel(text: "LỊCH SỬ QUÉT GẦN ĐÂY")
+                            SectionLabel(text: "LỊCH SỬ QUÉT GẦN ĐÂY")
                             Spacer()
                             Button {
                                 // view all

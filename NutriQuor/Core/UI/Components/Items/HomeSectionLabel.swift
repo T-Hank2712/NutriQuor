@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct HomeSectionLabel: View {
+struct SectionLabel: View {
     let text: String
 
     var body: some View {
@@ -24,6 +24,6 @@ struct HomeSectionLabel: View {
 }
 
 #Preview {
-    HomeSectionLabel(text: "LỊCH SỬ QUÉT GẦN ĐÂY")
+    SectionLabel(text: "LỊCH SỬ QUÉT GẦN ĐÂY")
         .padding()
 }

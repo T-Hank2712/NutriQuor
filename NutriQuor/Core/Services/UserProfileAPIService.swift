@@ -187,7 +187,7 @@ final class UserProfileAPIService {
         lastName: String?,
         avatar: String?
     ) async throws -> Profile {
-        let request = try UserProfileAPI.updateUserProfile(
+        let request = try UserProfileAPI.updateUserProfileRequest(
                 profileId: profileId,
                 firstName: firstName,
                 lastName: lastName,
@@ -196,6 +196,50 @@ final class UserProfileAPIService {
         
         let response = try await APIClient.shared.request(request, responseType: APIResponse<Profile>.self)
         
+        return response.data
+    }
+    
+    func getFamilyMembers(
+        profileId: Int
+    ) async throws -> [Profile] {
+        let request = try UserProfileAPI.familyMembersRequest(profileId: profileId)
+
+        let response = try await APIClient.shared.request(
+            request,
+            responseType: APIResponse<[Profile]>.self
+        )
+
+        return response.data
+    }
+    
+    func createProfile(
+        firstName: String?,
+        lastName: String?,
+        avatar: String?
+    )async throws -> [Profile] {
+        let request = try UserProfileAPI.addFamilyMembersRequest(
+            firstName: firstName,
+            lastName: lastName,
+            avatar: avatar
+        )
+        
+        let response = try await APIClient.shared.request(request, responseType: APIResponse<[Profile]>.self)
+        
+        return response.data
+    }
+    
+    func deleteProfile(
+        profileId: Int
+    ) async throws -> [Profile] {
+        let request = try UserProfileAPI.deleteProfileRequest(
+            profileId: profileId
+        )
+
+        let response = try await APIClient.shared.request(
+            request,
+            responseType: APIResponse<[Profile]>.self
+        )
+
         return response.data
     }
 }
