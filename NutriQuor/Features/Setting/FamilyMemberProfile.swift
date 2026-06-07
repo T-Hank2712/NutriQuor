@@ -15,6 +15,7 @@ struct FamilyMemberProfile: View {
     let profile: Profile
     
     @State private var showEditNameSheet = false
+    @State private var showDeleteAlert = false
 
     @State private var firstName: String = ""
     @State private var lastName: String = ""
@@ -187,6 +188,7 @@ struct FamilyMemberProfile: View {
                             icon: "trash.fill",
                             color: Color("AccentPink")
                         ) {
+                            showDeleteAlert = true
                         }
                     }
                     .padding(.horizontal, 20)
@@ -278,6 +280,21 @@ struct FamilyMemberProfile: View {
                     await viewModel.loadProfileGoals(profileId: profileId)
                 }
             }
+        }
+        .alert("Xóa thành viên", isPresented: $showDeleteAlert) {
+            Button("Hủy", role: .cancel) { }
+
+            Button("Xóa", role: .destructive) {
+                Task {
+                    let success = await viewModel.deleteProfile(profileId: profileId)
+
+                    if success {
+                        dismiss()
+                    }
+                }
+            }
+        } message: {
+            Text("Bạn có chắc chắn muốn xóa thành viên này khỏi hồ sơ gia đình không?")
         }
     }
 

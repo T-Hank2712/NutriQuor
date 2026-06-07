@@ -184,4 +184,14 @@ final class UserProfileViewModel: ObservableObject {
             print(error)
         }
     }
+    
+    func deleteProfile(profileId: Int) async -> Bool {
+        do {
+            profiles = try await userProfileService.deleteProfile(profileId: profileId)
+            return true
+        } catch {
+            print(error)
+            return false
+        }
+    }
 }

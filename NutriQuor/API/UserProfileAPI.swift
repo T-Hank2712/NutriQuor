@@ -244,4 +244,20 @@ enum UserProfileAPI {
 
         return request
     }
+    
+    static func deleteProfileRequest(
+        profileId: Int
+    ) throws -> URLRequest {
+        
+        guard let url = URL(
+            string: "\(AppConfig.shared.devBaseURL)/api/v0/user-profiles/\(profileId)"
+        ) else {
+            throw URLError(.badURL)
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+
+        return request
+    }
 }

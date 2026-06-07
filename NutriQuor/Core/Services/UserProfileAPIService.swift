@@ -227,4 +227,19 @@ final class UserProfileAPIService {
         
         return response.data
     }
+    
+    func deleteProfile(
+        profileId: Int
+    ) async throws -> [Profile] {
+        let request = try UserProfileAPI.deleteProfileRequest(
+            profileId: profileId
+        )
+
+        let response = try await APIClient.shared.request(
+            request,
+            responseType: APIResponse<[Profile]>.self
+        )
+
+        return response.data
+    }
 }
