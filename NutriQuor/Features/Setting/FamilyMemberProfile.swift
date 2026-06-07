@@ -180,14 +180,13 @@ struct FamilyMemberProfile: View {
                     // Save Button
                     Button {
                         Task {
-                            if let updatedProfile = await viewModel.updateUserProfile(
+                            if await viewModel.updateUserProfile(
                                 profileId: profileId,
                                 firstName: firstName,
                                 lastName: lastName,
                                 avatar: avatar
-                            ) {
+                            ) != nil {
                                 await MainActor.run {
-                                    // Cập nhật lại family member trong appState nếu cần
                                     dismiss()
                                 }
                             }

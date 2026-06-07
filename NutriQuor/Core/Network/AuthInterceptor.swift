@@ -13,7 +13,6 @@ actor AuthInterceptor {
 
     private var refreshTask: Task<Bool, Never>?
 
-    // MARK: - Refresh token
     func refresh() async -> Bool {
         if let refreshTask {
             return await refreshTask.value
@@ -23,8 +22,11 @@ actor AuthInterceptor {
             do {
                 let response = try await AuthService.shared.refreshAccessToken()
 
-                TokenStorage.shared.saveAccessToken(response.data.accessToken)
-                if let refreshToken = response.data.refreshToken {
+                let data = response.data   // cache local variable (IMPORTANT)
+
+                TokenStorage.shared.saveAccessToken(data.accessToken)
+
+                if let refreshToken = data.refreshToken {
                     TokenStorage.shared.saveRefreshToken(refreshToken)
                 }
 

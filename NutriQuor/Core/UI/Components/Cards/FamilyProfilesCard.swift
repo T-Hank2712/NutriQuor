@@ -8,14 +8,9 @@
 import SwiftUI
 
 struct FamilyProfilesCard: View {
-    @StateObject private var viewModel: FamilyProfilesViewModel
-    
-    var onAddMember: () -> Void
 
-    init(members: [Profile], onAddMember: @escaping () -> Void = {}) {
-        _viewModel = StateObject(wrappedValue: FamilyProfilesViewModel(members: members))
-        self.onAddMember = onAddMember
-    }
+    let members: [Profile]
+    var onAddMember: () -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -23,14 +18,17 @@ struct FamilyProfilesCard: View {
             HStack(spacing: 8) {
                 Image(systemName: "person.2.fill")
                     .foregroundStyle(Color("ColorPrimary"))
+
                 Text("Family Profiles")
                     .fontWeight(.bold)
             }
 
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 20) {
-                    ForEach(viewModel.members, id: \.profileId) { member in
+
+                    ForEach(members, id: \.profileId) { member in
                         VStack(spacing: 8) {
+
                             ZStack {
                                 Circle()
                                     .fill(Color("ColorPrimary").opacity(0.12))
@@ -82,30 +80,35 @@ struct FamilyProfilesCard: View {
 }
 
 #Preview {
-    FamilyProfilesCard(members: [
-        Profile(
-            profileId: 1,
-            userId: 1,
-            firstName: "Thanh",
-            lastName: "Lam",
-            avatar: nil,
-            healthGoals: [],
-            diseases: [],
-            allergies: [],
-            familyMembers: [],
-            parentProfileId: nil
-        ),
-        Profile(
-            profileId: 2,
-            userId: 1,
-            firstName: "Mai",
-            lastName: "Le",
-            avatar: nil,
-            healthGoals: [],
-            diseases: [],
-            allergies: [],
-            familyMembers: [],
-            parentProfileId: nil
-        )
-    ])
+    FamilyProfilesCard(
+        members: [
+            Profile(
+                profileId: 1,
+                userId: 1,
+                firstName: "Thanh",
+                lastName: "Lam",
+                avatar: nil,
+                healthGoals: [],
+                diseases: [],
+                allergies: [],
+                familyMembers: [],
+                parentProfileId: nil
+            ),
+            Profile(
+                profileId: 2,
+                userId: 1,
+                firstName: "Mai",
+                lastName: "Le",
+                avatar: nil,
+                healthGoals: [],
+                diseases: [],
+                allergies: [],
+                familyMembers: [],
+                parentProfileId: nil
+            )
+        ],
+        onAddMember: {
+            print("Add member tapped")
+        }
+    )
 }

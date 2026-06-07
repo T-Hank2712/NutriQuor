@@ -195,7 +195,7 @@ struct ProfileView: View {
                     )
 
                     FamilyProfilesCard(
-                        members: appState.profile?.familyMembers ?? [],
+                        members: viewModel.members,
                         onAddMember: {
                             newFamilyFirstName = ""
                             newFamilyLastName = ""
@@ -259,9 +259,19 @@ struct ProfileView: View {
                         showAddFamilySheet = false
                     },
                     onSave: {
-                        // TODO: Gọi API để thêm family member
-                        print("Add family member: \(newFamilyFirstName) \(newFamilyLastName)")
-                        showAddFamilySheet = false
+                        Task {
+                            await viewModel.addUserProfile(
+                                firstName: newFamilyFirstName,
+                                lastName: newFamilyLastName,
+                                avatar: newFamilyAvatar
+                            )
+
+                            await viewModel.loadFamilyMembers(profileId: profileId)
+
+                            await MainActor.run {
+                                showAddFamilySheet = false
+                            }
+                        }
                     }
                 )
             }
@@ -287,6 +297,8 @@ struct ProfileView: View {
             await viewModel.loadProfileAllergies(
                 profileId: profileId
             )
+            
+            await viewModel.loadFamilyMembers(profileId: profileId)
         }
 
 
