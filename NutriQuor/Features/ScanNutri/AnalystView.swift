@@ -375,7 +375,7 @@ struct ModernContainCard: View {
                 }
             }
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .frame(maxWidth: .infinity, minHeight: 70, alignment: .top)
         .padding(14)
         .background(
             RoundedRectangle(cornerRadius: 16)

@@ -288,19 +288,23 @@ struct ProfileView: View {
             guard profileId != 0 else { return }
             print(profileId)
             
-            await viewModel.loadProfileGoals(
-                profileId: profileId
-            )
-            
-            await viewModel.loadProfileDiseases(
-                profileId: profileId
-            )
-            
-            await viewModel.loadProfileAllergies(
-                profileId: profileId
-            )
-            
-            await viewModel.loadFamilyMembers(profileId: profileId)
+            await withTaskGroup(of: Void.self) { group in
+                group.addTask {
+                    await viewModel.loadProfileGoals(profileId: profileId)
+                }
+
+                group.addTask {
+                    await viewModel.loadProfileDiseases(profileId: profileId)
+                }
+
+                group.addTask {
+                    await viewModel.loadProfileAllergies(profileId: profileId)
+                }
+                
+                group.addTask {
+                    await viewModel.loadFamilyMembers(profileId: profileId)
+                }
+            }
         }
 
 
