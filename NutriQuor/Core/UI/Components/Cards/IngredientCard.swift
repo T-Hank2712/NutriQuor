@@ -7,43 +7,115 @@
 
 import SwiftUI
 
+enum IngredientStatus {
+    case safe, moderate, caution
+
+    var color: Color {
+        switch self {
+        case .safe:     return Color(red: 0.13, green: 0.77, blue: 0.37)
+        case .moderate: return Color(red: 0.96, green: 0.62, blue: 0.04)
+        case .caution:  return Color(red: 0.94, green: 0.27, blue: 0.27)
+        }
+    }
+
+    var backgroundColor: Color {
+        switch self {
+        case .safe:     return Color(red: 0.86, green: 0.99, blue: 0.90)
+        case .moderate: return Color(red: 0.99, green: 0.95, blue: 0.78)
+        case .caution:  return Color(red: 0.99, green: 0.89, blue: 0.89)
+        }
+    }
+
+    var label: String {
+        switch self {
+        case .safe:     return "Safe"
+        case .moderate: return "Moderate"
+        case .caution:  return "Caution"
+        }
+    }
+}
+
 struct IngredientCard: View {
     var title: String
-       var description: String
-       var statusColor: Color
-       
-       var body: some View {
-           HStack(alignment: .top, spacing: 12) {
-               
-               Circle()
-                   .fill(statusColor)
-                   .frame(width: 10, height: 10)
-                   .padding(.top, 6)
-               
-               VStack(alignment: .leading, spacing: 6) {
-                   
-                   Text(title)
-                       .fontWeight(.semibold)
-                   
-                   Text(description)
-                       .font(.subheadline)
-                       .foregroundColor(.gray)
-               }
-           }
-           .padding()
-           .frame(maxWidth: .infinity, alignment: .leading)
-           .background(Color.white)
-           .cornerRadius(.cardRadius)
-           
-           .overlay(
-            RoundedRectangle(cornerRadius: .cardRadius)
-                .stroke(Color.gray.opacity(.opacityLight), lineWidth: 1)
-           )
+    var description: String
+    var status: IngredientStatus
 
-           .shadow(color: Color.black.opacity(.opacityLight), radius: 6, x: 0, y: 3)
-       }
+    var body: some View {
+        HStack(alignment: .top, spacing: 14) {
+
+            // Dot icon with soft background circle
+            ZStack {
+                Circle()
+                    .fill(status.backgroundColor)
+                    .frame(width: 15, height: 15)
+                Circle()
+                    .fill(status.color)
+                    .frame(width: 5, height: 5)
+            }
+            .padding(.top, 2)
+
+            // Text content
+            VStack(alignment: .leading, spacing: 5) {
+                Text(title)
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundColor(.primary)
+
+                Text(description)
+                    .font(.system(size: 13))
+                    .foregroundColor(.secondary)
+                    .lineSpacing(3)
+            }
+
+            Spacer()
+
+            // Status badge
+            Text(status.label)
+                .font(.system(size: 11, weight: .medium))
+                .padding(.horizontal, 10)
+                .padding(.vertical, 4)
+                .background(status.backgroundColor)
+                .foregroundColor(status.color.opacity(0.85))
+                .clipShape(Capsule())
+                .padding(.top, 2)
+        }
+        .padding(.horizontal, 18)
+        .padding(.vertical, 16)
+        .background(Color(.systemBackground))
+        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .stroke(Color.gray.opacity(0.12), lineWidth: 0.5)
+        )
+        .overlay(
+            // Left accent bar
+            HStack {
+                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                    .fill(status.color)
+                    .frame(width: 3)
+                Spacer()
+            }
+        )
+    }
 }
 
 #Preview {
-    IngredientCard(title: "Apple", description: "description", statusColor: .green)
+    VStack(spacing: 12) {
+        IngredientCard(
+            title: "Spring Water",
+            description: "Natural source of hydration and essential minerals for daily metabolic functions.",
+            status: .safe
+        )
+        IngredientCard(
+            title: "Citric Acid",
+            description: "Common preservative and acidity regulator. Moderate consumption is generally acceptable.",
+            status: .moderate
+        )
+        IngredientCard(
+            title: "Sodium Benzoate",
+            description: "Synthetic preservative that may cause adverse reactions when combined with ascorbic acid.",
+            status: .caution
+        )
+    }
+    .padding()
+    .background(Color(.systemGroupedBackground))
 }

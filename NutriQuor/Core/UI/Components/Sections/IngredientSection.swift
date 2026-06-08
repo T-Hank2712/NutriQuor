@@ -25,25 +25,17 @@ struct IngredientSection: View {
             IngredientCard(
                 title: "Spring Water",
                 description: "Natural source of hydration and essential minerals for daily metabolic functions.",
-                statusColor: .green
+                status: .safe
             )
-            
             IngredientCard(
-                title: "Organic Italian Almonds (7%)",
-                description: "Rich in Vitamin E and healthy monounsaturated fats that support heart health.",
-                statusColor: .green
+                title: "Citric Acid",
+                description: "Common preservative and acidity regulator. Moderate consumption is generally acceptable.",
+                status: .moderate
             )
-            
             IngredientCard(
-                title: "Sea Salt",
-                description: "Essential mineral, but should be limited to maintain healthy blood pressure levels.",
-                statusColor: .orange
-            )
-            
-            IngredientCard(
-                title: "Rice Starch",
-                description: "A gluten-free thickener that provides a smooth texture without chemical processing.",
-                statusColor: .green
+                title: "Sodium Benzoate",
+                description: "Synthetic preservative that may cause adverse reactions when combined with ascorbic acid.",
+                status: .caution
             )
         }
     }
