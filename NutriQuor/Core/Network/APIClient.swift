@@ -105,9 +105,12 @@ final class APIClient {
 
     // MARK: - TOKEN ATTACH
     private func attachToken(_ request: inout URLRequest) {
-        if let token = TokenStorage.shared.getAccessToken() {
-            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+
+        guard let token = TokenStorage.shared.getAccessToken() else {
+            return
         }
+
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
     }
 }
 
