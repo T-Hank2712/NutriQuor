@@ -5,7 +5,12 @@ struct ProductDTO: Decodable, Identifiable {
         let energy: String?
         let protein: String?
         let fat: String?
+        let saturatedFat: String?
+        let transFat: String?
+        let carbohydrate: String?
         let sugar: String?
+        let fiber: String?
+        let sodium: String?
     }
 
     let id: Int

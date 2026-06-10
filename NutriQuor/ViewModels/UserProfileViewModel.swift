@@ -8,6 +8,7 @@
 import Foundation
 import Combine
 
+@MainActor
 final class UserProfileViewModel: ObservableObject {
     @Published var currentProfile: Profile?
     @Published var allergyList: [Allergy] = []
@@ -24,6 +25,7 @@ final class UserProfileViewModel: ObservableObject {
         do {
             let result = try await userProfileService.fetchAllergies()
             allergyList = result
+            print(allergyList)
         } catch {
             print("Error loading data:", error)
         }

@@ -8,26 +8,35 @@
 import SwiftUI
 
 struct AnalystView: View {
-    let nutriItem: History
+    let product: ProductDTO
     let onDismiss: () -> Void
 
     @Environment(\.dismiss) private var dismiss
     @State private var selectedRow: NutriText?
+    @State private var showAllNutrition = false
 
-    private var scoreColor: Color {
-        switch nutriItem.score.lowercased() {
-        case "tốt":  return Color("SuccessTeal")
-        case "xấu":  return Color("AccentPink")
-        default:     return Color("ColorPrimary")
-        }
-    }
-
-    private var scoreIcon: String {
-        switch nutriItem.score.lowercased() {
-        case "tốt":  return "checkmark.shield.fill"
-        case "xấu":  return "xmark.shield.fill"
-        default:     return "minus.shield.fill"
-        }
+//    private var scoreColor: Color {
+//        switch nutriItem.score.lowercased() {
+//        case "tốt":  return Color("SuccessTeal")
+//        case "xấu":  return Color("AccentPink")
+//        default:     return Color("ColorPrimary")
+//        }
+//    }
+//
+//    private var scoreIcon: String {
+//        switch nutriItem.score.lowercased() {
+//        case "tốt":  return "checkmark.shield.fill"
+//        case "xấu":  return "xmark.shield.fill"
+//        default:     return "minus.shield.fill"
+//        }
+//    }
+    
+    struct NutrientItem: Identifiable {
+        let id = UUID()
+        let title: String
+        let value: String?
+        let color: Color
+        let icon: String
     }
 
     var body: some View {
@@ -66,7 +75,7 @@ struct AnalystView: View {
                                     .frame(width: 110, height: 110)
                                     .shadow(color: Color("ColorPrimary").opacity(0.3), radius: 20, y: 8)
 
-                                nutriItem.image
+                                Image("Example")
                                     .resizable()
                                     .scaledToFill()
                                     .frame(width: 110, height: 110)
@@ -74,21 +83,21 @@ struct AnalystView: View {
                             }
 
                             // Score badge
-                            HStack(spacing: 6) {
-                                Image(systemName: scoreIcon)
-                                    .font(.system(size: 13, weight: .bold))
-                                Text(nutriItem.score.uppercased())
-                                    .font(.system(size: 12, weight: .black, design: .rounded))
-                                    .kerning(0.5)
-                            }
-                            .foregroundStyle(scoreColor)
-                            .padding(.horizontal, 14)
-                            .padding(.vertical, 7)
-                            .background(
-                                Capsule()
-                                    .fill(scoreColor.opacity(0.1))
-                                    .overlay(Capsule().stroke(scoreColor.opacity(0.3), lineWidth: 1))
-                            )
+//                            HStack(spacing: 6) {
+//                                Image(systemName: scoreIcon)
+//                                    .font(.system(size: 13, weight: .bold))
+//                                Text(nutriItem.score.uppercased())
+//                                    .font(.system(size: 12, weight: .black, design: .rounded))
+//                                    .kerning(0.5)
+//                            }
+//                            .foregroundStyle(scoreColor)
+//                            .padding(.horizontal, 14)
+//                            .padding(.vertical, 7)
+//                            .background(
+//                                Capsule()
+//                                    .fill(scoreColor.opacity(0.1))
+//                                    .overlay(Capsule().stroke(scoreColor.opacity(0.3), lineWidth: 1))
+//                            )
                         }
                         .padding(.bottom, 28)
                     }
@@ -98,7 +107,7 @@ struct AnalystView: View {
 
                         // Product name + tags
                         VStack(spacing: 10) {
-                            Text(nutriItem.title)
+                            Text(product.productName)
                                 .font(.system(size: 26, weight: .black, design: .rounded))
                                 .foregroundStyle(.primary)
                                 .kerning(-0.4)
@@ -122,14 +131,47 @@ struct AnalystView: View {
                         .padding(.top, 10)
 
                         // MARK: - Nutrition
-                        AnalystSection(title: "Dinh dưỡng", icon: "chart.bar.fill", iconColor: Color("ColorPrimary")) {
-                            HStack(spacing: 12) {
-                                ModernNutrientCard(title: "PROTEIN", value: "8g",  color: Color("AccentPink"), icon: "flame.fill")
-                                ModernNutrientCard(title: "CARBS",   value: "12g", color: Color("AccentOrange"), icon: "bolt.fill")
-                                ModernNutrientCard(title: "FAT",     value: "14g", color: Color("SuccessTeal"), icon: "drop.fill")
+                        AnalystSection(title: "Dinh dưỡng",
+                                       icon: "chart.bar.fill",
+                                       iconColor: Color("ColorPrimary")) {
+
+                            if !nutritionItems.isEmpty {
+
+                                let displayItems = showAllNutrition
+                                    ? nutritionItems
+                                    : Array(nutritionItems.prefix(3))
+
+                                VStack(spacing: 12) {
+
+                                    LazyVGrid(
+                                        columns: Array(repeating: GridItem(.flexible(), spacing: 12), count: 3),
+                                        spacing: 12
+                                    ) {
+                                        ForEach(displayItems) { item in
+                                            ModernNutrientCard(
+                                                title: item.title,
+                                                value: item.value ?? "0",
+                                                color: item.color,
+                                                icon: item.icon
+                                            )
+                                        }
+                                    }
+
+                                    if nutritionItems.count > 3 {
+                                        Button {
+                                            withAnimation(.spring(response: 0.3, dampingFraction: 0.85)) {
+                                                showAllNutrition.toggle()
+                                            }
+                                        } label: {
+                                            Text(showAllNutrition ? "Thu gọn" : "Xem tất cả")
+                                                .font(.system(size: 13, weight: .semibold))
+                                                .foregroundStyle(Color("ColorPrimary"))
+                                        }
+                                    }
+                                }
                             }
                         }
-
+                        
                         // MARK: - Alerts
                         AnalystSection(title: "Cảnh báo", icon: "exclamationmark.triangle.fill", iconColor: Color("WarningAmber")) {
                             VStack(spacing: 10) {
@@ -230,20 +272,67 @@ struct AnalystView: View {
             .background(Color(.systemGroupedBackground))
         }
     }
+    
+    private var nutritionItems: [NutrientItem] {
+        guard let nutrition = product.nutrition else { return [] }
+
+        return [
+            .init(title: "ENERGY", value: nutrition.energy, color: Color("AccentOrange"), icon: "bolt.fill"),
+            .init(title: "PROTEIN", value: nutrition.protein, color: Color("AccentPink"), icon: "flame.fill"),
+            .init(title: "FAT", value: nutrition.fat, color: Color("SuccessTeal"), icon: "drop.fill"),
+            .init(title: "SUGAR", value: nutrition.sugar, color: Color("ColorPrimary"), icon: "cube.fill"),
+            .init(title: "CARB", value: nutrition.carbohydrate, color: Color("AccentOrange"), icon: "leaf.fill"),
+            .init(title: "FIBER", value: nutrition.fiber, color: Color("SuccessTeal"), icon: "leaf.circle.fill"),
+            .init(title: "SODIUM", value: nutrition.sodium, color: Color("AccentPink"), icon: "drop.triangle.fill"),
+            .init(title: "SAT FAT", value: nutrition.saturatedFat, color: Color("WarningAmber"), icon: "flame"),
+            .init(title: "TRANS FAT", value: nutrition.transFat, color: Color("AccentPurple"), icon: "xmark.octagon.fill")
+        ]
+    }
+    
+    private var displayNutritionItems: [NutrientItem] {
+        showAllNutrition ? nutritionItems : Array(nutritionItems.prefix(6))
+    }
 }
 
 // MARK: - Preview
 #Preview {
     NavigationStack {
         AnalystView(
-            nutriItem: History(
-                image: Image("Example"),
-                title: "Bánh quy ABC",
+            product: ProductDTO(
+                id: 1,
+                userId: 1,
+                productName: "Bánh quy ABC",
+                ageRange: "3+",
+                ingredients: [
+                    "Bột mì",
+                    "Đường",
+                    "Dầu thực vật"
+                ],
+                additive: [
+                    "INS 322",
+                    "INS 500(ii)"
+                ],
+                nutrition: ProductDTO.Nutrition(
+                    energy: "250 kcal",
+                    protein: "12g",
+                    fat: "10g",
+                    saturatedFat: "3g",
+                    transFat: "0g",
+                    carbohydrate: "30g",
+                    sugar: "12g",
+                    fiber: "5g",
+                    sodium: "200mg"
+                ),
+                manufacturer: "ABC Food",
+                mfgDate: "2026-01-01",
+                expiryDate: "2027-01-01",
+                netWeight: "200 g",
+                allergen: "Gluten",
                 warning: "Nhiều đường",
-                score: "Xấu",
-                time: Calendar.current.date(
-                    from: DateComponents(year: 2025, month: 1, day: 24, hour: 21, minute: 04)
-                )!
+                origin: "Việt Nam",
+                createdAt: "2026-06-09T05:27:07.241790Z",
+                timeZone: "Asia/Ho_Chi_Minh",
+                createdAtLocal: Date()
             ),
             onDismiss: {}
         )

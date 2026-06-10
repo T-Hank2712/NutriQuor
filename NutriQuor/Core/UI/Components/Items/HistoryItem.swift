@@ -63,10 +63,15 @@ struct HistoryItem: View {
                 "INS 500(ii)"
             ],
             nutrition: ProductDTO.Nutrition(
-                energy: "450 kcal",
-                protein: "6 g",
-                fat: "18 g",
-                sugar: "22 g"
+                energy: "250 kcal",
+                protein: "12g",
+                fat: "10g",
+                saturatedFat: "3g",
+                transFat: "0g",
+                carbohydrate: "30g",
+                sugar: "12g",
+                fiber: "5g",
+                sodium: "200mg"
             ),
             manufacturer: "ABC Food",
             mfgDate: "2026-01-01",

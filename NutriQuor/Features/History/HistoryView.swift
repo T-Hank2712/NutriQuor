@@ -93,10 +93,10 @@ struct HistoryView: View {
                                 .frame(width: 60)
 
                                 NavigationLink {
-//                                    AnalystView(
-//                                        nutriItem: item,
-//                                        onDismiss: {}
-//                                    )
+                                    AnalystView(
+                                        product: item,
+                                        onDismiss: {}
+                                    )
                                 } label: {
                                     HistoryItem(record: item)
                                 }

@@ -306,43 +306,6 @@ struct FamilyMemberProfile: View {
     }
 }
 
-// MARK: - Family Input Field
-private struct FamilyInputField: View {
-    let title: String
-    let placeholder: String
-    let icon: String
-    @Binding var text: String
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text(title)
-                .font(.system(size: 12, weight: .semibold, design: .rounded))
-                .foregroundStyle(.secondary)
-
-            HStack(spacing: 10) {
-                Image(systemName: icon)
-                    .font(.system(size: 14))
-                    .foregroundStyle(Color("AccentPink"))
-                    .frame(width: 20)
-
-                TextField(placeholder, text: $text)
-                    .font(.system(size: 15, weight: .medium, design: .rounded))
-            }
-            .padding(.horizontal, 14)
-            .padding(.vertical, 12)
-            .background(
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(Color(.systemGray6))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 12)
-                                .stroke(Color("AccentPink").opacity(0.15), lineWidth: 1)
-                    )
-            )
-        }
-        .frame(maxWidth: .infinity)
-    }
-}
-
 #Preview {
     NavigationStack {
         FamilyMemberProfile(profile: Profile(

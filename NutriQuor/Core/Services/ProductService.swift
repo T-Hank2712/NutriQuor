@@ -43,4 +43,24 @@ final class ProductService {
             return response.data
         }
     }
+    
+    static func countProductsByDate(
+        day: Int,
+        month: Int,
+        year: Int
+    ) async throws -> Int {
+
+        let request = try ProductAPI.countProductsByDate(
+            day: day,
+            month: month,
+            year: year
+        )
+
+        let response = try await APIClient.shared.request(
+            request,
+            responseType: APIResponse<ProductCountResponse>.self
+        )
+
+        return response.data.count
+    }
 }
