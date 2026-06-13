@@ -28,7 +28,7 @@ struct FamilyProfilesCard: View {
 
                     ForEach(members, id: \.profileId) { member in
                         NavigationLink {
-                            FamilyMemberProfile(profile: member)
+//                            FamilyMemberProfile(profile: member)
                         } label: {
                             VStack(spacing: 8) {
 
@@ -88,28 +88,16 @@ struct FamilyProfilesCard: View {
     FamilyProfilesCard(
         members: [
             Profile(
-                profileId: 1,
-                userId: 1,
+                profileId: "",
                 firstName: "Thanh",
                 lastName: "Lam",
                 avatar: nil,
-                healthGoals: [],
-                diseases: [],
-                allergies: [],
-                familyMembers: [],
-                parentProfileId: nil
             ),
             Profile(
-                profileId: 2,
-                userId: 1,
+                profileId: "",
                 firstName: "Mai",
                 lastName: "Le",
                 avatar: nil,
-                healthGoals: [],
-                diseases: [],
-                allergies: [],
-                familyMembers: [],
-                parentProfileId: nil
             )
         ],
         onAddMember: {

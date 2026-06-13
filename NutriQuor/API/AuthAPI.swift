@@ -18,7 +18,7 @@ enum AuthAPI {
     ) throws -> URLRequest {
 
         guard let url = URL(
-            string: "\(AppConfig.shared.devBaseURL)/api/v0/auth/register"
+            string: "\(AppConfig.shared.devBaseURL)/api/v1/auth/register"
         ) else {
             throw URLError(.badURL)
         }
@@ -42,7 +42,7 @@ enum AuthAPI {
 
     static func loginRequest(email: String, password: String) throws -> URLRequest {
         guard let url = URL(
-            string: "\(AppConfig.shared.devBaseURL)/api/v0/auth/login"
+            string: "\(AppConfig.shared.devBaseURL)/api/v1/auth/login"
         ) else {
             throw URLError(.badURL)
         }
@@ -59,7 +59,7 @@ enum AuthAPI {
 
     static func meRequest() throws -> URLRequest {
         guard let url = URL(
-            string: "\(AppConfig.shared.devBaseURL)/api/v0/user-profiles/me"
+            string: "\(AppConfig.shared.devBaseURL)/api/v1/auth/me"
         ) else {
             throw URLError(.badURL)
         }
@@ -72,7 +72,7 @@ enum AuthAPI {
     
     static func refreshAccessTokenRequest(refreshToken: String) throws -> URLRequest {
         var components = URLComponents(
-            string: "\(AppConfig.shared.devBaseURL)/api/v0/auth/refresh"
+            string: "\(AppConfig.shared.devBaseURL)/api/v1/auth/refresh"
         )
         components?.queryItems = [
             URLQueryItem(name: "refresh_token", value: refreshToken)
