@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct CountScansCard: View {
+    
+    var count: Int
+    
     var body: some View {
         VStack(spacing: 8) {
             
@@ -17,7 +20,7 @@ struct CountScansCard: View {
             
             HStack(alignment: .bottom, spacing: 8) {
                 
-                Text("12")
+                Text("\(count)")
                     .font(.largeTitle)
                     .fontWeight(.bold)
                 
@@ -40,5 +43,5 @@ struct CountScansCard: View {
 }
 
 #Preview {
-    CountScansCard()
+    CountScansCard(count: 27)
 }

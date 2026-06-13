@@ -7,11 +7,10 @@
 
 import SwiftUI
 
-struct ContainList: View {
+struct ContainListView: View {
     var body: some View {
         ScrollView{
             VStack(spacing: 20){
-                SearchBar(text: .constant(""))
                 ProductCard(
                     name: "Sữa",
                     tags: ["Drink", "Healthy"]
@@ -25,5 +24,5 @@ struct ContainList: View {
 }
 
 #Preview {
-    ContainList()
+    ContainListView()
 }

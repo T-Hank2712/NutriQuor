@@ -5,10 +5,16 @@ struct ProductDTO: Decodable, Identifiable {
         let energy: String?
         let protein: String?
         let fat: String?
+        let saturatedFat: String?
+        let transFat: String?
+        let carbohydrate: String?
         let sugar: String?
+        let fiber: String?
+        let sodium: String?
     }
 
     let id: Int
+    let userId: Int
     let productName: String
     let ageRange: String?
     let ingredients: [String]?
@@ -23,10 +29,11 @@ struct ProductDTO: Decodable, Identifiable {
     let origin: String?
     let createdAt: String?
     let timeZone: String?
-    let createdAtLocal: String?
+    let createdAtLocal: Date?
 
     enum CodingKeys: String, CodingKey {
         case id = "_id"
+        case userId = "user_id"
         case productName = "product_name"
         case ageRange = "age_range"
         case ingredients

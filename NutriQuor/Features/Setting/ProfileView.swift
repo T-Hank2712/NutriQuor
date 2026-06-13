@@ -33,8 +33,8 @@ struct ProfileView: View {
     @State private var newFamilyLastName: String = ""
     @State private var newFamilyAvatar: String = ""
     
-    var profileId: Int {
-        appState.profile?.profileId ?? 0
+    var profileId: String {
+        appState.profile?.profileId ?? ""
     }
     
     @StateObject private var viewModel = UserProfileViewModel()
@@ -285,22 +285,26 @@ struct ProfileView: View {
             email = appState.user?.email ?? ""
             
             
-            guard profileId != 0 else { return }
+            guard profileId != "" else { return }
             print(profileId)
             
-            await viewModel.loadProfileGoals(
-                profileId: profileId
-            )
-            
-            await viewModel.loadProfileDiseases(
-                profileId: profileId
-            )
-            
-            await viewModel.loadProfileAllergies(
-                profileId: profileId
-            )
-            
-            await viewModel.loadFamilyMembers(profileId: profileId)
+            await withTaskGroup(of: Void.self) { group in
+                group.addTask {
+                    await viewModel.loadProfileGoals(profileId: profileId)
+                }
+
+                group.addTask {
+                    await viewModel.loadProfileDiseases(profileId: profileId)
+                }
+
+                group.addTask {
+                    await viewModel.loadProfileAllergies(profileId: profileId)
+                }
+                
+                group.addTask {
+                    await viewModel.loadFamilyMembers(profileId: profileId)
+                }
+            }
         }
 
 

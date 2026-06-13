@@ -11,7 +11,7 @@ enum UserProfileAPI {
 
     static func allergiesRequest() throws -> URLRequest {
         guard let url = URL(
-            string: "\(AppConfig.shared.devBaseURL)/api/v0/allergies"
+            string: "\(AppConfig.shared.devBaseURL)/api/v1/allergies"
         ) else {
             throw URLError(.badURL)
         }
@@ -24,7 +24,7 @@ enum UserProfileAPI {
 
     static func diseasesRequest() throws -> URLRequest {
         guard let url = URL(
-            string: "\(AppConfig.shared.devBaseURL)/api/v0/diseases"
+            string: "\(AppConfig.shared.devBaseURL)/api/v1/diseases"
         ) else {
             throw URLError(.badURL)
         }
@@ -37,7 +37,7 @@ enum UserProfileAPI {
 
     static func healthGoalsRequest() throws -> URLRequest {
         guard let url = URL(
-            string: "\(AppConfig.shared.devBaseURL)/api/v0/health-goals"
+            string: "\(AppConfig.shared.devBaseURL)/api/v1/health-goals"
         ) else {
             throw URLError(.badURL)
         }
@@ -48,9 +48,9 @@ enum UserProfileAPI {
         return request
     }
 
-    static func healthGoalProfileRequest(profileId: Int) throws -> URLRequest {
+    static func healthGoalProfileRequest(profileId: String) throws -> URLRequest {
         guard let url = URL(
-            string: "\(AppConfig.shared.devBaseURL)/api/v0/user-profiles/\(profileId)/health-goals"
+            string: "\(AppConfig.shared.devBaseURL)/api/v1/user-profiles/\(profileId)/health-goals"
         ) else {
             throw URLError(.badURL)
         }
@@ -62,11 +62,11 @@ enum UserProfileAPI {
     }
 
     static func addHealthGoalRequest(
-        profileId: Int,
+        profileId: String,
         healthGoalId: Int
     ) throws -> URLRequest {
         guard let url = URL(
-            string: "\(AppConfig.shared.devBaseURL)/api/v0/user-profiles/\(profileId)/health-goals/\(healthGoalId)"
+            string: "\(AppConfig.shared.devBaseURL)/api/v1/user-profiles/\(profileId)/health-goals/\(healthGoalId)"
         ) else {
             throw URLError(.badURL)
         }
@@ -78,11 +78,11 @@ enum UserProfileAPI {
     }
 
     static func deleteHealthGoalRequest(
-        profileId: Int,
+        profileId: String,
         healthGoalId: Int
     ) throws -> URLRequest {
         guard let url = URL(
-            string: "\(AppConfig.shared.devBaseURL)/api/v0/user-profiles/\(profileId)/health-goals/\(healthGoalId)"
+            string: "\(AppConfig.shared.devBaseURL)/api/v1/user-profiles/\(profileId)/health-goals/\(healthGoalId)"
         ) else {
             throw URLError(.badURL)
         }
@@ -93,9 +93,9 @@ enum UserProfileAPI {
         return request
     }
 
-    static func diseaseProfileRequest(profileId: Int) throws -> URLRequest {
+    static func diseaseProfileRequest(profileId: String) throws -> URLRequest {
         guard let url = URL(
-            string: "\(AppConfig.shared.devBaseURL)/api/v0/user-profiles/\(profileId)/diseases"
+            string: "\(AppConfig.shared.devBaseURL)/api/v1/user-profiles/\(profileId)/diseases"
         ) else {
             throw URLError(.badURL)
         }
@@ -107,11 +107,11 @@ enum UserProfileAPI {
     }
 
     static func addDiseaseRequest(
-        profileId: Int,
+        profileId: String,
         diseaseId: Int
     ) throws -> URLRequest {
         guard let url = URL(
-            string: "\(AppConfig.shared.devBaseURL)/api/v0/user-profiles/\(profileId)/diseases/\(diseaseId)"
+            string: "\(AppConfig.shared.devBaseURL)/api/v1/user-profiles/\(profileId)/diseases/\(diseaseId)"
         ) else {
             throw URLError(.badURL)
         }
@@ -123,11 +123,11 @@ enum UserProfileAPI {
     }
 
     static func deleteDiseaseRequest(
-        profileId: Int,
+        profileId: String,
         diseaseId: Int
     ) throws -> URLRequest {
         guard let url = URL(
-            string: "\(AppConfig.shared.devBaseURL)/api/v0/user-profiles/\(profileId)/diseases/\(diseaseId)"
+            string: "\(AppConfig.shared.devBaseURL)/api/v1/user-profiles/\(profileId)/diseases/\(diseaseId)"
         ) else {
             throw URLError(.badURL)
         }
@@ -138,9 +138,9 @@ enum UserProfileAPI {
         return request
     }
 
-    static func allergyProfileRequest(profileId: Int) throws -> URLRequest {
+    static func allergyProfileRequest(profileId: String) throws -> URLRequest {
         guard let url = URL(
-            string: "\(AppConfig.shared.devBaseURL)/api/v0/user-profiles/\(profileId)/allergies"
+            string: "\(AppConfig.shared.devBaseURL)/api/v1/user-profiles/\(profileId)/allergies"
         ) else {
             throw URLError(.badURL)
         }
@@ -152,11 +152,11 @@ enum UserProfileAPI {
     }
 
     static func addAllergyRequest(
-        profileId: Int,
+        profileId: String,
         allergyId: Int
     ) throws -> URLRequest {
         guard let url = URL(
-            string: "\(AppConfig.shared.devBaseURL)/api/v0/user-profiles/\(profileId)/allergies/\(allergyId)"
+            string: "\(AppConfig.shared.devBaseURL)/api/v1/user-profiles/\(profileId)/allergies/\(allergyId)"
         ) else {
             throw URLError(.badURL)
         }
@@ -168,11 +168,11 @@ enum UserProfileAPI {
     }
 
     static func deleteAllergyRequest(
-        profileId: Int,
+        profileId: String,
         allergyId: Int
     ) throws -> URLRequest {
         guard let url = URL(
-            string: "\(AppConfig.shared.devBaseURL)/api/v0/user-profiles/\(profileId)/allergies/\(allergyId)"
+            string: "\(AppConfig.shared.devBaseURL)/api/v1/user-profiles/\(profileId)/allergies/\(allergyId)"
         ) else {
             throw URLError(.badURL)
         }
@@ -184,9 +184,9 @@ enum UserProfileAPI {
     }
     
     // MARK: - Profile Information
-    static func updateUserProfileRequest(profileId: Int, firstName: String?, lastName: String?, avatar: String?) throws -> URLRequest {
+    static func updateUserProfileRequest(profileId: String, firstName: String?, lastName: String?, avatar: String?) throws -> URLRequest {
         guard let url = URL(
-            string: "\(AppConfig.shared.devBaseURL)/api/v0/user-profiles/\(profileId)"
+            string: "\(AppConfig.shared.devBaseURL)/api/v1/user-profiles/\(profileId)"
         ) else {
             throw URLError(.badURL)
         }
@@ -206,9 +206,9 @@ enum UserProfileAPI {
         return request
     }
     
-    static func familyMembersRequest(profileId: Int) throws -> URLRequest {
+    static func familyMembersRequest(profileId: String) throws -> URLRequest {
         guard let url = URL(
-            string: "\(AppConfig.shared.devBaseURL)/api/v0/user-profiles/\(profileId)/family-members"
+            string: "\(AppConfig.shared.devBaseURL)/api/v1/user-profiles/\(profileId)/family-members"
         ) else {
             throw URLError(.badURL)
         }
@@ -225,7 +225,7 @@ enum UserProfileAPI {
         avatar: String?
     ) throws -> URLRequest {
         guard let url = URL(
-            string: "\(AppConfig.shared.devBaseURL)/api/v0/user-profiles/family-members"
+            string: "\(AppConfig.shared.devBaseURL)/api/v1/user-profiles/family-members"
         ) else {
             throw URLError(.badURL)
         }
@@ -246,11 +246,11 @@ enum UserProfileAPI {
     }
     
     static func deleteProfileRequest(
-        profileId: Int
+        profileId: String
     ) throws -> URLRequest {
         
         guard let url = URL(
-            string: "\(AppConfig.shared.devBaseURL)/api/v0/user-profiles/\(profileId)"
+            string: "\(AppConfig.shared.devBaseURL)/api/v1/user-profiles/\(profileId)"
         ) else {
             throw URLError(.badURL)
         }

@@ -8,29 +8,31 @@
 import SwiftUI
 
 struct HistoryItem: View {
-    let record: History
+    let record: ProductDTO
     
     var body: some View {
         HStack {
-            record.image
+            Image("Example")
                 .resizable()
                 .frame(width: 80, height: 80)
                 .clipShape(Circle())
                 .padding(10)
             
             VStack(alignment: .leading, spacing: 4) {
-                Text(record.title)
-                    .font(.headline)
+                Text(record.productName)
+                    .font(.subheadline)
+                    .lineLimit(1)
                 HStack {
                     Image(systemName: "exclamationmark.triangle.fill").foregroundColor(.yellow).opacity(.opacityStrong)
-                    Text(record.warning)
-                        .font(.subheadline)
+                    Text(record.warning ?? "")
+                        .font(.caption)
                         .foregroundColor(.gray)
+                        .lineLimit(1)
                 }
                 HStack {
                     Image(systemName: "circle.fill").foregroundColor(.orange).opacity(.opacityStrong)
-                    Text(record.score)
-                        .font(.subheadline)
+                    Text(record.createdAt ?? "")
+                        .font(.caption)
                         .foregroundColor(.gray)
                 }
             }
@@ -45,19 +47,42 @@ struct HistoryItem: View {
 }
 
 #Preview {
-    HistoryItem(record: History(
-        image: Image("Example"),
-        title: "Bánh quy ABC",
-        warning: "Nhiều đường",
-        score: "Xấu",
-        time: Calendar.current.date(
-            from: DateComponents(
-                year: 2025,
-                month: 1,
-                day: 24,
-                hour: 21,
-                minute: 04
-            )
-        )!
-    ))
+    HistoryItem(
+        record: ProductDTO(
+            id: 1,
+            userId: 1,
+            productName: "Bánh quy ABC",
+            ageRange: "3+",
+            ingredients: [
+                "Bột mì",
+                "Đường",
+                "Dầu thực vật"
+            ],
+            additive: [
+                "INS 322",
+                "INS 500(ii)"
+            ],
+            nutrition: ProductDTO.Nutrition(
+                energy: "250 kcal",
+                protein: "12g",
+                fat: "10g",
+                saturatedFat: "3g",
+                transFat: "0g",
+                carbohydrate: "30g",
+                sugar: "12g",
+                fiber: "5g",
+                sodium: "200mg"
+            ),
+            manufacturer: "ABC Food",
+            mfgDate: "2026-01-01",
+            expiryDate: "2027-01-01",
+            netWeight: "200 g",
+            allergen: "Gluten",
+            warning: "Nhiều đường",
+            origin: "Việt Nam",
+            createdAt: "2026-06-09T05:27:07.241790Z",
+            timeZone: "Asia/Ho_Chi_Minh",
+            createdAtLocal: Date()
+        )
+    )
 }

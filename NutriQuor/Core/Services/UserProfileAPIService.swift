@@ -39,7 +39,7 @@ final class UserProfileAPIService {
 
     // Load the data of the current user profile.
     // MARK: - Health Goal Profile
-    func getHealthGoalProfile(profileId: Int) async throws -> [HealthGoal] {
+    func getHealthGoalProfile(profileId: String) async throws -> [HealthGoal] {
         let request = try UserProfileAPI.healthGoalProfileRequest(profileId: profileId)
 
         let response = try await APIClient.shared.request(
@@ -51,7 +51,7 @@ final class UserProfileAPIService {
     }
 
     func addHealthGoal(
-        profileId: Int,
+        profileId: String,
         healthGoalId: Int
     ) async throws -> [HealthGoal] {
         let request = try UserProfileAPI.addHealthGoalRequest(
@@ -68,7 +68,7 @@ final class UserProfileAPIService {
     }
 
     func deleteHealthGoal(
-        profileId: Int,
+        profileId: String,
         healthGoalId: Int
     ) async throws -> [HealthGoal] {
         let request = try UserProfileAPI.deleteHealthGoalRequest(
@@ -86,7 +86,7 @@ final class UserProfileAPIService {
 
     // MARK: - Disease Profile
     func getDiseaseProfile(
-        profileId: Int
+        profileId: String
     ) async throws -> [Disease] {
         let request = try UserProfileAPI.diseaseProfileRequest(profileId: profileId)
 
@@ -99,7 +99,7 @@ final class UserProfileAPIService {
     }
 
     func addDisease(
-        profileId: Int,
+        profileId: String,
         diseaseId: Int
     ) async throws -> [Disease] {
         let request = try UserProfileAPI.addDiseaseRequest(
@@ -116,7 +116,7 @@ final class UserProfileAPIService {
     }
 
     func deleteDisease(
-        profileId: Int,
+        profileId: String,
         diseaseId: Int
     ) async throws -> [Disease] {
         let request = try UserProfileAPI.deleteDiseaseRequest(
@@ -134,7 +134,7 @@ final class UserProfileAPIService {
 
     // MARK: - Allergy Profile
     func getAllergyProfile(
-        profileId: Int
+        profileId: String
     ) async throws -> [Allergy] {
         let request = try UserProfileAPI.allergyProfileRequest(profileId: profileId)
 
@@ -147,7 +147,7 @@ final class UserProfileAPIService {
     }
 
     func addAllergy(
-        profileId: Int,
+        profileId: String,
         allergyId: Int
     ) async throws -> [Allergy] {
         let request = try UserProfileAPI.addAllergyRequest(
@@ -164,7 +164,7 @@ final class UserProfileAPIService {
     }
 
     func deleteAllergy(
-        profileId: Int,
+        profileId: String,
         allergyId: Int
     ) async throws -> [Allergy] {
         let request = try UserProfileAPI.deleteAllergyRequest(
@@ -182,7 +182,7 @@ final class UserProfileAPIService {
     
     // MARK: - Profile Information
     func updateProfile(
-        profileId: Int,
+        profileId: String,
         firstName: String?,
         lastName: String?,
         avatar: String?
@@ -200,7 +200,7 @@ final class UserProfileAPIService {
     }
     
     func getFamilyMembers(
-        profileId: Int
+        profileId: String
     ) async throws -> [Profile] {
         let request = try UserProfileAPI.familyMembersRequest(profileId: profileId)
 
@@ -229,7 +229,7 @@ final class UserProfileAPIService {
     }
     
     func deleteProfile(
-        profileId: Int
+        profileId: String
     ) async throws -> [Profile] {
         let request = try UserProfileAPI.deleteProfileRequest(
             profileId: profileId

@@ -1,13 +1,15 @@
 import SwiftUI
 
 struct HistoryView: View {
-    @State private var items: [History] = []
-    @State private var errorMessage: String?
-    @State private var isLoading = false
     
-    private var filteredItems: [History] {
-        items
-            .sorted(by: { $0.time > $1.time })
+    @State private var selectedDate = Date()
+    @StateObject private var viewModel = ProductViewModel()
+    
+    private var filteredItems: [ProductDTO] {
+        viewModel.products.sorted {
+            ($0.createdAtLocal ?? .distantPast) >
+            ($1.createdAtLocal ?? .distantPast)
+        }
     }
     
     var body: some View {
@@ -19,51 +21,80 @@ struct HistoryView: View {
                     .bold()
                     .foregroundStyle(Color(.colorPrimary))
                 
+                HStack {
+                    Image(systemName: "calendar")
+                        .foregroundStyle(Color(.colorPrimary))
+
+                    Text("Lọc theo ngày")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+
+                    Spacer()
+
+                    DatePicker(
+                        "",
+                        selection: $selectedDate,
+                        displayedComponents: .date
+                    )
+                    .labelsHidden()
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
+                .background(
+                    RoundedRectangle(cornerRadius: 16)
+                        .fill(Color(.secondarySystemBackground))
+                )
+                
+                
                 ScrollView {
-                    if let errorMessage {
+                    if let errorMessage = viewModel.errorMessage {
                         Text(errorMessage)
                             .font(.caption)
                             .foregroundColor(.red)
                     }
 
-                    if isLoading {
+                    if viewModel.isLoading {
                         ProgressView("Đang tải lịch sử...")
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
 
-                    if !isLoading, errorMessage == nil, items.isEmpty {
+                    if !viewModel.isLoading,
+                       viewModel.errorMessage == nil,
+                       viewModel.products.isEmpty {
+
                         Text("Chưa có lịch sử quét")
                             .font(.subheadline)
                             .foregroundColor(.secondary)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.top, 8)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .padding(.top, 40)
                     }
                     
                     LazyVStack(spacing: 24) {
                         ForEach(filteredItems) { item in
                             HStack(alignment: .top, spacing: 16) {
-                                
-                                // MARK: - Time + Timeline
+
                                 VStack {
                                     Rectangle()
                                         .fill(Color(.colorPrimary).opacity(.opacityStrong))
                                         .frame(width: 2)
                                         .frame(maxHeight: .infinity)
-                                    Text(formatTime(item.time))
-                                        .font(.caption)
-                                        .foregroundColor(Color(.heading))
-                                    
+
+                                    Text(
+                                        item.createdAtLocal.map(formatTime) ?? "--:--"
+                                    )
+                                    .font(.caption)
+                                    .foregroundColor(Color(.heading))
+
                                     Rectangle()
                                         .fill(Color(.colorPrimary).opacity(.opacityStrong))
                                         .frame(width: 2)
                                         .frame(maxHeight: .infinity)
                                 }
                                 .frame(width: 60)
-                                
-                                // MARK: - Card
+
                                 NavigationLink {
                                     AnalystView(
-                                        nutriItem: item,
+                                        product: item,
                                         onDismiss: {}
                                     )
                                 } label: {
@@ -73,34 +104,17 @@ struct HistoryView: View {
                             }
                         }
                     }
-                }
+                }.padding(.top, 20)
             }
             .padding()
         }
         .task {
-            await loadProducts()
+            await viewModel.loadProductsByDate(date: selectedDate)
         }
-    }
-
-    @MainActor
-    private func loadProducts() async {
-        isLoading = true
-        errorMessage = nil
-        defer { isLoading = false }
-
-        do {
-            let products = try await ProductAPI.fetchProducts()
-            items = products.map { p in
-                History(
-                    image: Image("Example"),
-                    title: p.productName,
-                    warning: p.warning ?? "Không có cảnh báo",
-                    score: p.nutrition?.sugar ?? "Chưa có",
-                    time: parseDate(p.createdAtLocal) ?? parseDate(p.createdAt) ?? Date()
-                )
+        .onChange(of: selectedDate) { _, newDate in
+            Task {
+                await viewModel.loadProductsByDate(date: newDate)
             }
-        } catch {
-            errorMessage = "Không tải được dữ liệu. Kiểm tra API server và baseURL rồi thử lại."
         }
     }
     
