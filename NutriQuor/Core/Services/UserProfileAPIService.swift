@@ -13,28 +13,34 @@ final class UserProfileAPIService {
     func fetchAllergies() async throws -> [Allergy] {
         let request = try UserProfileAPI.allergiesRequest()
 
-        return try await APIClient.shared.request(
+        let response = try await APIClient.shared.request(
             request,
-            responseType: [Allergy].self
+            responseType: APIResponse<[Allergy]>.self
         )
+        
+        return response.data
     }
 
     func fetchDiseases() async throws -> [Disease] {
         let request = try UserProfileAPI.diseasesRequest()
 
-        return try await APIClient.shared.request(
+        let response = try await APIClient.shared.request(
             request,
-            responseType: [Disease].self
+            responseType: APIResponse<[Disease]>.self
         )
+        
+        return response.data
     }
 
     func fetchHealthGoals() async throws -> [HealthGoal] {
         let request = try UserProfileAPI.healthGoalsRequest()
 
-        return try await APIClient.shared.request(
+        let response = try await APIClient.shared.request(
             request,
-            responseType: [HealthGoal].self
+            responseType: APIResponse<[HealthGoal]>.self
         )
+        
+        return response.data
     }
 
     // Load the data of the current user profile.
@@ -52,7 +58,7 @@ final class UserProfileAPIService {
 
     func addHealthGoal(
         profileId: String,
-        healthGoalId: Int
+        healthGoalId: String
     ) async throws -> [HealthGoal] {
         let request = try UserProfileAPI.addHealthGoalRequest(
             profileId: profileId,
@@ -69,8 +75,8 @@ final class UserProfileAPIService {
 
     func deleteHealthGoal(
         profileId: String,
-        healthGoalId: Int
-    ) async throws -> [HealthGoal] {
+        healthGoalId: String
+    ) async throws -> Bool {
         let request = try UserProfileAPI.deleteHealthGoalRequest(
             profileId: profileId,
             healthGoalId: healthGoalId
@@ -78,7 +84,7 @@ final class UserProfileAPIService {
 
         let response = try await APIClient.shared.request(
             request,
-            responseType: APIResponse<[HealthGoal]>.self
+            responseType: APIResponse<Bool>.self
         )
 
         return response.data
@@ -100,7 +106,7 @@ final class UserProfileAPIService {
 
     func addDisease(
         profileId: String,
-        diseaseId: Int
+        diseaseId: String
     ) async throws -> [Disease] {
         let request = try UserProfileAPI.addDiseaseRequest(
             profileId: profileId,
@@ -117,8 +123,8 @@ final class UserProfileAPIService {
 
     func deleteDisease(
         profileId: String,
-        diseaseId: Int
-    ) async throws -> [Disease] {
+        diseaseId: String
+    ) async throws -> Bool {
         let request = try UserProfileAPI.deleteDiseaseRequest(
             profileId: profileId,
             diseaseId: diseaseId
@@ -126,7 +132,7 @@ final class UserProfileAPIService {
 
         let response = try await APIClient.shared.request(
             request,
-            responseType: APIResponse<[Disease]>.self
+            responseType: APIResponse<Bool>.self
         )
 
         return response.data
@@ -148,7 +154,7 @@ final class UserProfileAPIService {
 
     func addAllergy(
         profileId: String,
-        allergyId: Int
+        allergyId: String
     ) async throws -> [Allergy] {
         let request = try UserProfileAPI.addAllergyRequest(
             profileId: profileId,
@@ -165,8 +171,8 @@ final class UserProfileAPIService {
 
     func deleteAllergy(
         profileId: String,
-        allergyId: Int
-    ) async throws -> [Allergy] {
+        allergyId: String
+    ) async throws -> Bool {
         let request = try UserProfileAPI.deleteAllergyRequest(
             profileId: profileId,
             allergyId: allergyId
@@ -174,7 +180,7 @@ final class UserProfileAPIService {
 
         let response = try await APIClient.shared.request(
             request,
-            responseType: APIResponse<[Allergy]>.self
+            responseType: APIResponse<Bool>.self
         )
 
         return response.data
@@ -216,28 +222,28 @@ final class UserProfileAPIService {
         firstName: String?,
         lastName: String?,
         avatar: String?
-    )async throws -> [Profile] {
+    )async throws -> Profile {
         let request = try UserProfileAPI.addFamilyMembersRequest(
             firstName: firstName,
             lastName: lastName,
             avatar: avatar
         )
         
-        let response = try await APIClient.shared.request(request, responseType: APIResponse<[Profile]>.self)
+        let response = try await APIClient.shared.request(request, responseType: APIResponse<Profile>.self)
         
         return response.data
     }
     
     func deleteProfile(
         profileId: String
-    ) async throws -> [Profile] {
+    ) async throws -> Bool {
         let request = try UserProfileAPI.deleteProfileRequest(
             profileId: profileId
         )
 
         let response = try await APIClient.shared.request(
             request,
-            responseType: APIResponse<[Profile]>.self
+            responseType: APIResponse<Bool>.self
         )
 
         return response.data

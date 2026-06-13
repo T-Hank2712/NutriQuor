@@ -85,8 +85,8 @@ struct AllergiesCard: View {
 #Preview {
     AllergiesCard(
         allergies: [
-            Allergy(id: 1, name: "Nuts"),
-            Allergy(id: 2, name: "Gluten")
+            Allergy(id: "1", name: "Nuts"),
+            Allergy(id: "2", name: "Gluten")
         ],
         onAdd: {},
         onDelete: { _ in }

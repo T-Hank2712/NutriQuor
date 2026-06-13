@@ -83,8 +83,8 @@ struct colorPrimaryGoalsCard: View {
 #Preview {
     colorPrimaryGoalsCard(
         goals: [
-            HealthGoal(id: 1, name: "Lose Weight"),
-            HealthGoal(id: 2, name: "Build Muscle")
+            HealthGoal(id: "1", name: "Lose Weight"),
+            HealthGoal(id: "2", name: "Build Muscle")
         ],
         onAdd: {},
         onDelete: { _ in }

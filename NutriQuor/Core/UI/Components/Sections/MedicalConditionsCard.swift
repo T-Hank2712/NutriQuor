@@ -58,8 +58,8 @@ struct MedicalConditionsCard: View {
 #Preview {
     MedicalConditionsCard(
         diseases: [
-            Disease(id: 1, name: "Nuts"),
-            Disease(id: 2, name: "Gluten")
+            Disease(id: "1", name: "Nuts"),
+            Disease(id: "2", name: "Gluten")
         ],
         onAdd: {},
         onDelete: { _ in }
