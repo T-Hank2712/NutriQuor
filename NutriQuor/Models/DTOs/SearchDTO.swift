@@ -11,9 +11,6 @@ struct SearchDTO: Identifiable, Codable{
     let id: String
     let name: String
     let code: String?
-    let image: String
-    let description: String
-    let effects: [HealthEffect]
-    let found_in: [FoodCategory]
+    let description: String?
     let type: String
 }

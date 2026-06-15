@@ -129,7 +129,7 @@ struct SearchView: View {
                     VStack(spacing: 10) {
                         ForEach(viewModel.filteredList, id: \.id) { item in
                             NavigationLink {
-                                SearchDetailView(data: item)
+                                SearchDetailView(id: item.id)
                             } label: {
                                 ModernProductCard(
                                     name: item.name,
@@ -163,7 +163,7 @@ struct SearchView: View {
                 VStack(spacing: 10) {
                     ForEach(viewModel.filteredList, id: \.id) { item in
                         NavigationLink {
-                            SearchDetailView(data: item)
+                            SearchDetailView(id: item.id)
                         } label: {
                             ModernProductCard(
                                 name: item.name,

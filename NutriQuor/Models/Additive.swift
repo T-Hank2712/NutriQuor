@@ -7,11 +7,11 @@
 
 import Foundation
 struct Additive: Identifiable, Codable {
-    let id: Int
+    let id: String
     let name: String
+    let key: String
     let code: String?
-    let description: String
-    let image: String
+    let description: String?
     let effects: [HealthEffect]
     let found_in: [FoodCategory]
 }

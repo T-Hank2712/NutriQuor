@@ -8,17 +8,25 @@
 import Foundation
 
 final class SearchService {
-     func fetchAllItem() async throws -> [SearchDTO] {
-        guard let url = URL(string: "\(AppConfig.shared.devBaseURL)/api/v0/search-nutrition/") else {
-            throw URLError(.badURL)
-        }
+    
+    func fetchAll() async throws -> [SearchDTO]{
+        let request = try SearchAPI.searchRequest()
 
-        let (data, response) = try await URLSession.shared.data(from: url)
-        guard let http = response as? HTTPURLResponse, (200...299).contains(http.statusCode) else {
-            throw URLError(.badServerResponse)
-        }
+        let response = try await APIClient.shared.request(
+            request,
+            responseType: APIResponse<[SearchDTO]>.self
+        )
+        
+        return response.data
+    }
+    
+    func fetchDetail(id: String) async throws -> SearchDetailDTO{
+        let request = try SearchAPI.searchDetailRequest(id: id)
 
-        let decoder = JSONDecoder()
-        return try decoder.decode([SearchDTO].self, from: data)
+        let response = try await APIClient.shared.request(
+            request,
+            responseType: APIResponse<SearchDetailDTO>.self
+        )
+        return response.data
     }
 }

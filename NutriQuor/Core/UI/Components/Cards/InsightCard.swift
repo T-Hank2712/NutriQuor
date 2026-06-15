@@ -32,7 +32,7 @@ struct InsightCard: View {
                 .foregroundColor(.white)
             
             NavigationLink {
-                SearchDetailView(data: SearchDTO(id: "1", name: "Test", code: "E123",image: "test", description: "Test", effects: [], found_in: [], type: "Test"))
+                SearchDetailView(id: "1")
             } label: {
                 Text("LEARN MORE")
                     .padding(.horizontal, 20)

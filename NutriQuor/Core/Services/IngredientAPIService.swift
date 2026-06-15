@@ -9,7 +9,7 @@ import Foundation
 
 final class IngredientAPIService {
     func fetchIngredients() async throws -> [Ingredient] {
-        let url = URL(string: "\(AppConfig.shared.devBaseURL)/api/v0/ingredients")!
+        let url = URL(string: "\(AppConfig.shared.devBaseURL)/api/v1/ingredients")!
         
         let (data, _) = try await URLSession.shared.data(from: url)
 

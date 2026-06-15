@@ -7,10 +7,10 @@
 
 import Foundation
 struct Ingredient: Identifiable, Codable {
-    let id: Int
+    let id: String
     let name: String
-    let description: String
-    let image: String
+    let key: String
+    let description: String?
     let effects: [HealthEffect]
     let found_in: [FoodCategory]
 }
