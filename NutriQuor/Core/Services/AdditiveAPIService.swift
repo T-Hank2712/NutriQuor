@@ -9,7 +9,7 @@ import Foundation
 
 final class AdditiveAPIService {
     func fetchAdditives() async throws -> [Additive] {
-        let url = URL(string: "\(AppConfig.shared.devBaseURL)/api/v0/additives")!
+        let url = URL(string: "\(AppConfig.shared.devBaseURL)/api/v1/additives")!
         
         let (data, _) = try await URLSession.shared.data(from: url)
 

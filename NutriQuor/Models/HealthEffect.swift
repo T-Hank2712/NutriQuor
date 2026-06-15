@@ -8,6 +8,7 @@
 import Foundation
 
 struct HealthEffect: Identifiable, Codable {
-    let id: Int
+    let id: String
     let title: String
+    let description: String?
 }

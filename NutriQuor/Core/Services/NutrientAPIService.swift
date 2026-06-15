@@ -9,7 +9,7 @@ import Foundation
 
 final class NutrientAPIService {
     func fetchNutrients() async throws -> [Nutrient] {
-        let url = URL(string: "\(AppConfig.shared.devBaseURL)/api/v0/nutrients")!
+        let url = URL(string: "\(AppConfig.shared.devBaseURL)/api/v1/nutrients")!
         
         let (data, _) = try await URLSession.shared.data(from: url)
 

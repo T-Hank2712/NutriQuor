@@ -9,11 +9,13 @@ import Foundation
 enum SearchItem: Identifiable {
     case nutrient(Nutrient)
     case ingredient(Ingredient)
+    case additive(Additive)
 
     var id: String {
         switch self {
         case .nutrient(let n): return "n-\(n.id)"
         case .ingredient(let i): return "i-\(i.id)"
+        case .additive(let a): return "a-\(a.id)"
         }
     }
 
@@ -21,20 +23,15 @@ enum SearchItem: Identifiable {
         switch self {
         case .nutrient(let n): return n.name
         case .ingredient(let i): return i.name
+        case .additive(let a): return a.name
         }
     }
     
     var description: String {
         switch self {
-        case .nutrient(let n): return n.description
-        case .ingredient(let i): return i.description
-        }
-    }
-    
-    var image: String? {
-        switch self {
-        case .nutrient(let n): return n.image
-        case .ingredient(let i): return i.image
+        case .nutrient(let n): return n.description ?? ""
+        case .ingredient(let i): return i.description ?? ""
+        case .additive(let a): return a.description ?? ""
         }
     }
     
@@ -42,6 +39,7 @@ enum SearchItem: Identifiable {
         switch self {
         case .nutrient(let n): return n.effects
         case .ingredient(let i): return i.effects
+        case .additive(let a): return a.effects
         }
     }
     
@@ -49,6 +47,7 @@ enum SearchItem: Identifiable {
         switch self {
         case .nutrient(let n): return n.found_in
         case .ingredient(let i): return i.found_in
+        case .additive(let a): return a.found_in
         }
     }
 }

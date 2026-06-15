@@ -47,6 +47,25 @@ final class UserProfileViewModel: ObservableObject {
         }
     }
     
+    func bootstrap(profileId: String) async {
+        do {
+            async let goals = userProfileService.getHealthGoalProfile(profileId: profileId)
+            async let diseases = userProfileService.getDiseaseProfile(profileId: profileId)
+            async let allergies = userProfileService.getAllergyProfile(profileId: profileId)
+            async let members = userProfileService.getFamilyMembers(profileId: profileId)
+
+            let (g, d, a, m) = try await (goals, diseases, allergies, members)
+
+            self.selectedHealthGoals = g
+            self.selectedDiseases = d
+            self.selectedAllergies = a
+            self.members = m
+
+        } catch {
+            print("BOOTSTRAP ERROR:", error)
+        }
+    }
+    
     // MARK: - Profile
     // Health Goals Profile
     func loadProfileGoals(profileId: String) async {

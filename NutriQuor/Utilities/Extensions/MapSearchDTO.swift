@@ -13,10 +13,7 @@ extension Nutrient {
             id: "nutrient-\(self.id)",
             name: self.name,
             code: nil,
-            image: self.image,
             description: self.description,
-            effects: self.effects,
-            found_in: self.found_in,
             type: "nutrient"
         )
     }
@@ -28,10 +25,7 @@ extension Ingredient {
             id: "ingredient-\(self.id)",
             name: self.name,
             code: nil,
-            image: self.image,
             description: self.description,
-            effects: self.effects,
-            found_in: self.found_in,
             type: "ingredient"
         )
     }
@@ -43,10 +37,7 @@ extension Additive {
             id: "ingredient-\(self.id)",
             name: self.name,
             code: self.code,
-            image: self.image,
             description: self.description,
-            effects: self.effects,
-            found_in: self.found_in,
             type: "additive"
         )
     }

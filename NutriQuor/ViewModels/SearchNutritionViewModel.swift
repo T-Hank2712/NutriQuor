@@ -17,6 +17,7 @@ final class SearchNutritionViewModel: ObservableObject {
     // MARK: - Data
     @Published var list: [SearchDTO] = []
     @Published var filteredList: [SearchDTO] = []
+    @Published var detail: SearchDetailDTO?
 
     // MARK: - Services
     private let searchService = SearchService()
@@ -27,7 +28,7 @@ final class SearchNutritionViewModel: ObservableObject {
     // MARK: - Load All
     func loadAll() async {
         do {
-            let result = try await searchService.fetchAllItem()
+            let result = try await searchService.fetchAll()
             list = result
 
             if query.isEmpty {
@@ -36,6 +37,15 @@ final class SearchNutritionViewModel: ObservableObject {
 
         } catch {
             print("Error loading data:", error)
+        }
+    }
+    
+    func loadDetail(id: String) async {
+        do {
+            detail = try await searchService.fetchDetail(id: id)
+            print(detail ?? "")
+        } catch {
+            print("Error:", error)
         }
     }
 
@@ -51,7 +61,6 @@ final class SearchNutritionViewModel: ObservableObject {
 
             case .nutrient:
                 data = try await nutrientService.fetchNutrients().map { $0.toSearchDTO() }
-                print(data)
 
             case .ingredient:
                 data = try await ingredientService.fetchIngredients().map { $0.toSearchDTO() }
