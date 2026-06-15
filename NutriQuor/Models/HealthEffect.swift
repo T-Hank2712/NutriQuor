@@ -9,6 +9,6 @@ import Foundation
 
 struct HealthEffect: Identifiable, Codable {
     let id: String
-    let title: String
+    let name: String
     let description: String?
 }
