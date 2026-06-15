@@ -97,7 +97,7 @@ struct ProfileView: View {
                         
                         // Display name + edit button
                         VStack(spacing: 6) {
-                            Text("\(firstName) \(lastName)".trimmingCharacters(in: .whitespaces).isEmpty ? "Chưa có tên" : "\(firstName) \(lastName)")
+                            Text("\(lastName) \(firstName)".trimmingCharacters(in: .whitespaces).isEmpty ? "Chưa có tên" : "\(lastName) \(firstName)")
                                 .font(.title2)
                                 .fontWeight(.semibold)
                             
@@ -138,14 +138,9 @@ struct ProfileView: View {
                             onDelete: { goal in
                                 
                                 Task {
-                                    
-                                    await viewModel.deleteHealthGoal(
+                                    _ = await viewModel.deleteHealthGoal(
                                         profileId: profileId,
                                         healthGoalId: goal.id
-                                    )
-                                    
-                                    await viewModel.loadProfileGoals(
-                                        profileId: profileId
                                     )
                                 }
                             }
@@ -160,14 +155,9 @@ struct ProfileView: View {
                             onDelete: { disease in
                                 
                                 Task {
-                                    
-                                    await viewModel.deleteDisease(
+                                    _ = await viewModel.deleteDisease(
                                         profileId: profileId,
                                         diseaseId: disease.id
-                                    )
-                                    
-                                    await viewModel.loadProfileDiseases(
-                                        profileId: profileId
                                     )
                                 }
                             }
@@ -182,14 +172,9 @@ struct ProfileView: View {
                             onDelete: { allergy in
                                 
                                 Task {
-                                    
-                                    await viewModel.deleteAllergy(
+                                    _ = await viewModel.deleteAllergy(
                                         profileId: profileId,
                                         allergyId: allergy.id
-                                    )
-                                    
-                                    await viewModel.loadProfileAllergies(
-                                        profileId: profileId
                                     )
                                 }
                             }

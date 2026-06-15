@@ -61,7 +61,7 @@ final class UserProfileViewModel: ObservableObject {
         }
     }
     
-    func addHealthGoal(profileId: String, healthGoalId: Int) async {
+    func addHealthGoal(profileId: String, healthGoalId: String) async {
         do {
             
             selectedHealthGoals = try await userProfileService
@@ -72,14 +72,20 @@ final class UserProfileViewModel: ObservableObject {
         }
     }
     
-    func deleteHealthGoal(profileId: String, healthGoalId: Int) async {
+    func deleteHealthGoal(profileId: String, healthGoalId: String) async -> Bool {
         do {
             
-            selectedHealthGoals = try await userProfileService
+            let success = try await userProfileService
                 .deleteHealthGoal(profileId: profileId, healthGoalId: healthGoalId)
-            
+            if success {
+                selectedHealthGoals.removeAll {
+                    $0.id == healthGoalId
+                }
+            }
+            return success
         } catch {
             print(error)
+            return false
         }
     }
     
@@ -96,28 +102,36 @@ final class UserProfileViewModel: ObservableObject {
         }
     }
     
-    func addDisease(profileId: String, diseaseId: Int) async {
+    func addDisease(profileId: String, diseaseId: String) async {
         do {
-            
             selectedDiseases = try await userProfileService
-                .addDisease(profileId: profileId, diseaseId: diseaseId)
-            
+                .addDisease(
+                    profileId: profileId,
+                    diseaseId: diseaseId
+                )
         } catch {
             print(error)
         }
     }
-    
-    func deleteDisease(profileId: String, diseaseId: Int) async {
+
+    func deleteDisease(profileId: String, diseaseId: String) async -> Bool {
         do {
-            
-            selectedDiseases = try await userProfileService
-                .deleteDisease(profileId: profileId, diseaseId: diseaseId)
-            
+            let success = try await userProfileService
+                .deleteDisease(
+                    profileId: profileId,
+                    diseaseId: diseaseId
+                )
+            if success {
+                selectedDiseases.removeAll {
+                    $0.id == diseaseId
+                }
+            }
+            return success
         } catch {
             print(error)
+            return false
         }
     }
-    
     // Allergies Profile
     func loadProfileAllergies(profileId: String) async {
         
@@ -131,7 +145,7 @@ final class UserProfileViewModel: ObservableObject {
         }
     }
     
-    func addAllergy(profileId: String, allergyId: Int) async {
+    func addAllergy(profileId: String, allergyId: String) async {
         do {
             
             selectedAllergies = try await userProfileService
@@ -142,14 +156,20 @@ final class UserProfileViewModel: ObservableObject {
         }
     }
     
-    func deleteAllergy(profileId: String, allergyId: Int) async {
+    func deleteAllergy(profileId: String, allergyId: String) async -> Bool {
         do {
             
-            selectedAllergies = try await userProfileService
+            let success = try await userProfileService
                 .deleteAllergy(profileId: profileId, allergyId: allergyId)
-            
+            if success {
+                selectedAllergies.removeAll {
+                    $0.id == allergyId
+                }
+            }
+            return success
         } catch {
             print(error)
+            return false
         }
     }
     
@@ -179,8 +199,14 @@ final class UserProfileViewModel: ObservableObject {
     
     func addUserProfile(firstName: String?, lastName: String?, avatar: String?) async {
         do {
-            profiles = try await userProfileService
-                .createProfile(firstName: firstName, lastName: lastName, avatar: avatar)
+            let profile = try await userProfileService
+                .createProfile(
+                    firstName: firstName,
+                    lastName: lastName,
+                    avatar: avatar
+                )
+
+            profiles.append(profile)
 
         } catch {
             print(error)
@@ -189,8 +215,14 @@ final class UserProfileViewModel: ObservableObject {
     
     func deleteProfile(profileId: String) async -> Bool {
         do {
-            profiles = try await userProfileService.deleteProfile(profileId: profileId)
-            return true
+            let success = try await userProfileService
+                        .deleteProfile(profileId: profileId)
+            if success {
+                profiles.removeAll {
+                    $0.profileId == profileId
+                }
+            }
+            return success
         } catch {
             print(error)
             return false

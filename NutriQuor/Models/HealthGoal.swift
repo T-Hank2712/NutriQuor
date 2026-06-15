@@ -8,6 +8,6 @@
 import Foundation
 
 struct HealthGoal: Identifiable, Codable {
-    let id: Int
+    let id: String
     let name: String
 }
