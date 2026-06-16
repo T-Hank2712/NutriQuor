@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct AnalystView: View {
-    let product: ProductDTO
+    let product: Product
     let onDismiss: () -> Void
 
     @Environment(\.dismiss) private var dismiss
@@ -107,7 +107,7 @@ struct AnalystView: View {
 
                         // Product name + tags
                         VStack(spacing: 10) {
-                            Text(product.productName)
+                            Text(product.productName ?? "")
                                 .font(.system(size: 26, weight: .black, design: .rounded))
                                 .foregroundStyle(.primary)
                                 .kerning(-0.4)
@@ -274,23 +274,14 @@ struct AnalystView: View {
     }
     
     private var nutritionItems: [NutrientItem] {
-        guard let nutrition = product.nutrition else { return [] }
-
-        return [
-            .init(title: "ENERGY", value: nutrition.energy, color: Color("AccentOrange"), icon: "bolt.fill"),
-            .init(title: "PROTEIN", value: nutrition.protein, color: Color("AccentPink"), icon: "flame.fill"),
-            .init(title: "FAT", value: nutrition.fat, color: Color("SuccessTeal"), icon: "drop.fill"),
-            .init(title: "SUGAR", value: nutrition.sugar, color: Color("ColorPrimary"), icon: "cube.fill"),
-            .init(title: "CARB", value: nutrition.carbohydrate, color: Color("AccentOrange"), icon: "leaf.fill"),
-            .init(title: "FIBER", value: nutrition.fiber, color: Color("SuccessTeal"), icon: "leaf.circle.fill"),
-            .init(title: "SODIUM", value: nutrition.sodium, color: Color("AccentPink"), icon: "drop.triangle.fill"),
-            .init(title: "SAT FAT", value: nutrition.saturatedFat, color: Color("WarningAmber"), icon: "flame"),
-            .init(title: "TRANS FAT", value: nutrition.transFat, color: Color("AccentPurple"), icon: "xmark.octagon.fill")
-        ]
-    }
-    
-    private var displayNutritionItems: [NutrientItem] {
-        showAllNutrition ? nutritionItems : Array(nutritionItems.prefix(6))
+        product.nutrition.map { key, value in
+            NutrientItem(
+                title: key.uppercased(),
+                value: value,
+                color: Color(.red),
+                icon: "flame"
+            )
+        }
     }
 }
 
@@ -298,9 +289,7 @@ struct AnalystView: View {
 #Preview {
     NavigationStack {
         AnalystView(
-            product: ProductDTO(
-                id: 1,
-                userId: 1,
+            product: Product(
                 productName: "Bánh quy ABC",
                 ageRange: "3+",
                 ingredients: [
@@ -312,27 +301,24 @@ struct AnalystView: View {
                     "INS 322",
                     "INS 500(ii)"
                 ],
-                nutrition: ProductDTO.Nutrition(
-                    energy: "250 kcal",
-                    protein: "12g",
-                    fat: "10g",
-                    saturatedFat: "3g",
-                    transFat: "0g",
-                    carbohydrate: "30g",
-                    sugar: "12g",
-                    fiber: "5g",
-                    sodium: "200mg"
-                ),
+                nutrition: [
+                    "energy": "250 kcal",
+                    "protein": "12g",
+                    "fat": "10g",
+                    "saturatedFat": "3g",
+                    "transFat": "0g",
+                    "carbohydrate": "30g",
+                    "sugar": "12g",
+                    "fiber": "5g",
+                    "sodium": "200mg"
+                ],
                 manufacturer: "ABC Food",
                 mfgDate: "2026-01-01",
                 expiryDate: "2027-01-01",
                 netWeight: "200 g",
                 allergen: "Gluten",
                 warning: "Nhiều đường",
-                origin: "Việt Nam",
-                createdAt: "2026-06-09T05:27:07.241790Z",
-                timeZone: "Asia/Ho_Chi_Minh",
-                createdAtLocal: Date()
+                origin: "Việt Nam"
             ),
             onDismiss: {}
         )

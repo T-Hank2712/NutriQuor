@@ -171,7 +171,7 @@ struct SearchDetailView: View {
                                                 .foregroundStyle(verdict.color)
                                         }
     
-                                        Text(effect.title)
+                                        Text(effect.name)
                                             .font(.system(size: 14, weight: .medium, design: .rounded))
                                             .foregroundStyle(.primary)
                                             .frame(maxWidth: .infinity, alignment: .leading)

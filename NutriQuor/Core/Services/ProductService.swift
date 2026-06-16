@@ -63,4 +63,16 @@ final class ProductService {
 
         return response.data.count
     }
+    
+    func createProduct(
+    ) async throws -> Product {
+        let request = try await ProductAPI.createProduct()
+
+        let response = try await APIClient.shared.request(
+            request,
+            responseType: APIResponse<Product>.self
+        )
+
+        return response.data
+    }
 }

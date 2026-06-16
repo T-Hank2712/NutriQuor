@@ -3,23 +3,49 @@ import SwiftUI
 struct HistoryView: View {
     
     @State private var selectedDate = Date()
-    @StateObject private var viewModel = ProductViewModel()
     
-    private var filteredItems: [ProductDTO] {
-        viewModel.products.sorted {
-            ($0.createdAtLocal ?? .distantPast) >
-            ($1.createdAtLocal ?? .distantPast)
-        }
+    @EnvironmentObject var appState: AppState
+    @StateObject private var viewModel = HistoryViewModel()
+    
+    private var filteredItems: [ScanHistory] {
+        viewModel.scanHistory
+            .filter {
+                Calendar.current.isDate(
+                    $0.scannedAt,
+                    inSameDayAs: selectedDate
+                )
+            }
+            .sorted {
+                $0.scannedAt > $1.scannedAt
+            }
     }
     
     var body: some View {
         NavigationStack{
             VStack(alignment: .leading) {
                 
-                Text("Lịch sử")
-                    .font(.largeTitle)
-                    .bold()
+                HStack {
+                    Text("Lịch sử")
+                        .font(.largeTitle)
+                        .bold()
+                        .foregroundStyle(Color(.colorPrimary))
+
+                    Spacer()
+
+                    Button {
+                        Task {
+                            await viewModel.createProduct()
+                        }
+                    } label: {
+                        if viewModel.isLoading {
+                            ProgressView()
+                        } else {
+                            Image(systemName: "plus.circle.fill")
+                                .font(.title2)
+                        }
+                    }
                     .foregroundStyle(Color(.colorPrimary))
+                }
                 
                 HStack {
                     Image(systemName: "calendar")
@@ -60,7 +86,7 @@ struct HistoryView: View {
 
                     if !viewModel.isLoading,
                        viewModel.errorMessage == nil,
-                       viewModel.products.isEmpty {
+                       viewModel.scanHistory.isEmpty {
 
                         Text("Chưa có lịch sử quét")
                             .font(.subheadline)
@@ -80,7 +106,7 @@ struct HistoryView: View {
                                         .frame(maxHeight: .infinity)
 
                                     Text(
-                                        item.createdAtLocal.map(formatTime) ?? "--:--"
+                                        formatTime(item.scannedAt)
                                     )
                                     .font(.caption)
                                     .foregroundColor(Color(.heading))
@@ -94,7 +120,7 @@ struct HistoryView: View {
 
                                 NavigationLink {
                                     AnalystView(
-                                        product: item,
+                                        product: item.product,
                                         onDismiss: {}
                                     )
                                 } label: {
@@ -109,12 +135,10 @@ struct HistoryView: View {
             .padding()
         }
         .task {
-            await viewModel.loadProductsByDate(date: selectedDate)
+            viewModel.updateUserId(appState.user?.id)
         }
-        .onChange(of: selectedDate) { _, newDate in
-            Task {
-                await viewModel.loadProductsByDate(date: newDate)
-            }
+        .onChange(of: appState.user?.id) { oldValue, newValue in
+            viewModel.updateUserId(newValue)
         }
     }
     
@@ -160,6 +184,7 @@ struct HistoryView: View {
     }
 }
 
-#Preview {
-    HistoryView()
-}
+//#Preview {
+//    HistoryView(viewModel: HistoryViewModel())
+//        .environmentObject(AppState())
+//}
