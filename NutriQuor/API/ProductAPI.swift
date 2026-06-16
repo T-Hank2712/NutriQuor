@@ -70,4 +70,17 @@ final class ProductAPI {
 
         return request
     }
+    
+    static func createProduct() async throws -> URLRequest {
+        guard let url = URL(
+            string: "\(AppConfig.shared.devBaseURL)/api/v1/products"
+        ) else {
+            throw URLError(.badURL)
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+
+        return request
+    }
 }

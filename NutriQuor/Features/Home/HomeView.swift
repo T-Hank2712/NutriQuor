@@ -10,11 +10,6 @@ import SwiftUI
 struct HomeView: View {
     
     @EnvironmentObject var appState: AppState
-    @StateObject private var viewModel = ProductViewModel()
-    
-    var items: [ProductDTO] {
-        viewModel.products
-    }
     
     var body: some View {
         NavigationStack {
@@ -59,7 +54,7 @@ struct HomeView: View {
                         SectionLabel(text: "THỐNG KÊ HÔM NAY")
                         
                         HStack(spacing: 14) {
-                            CountScansCard(count: viewModel.productCount)
+                            CountScansCard(count: 1)
                             IndexCard()
                         }
                     }
@@ -84,31 +79,21 @@ struct HomeView: View {
                             }
                         }
                         
-                        VStack(spacing: 12) {
-                            ForEach(items) { item in
-                                NavigationLink {
-                                    //AnalystView(nutriItem: item, onDismiss: {})
-                                } label: {
-                                    HomeHistoryItem(record: item)
-                                }
-                                .buttonStyle(.plain)
-                            }
-                        }
+//                        VStack(spacing: 12) {
+//                            ForEach(items) { item in
+//                                NavigationLink {
+//                                    //AnalystView(nutriItem: item, onDismiss: {})
+//                                } label: {
+//                                    HomeHistoryItem(record: item)
+//                                }
+//                                .buttonStyle(.plain)
+//                            }
+//                        }
                     }
                 }
                 .padding(.horizontal, 20)
                 .padding(.bottom, 32)
             }.task {
-                await withTaskGroup(of: Void.self) { group in
-                    
-                    group.addTask {
-                        await viewModel.loadProductsByDate(date: Date())
-                    }
-                    
-                    group.addTask {
-                        await viewModel.loadProductCountToday()
-                    }
-                }
             }
             .background(Color(.systemGroupedBackground))
         }
