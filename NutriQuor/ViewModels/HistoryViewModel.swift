@@ -19,13 +19,20 @@ final class HistoryViewModel: ObservableObject {
         loadScanHistory()
     }
 
-    func loadScanHistory() {
+    func loadScanHistory(for date: Date = Date()) {
         guard let userId else {
             scanHistory = []
             return
         }
 
-        scanHistory = scanHistoryManager.getAll(userId: userId)
+        scanHistory = scanHistoryManager
+            .getAll(userId: userId)
+            .filter {
+                Calendar.current.isDate(
+                    $0.scannedAt,
+                    inSameDayAs: date
+                )
+            }
     }
 
     func createProduct() async {
