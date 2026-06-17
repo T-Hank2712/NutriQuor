@@ -14,10 +14,13 @@ final class HomeViewModel: ObservableObject {
     @Published var errorMessage: String?
     @Published var scanHistory: [ScanHistory] = []
     
+    @Published var daily: SearchDTO?
+    
     @Published var todayScanCount = 0
     
     private let productService = ProductService()
     private let scanHistoryManager = ScanHistoryManager.shared
+    private let searchService = SearchService()
     
     private var userId: String?
     
@@ -48,5 +51,14 @@ final class HomeViewModel: ObservableObject {
             .filter {
                 Calendar.current.isDateInToday($0.scannedAt)
             }
+    }
+    
+    func loadDailyFeature() async {
+        do {
+            let result = try await searchService.fetchDailyFeature()
+            daily = result
+        } catch {
+            print("Error loading data:", error)
+        }
     }
 }

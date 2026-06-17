@@ -29,4 +29,14 @@ final class SearchService {
         )
         return response.data
     }
+    
+    func fetchDailyFeature() async throws -> SearchDTO{
+        let request = try SearchAPI.dailyFeatureRequest()
+        
+        let response = try await APIClient.shared.request(
+            request,
+            responseType: APIResponse<SearchDTO>.self
+        )
+        return response.data
+    }
 }

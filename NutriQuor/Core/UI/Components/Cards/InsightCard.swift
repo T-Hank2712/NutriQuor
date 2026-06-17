@@ -9,6 +9,8 @@ import SwiftUI
 
 struct InsightCard: View {
     
+    var item: SearchDTO
+    
     var body: some View {
         
         VStack(alignment: .leading, spacing: 14) {
@@ -23,16 +25,20 @@ struct InsightCard: View {
                     .foregroundColor(Color(.white))
             }
             
-            Text("Red 40 (E129)")
+            Text(
+                item.code?.isEmpty == false
+                ? "\(item.name) (\(item.code!))"
+                : item.name
+            )
                 .font(.title2)
                 .fontWeight(.bold)
                 .foregroundStyle(.white)
             
-            Text("Used in candies and dairy products. Recent studies link it to hyperactivity in children. Check for 'Allura Red' on your labels.")
+            Text(item.description ?? "")
                 .foregroundColor(.white)
             
             NavigationLink {
-                SearchDetailView(id: "1")
+                SearchDetailView(id: item.id)
             } label: {
                 Text("LEARN MORE")
                     .padding(.horizontal, 20)
@@ -56,5 +62,13 @@ struct InsightCard: View {
 }
 
 #Preview {
-    InsightCard()
+    InsightCard(
+        item: SearchDTO(
+            id: "1",
+            name: "Orange GGN",
+            code: "E111",
+            description: "Synthetic orange food coloring formerly used in beverages and confectionery. It has been banned in many countries due to safety concerns.",
+            type: "Additive"
+        )
+    )
 }

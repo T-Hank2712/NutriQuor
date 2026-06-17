@@ -62,7 +62,9 @@ struct HomeView: View {
                     // MARK: - Insight
                     VStack(alignment: .leading, spacing: 14) {
                         SectionLabel(text: "GỢI Ý CHO BẠN")
-                        InsightCard()
+                        if let daily = viewModel.daily {
+                            InsightCard(item: daily)
+                        }
                     }
                     
                     // MARK: - Recent Scans
@@ -97,6 +99,8 @@ struct HomeView: View {
                 viewModel.updateUserId(appState.user?.id)
                 viewModel.scanCountToday()
                 viewModel.loadTodayScanHistory()
+                
+                await viewModel.loadDailyFeature()
             }
             .background(Color(.systemGroupedBackground))
         }

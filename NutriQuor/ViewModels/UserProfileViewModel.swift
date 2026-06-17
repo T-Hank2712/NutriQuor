@@ -30,7 +30,8 @@ final class UserProfileViewModel: ObservableObject {
             print("Error loading data:", error)
         }
     }
-    func loadDiseases() async{
+    
+    func loadDiseases() async {
         do {
             let result = try await userProfileService.fetchDiseases()
             diseaseList = result
@@ -38,6 +39,7 @@ final class UserProfileViewModel: ObservableObject {
             print("Error loading data:", error)
         }
     }
+    
     func loadHealthGoals() async {
         do {
             let result = try await userProfileService.fetchHealthGoals()
