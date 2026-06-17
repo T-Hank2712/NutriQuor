@@ -9,13 +9,13 @@ import Foundation
 
 final class AdditiveAPIService {
     func fetchAdditives() async throws -> [Additive] {
-        let url = URL(string: "\(AppConfig.shared.devBaseURL)/api/v1/additives")!
+        let request = try AdditiveAPI.additivesRequest()
+
+        let response = try await APIClient.shared.request(
+            request,
+            responseType: APIResponse<[Additive]>.self
+        )
         
-        let (data, _) = try await URLSession.shared.data(from: url)
-
-        let decoder = JSONDecoder()
-        let additives = try decoder.decode([Additive].self, from: data)
-
-        return additives
+        return response.data
     }
 }

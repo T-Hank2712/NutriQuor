@@ -84,10 +84,11 @@ final class UserProfileViewModel: ObservableObject {
     
     func addHealthGoal(profileId: String, healthGoalId: String) async {
         do {
-            
-            selectedHealthGoals = try await userProfileService
+            let newHealthGoal = try await userProfileService
                 .addHealthGoal(profileId: profileId, healthGoalId: healthGoalId)
-            
+
+            selectedHealthGoals.append(newHealthGoal)
+
         } catch {
             print(error)
         }
@@ -125,11 +126,11 @@ final class UserProfileViewModel: ObservableObject {
     
     func addDisease(profileId: String, diseaseId: String) async {
         do {
-            selectedDiseases = try await userProfileService
-                .addDisease(
-                    profileId: profileId,
-                    diseaseId: diseaseId
-                )
+            let newDisease = try await userProfileService
+                .addDisease(profileId: profileId, diseaseId: diseaseId)
+
+            selectedDiseases.append(newDisease)
+
         } catch {
             print(error)
         }
@@ -168,10 +169,11 @@ final class UserProfileViewModel: ObservableObject {
     
     func addAllergy(profileId: String, allergyId: String) async {
         do {
-            
-            selectedAllergies = try await userProfileService
+            let newAllergy = try await userProfileService
                 .addAllergy(profileId: profileId, allergyId: allergyId)
-            
+
+            selectedAllergies.append(newAllergy)
+
         } catch {
             print(error)
         }

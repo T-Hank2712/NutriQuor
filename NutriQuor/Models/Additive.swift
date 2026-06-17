@@ -12,6 +12,6 @@ struct Additive: Identifiable, Codable {
     let key: String
     let code: String?
     let description: String?
-    let effects: [HealthEffect]
-    let found_in: [FoodCategory]
+    let effects: [HealthEffect]?
+    let found_in: [FoodCategory]?
 }

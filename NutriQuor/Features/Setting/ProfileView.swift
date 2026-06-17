@@ -301,20 +301,8 @@ struct ProfileView: View {
             ) { allergy in
                 
                 Task {
-                    await withTaskGroup(of: Void.self) { group in
-                        group.addTask {
-                            await viewModel.addAllergy(
-                                profileId: profileId,
-                                allergyId: allergy.id
-                            )
-                        }
-
-                        group.addTask {
-                            await viewModel.loadProfileAllergies(
-                                profileId: profileId
-                            )
-                        }
-                    }
+                    await viewModel.addAllergy(profileId: profileId, allergyId: allergy.id)
+                    await viewModel.loadProfileAllergies(profileId: profileId)
                 }
             }
         }
@@ -326,21 +314,8 @@ struct ProfileView: View {
             ) { disease in
                 
                 Task {
-                    
-                    await withTaskGroup(of: Void.self) { group in
-                        group.addTask {
-                            await viewModel.addDisease(
-                                profileId: profileId,
-                                diseaseId: disease.id
-                            )
-                        }
-
-                        group.addTask {
-                            await viewModel.loadProfileDiseases(
-                                profileId: profileId
-                            )
-                        }
-                    }
+                    await viewModel.addDisease(profileId: profileId, diseaseId: disease.id)
+                    await viewModel.loadProfileDiseases(profileId: profileId)
                 }
             }
         }
@@ -353,21 +328,8 @@ struct ProfileView: View {
             ) { goal in
                 
                 Task {
-                    
-                    await withTaskGroup(of: Void.self) { group in
-                        group.addTask {
-                            await viewModel.addHealthGoal(
-                                profileId: profileId,
-                                healthGoalId: goal.id
-                            )
-                        }
-
-                        group.addTask {
-                            await viewModel.loadProfileGoals(
-                                profileId: profileId
-                            )
-                        }
-                    }
+                    await viewModel.addHealthGoal(profileId: profileId, healthGoalId: goal.id)
+                    await viewModel.loadProfileGoals(profileId: profileId)
                 }
             }
         }

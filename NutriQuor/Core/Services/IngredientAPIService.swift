@@ -9,13 +9,13 @@ import Foundation
 
 final class IngredientAPIService {
     func fetchIngredients() async throws -> [Ingredient] {
-        let url = URL(string: "\(AppConfig.shared.devBaseURL)/api/v1/ingredients")!
+        let request = try IngredientAPI.ingredientsRequest()
+
+        let response = try await APIClient.shared.request(
+            request,
+            responseType: APIResponse<[Ingredient]>.self
+        )
         
-        let (data, _) = try await URLSession.shared.data(from: url)
-
-        let decoder = JSONDecoder()
-        let ingredients = try decoder.decode([Ingredient].self, from: data)
-
-        return ingredients
+        return response.data
     }
 }

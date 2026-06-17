@@ -86,20 +86,44 @@ final class APIClient {
     // MARK: - VALIDATION
     private func validate(_ response: URLResponse, _ data: Data) throws {
         guard let http = response as? HTTPURLResponse else {
+            print("❌ Invalid response type:", response)
             throw URLError(.badServerResponse)
         }
 
-        print("STATUS:", http.statusCode)
-        print(String(data: data, encoding: .utf8) ?? "")
+        print("\n================ API RESPONSE ================")
+        print("🔵 URL:", http.url?.absoluteString ?? "unknown")
+        print("🔵 Status Code:", http.statusCode)
+        print("🔵 Headers:", http.allHeaderFields)
+
+        // Try decode JSON pretty
+        if let jsonObject = try? JSONSerialization.jsonObject(with: data),
+           let prettyData = try? JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted),
+           let prettyString = String(data: prettyData, encoding: .utf8) {
+            print("🔵 Body (JSON pretty):\n", prettyString)
+        } else {
+            print("🔵 Body (raw):\n", String(data: data, encoding: .utf8) ?? "nil")
+        }
+
+        print("=============================================\n")
 
         guard 200...299 ~= http.statusCode else {
 
             if http.statusCode == 401 {
+                print("❌ Unauthorized (401) - check token or auth header")
                 throw APIError.unauthorized
             }
 
-            let message = String(data: data, encoding: .utf8) ?? "Request failed"
-            throw APIError.serverError(message)
+            // Try extract message field nếu backend trả JSON kiểu {message: ...}
+            var serverMessage = "Request failed"
+
+            if let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+               let message = json["message"] as? String {
+                serverMessage = message
+            }
+
+            print("❌ API ERROR MESSAGE:", serverMessage)
+
+            throw APIError.serverError(serverMessage)
         }
     }
 

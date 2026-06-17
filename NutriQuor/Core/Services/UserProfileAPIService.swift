@@ -59,7 +59,7 @@ final class UserProfileAPIService {
     func addHealthGoal(
         profileId: String,
         healthGoalId: String
-    ) async throws -> [HealthGoal] {
+    ) async throws -> HealthGoal {
         let request = try UserProfileAPI.addHealthGoalRequest(
             profileId: profileId,
             healthGoalId: healthGoalId
@@ -67,7 +67,7 @@ final class UserProfileAPIService {
 
         let response = try await APIClient.shared.request(
             request,
-            responseType: APIResponse<[HealthGoal]>.self
+            responseType: APIResponse<HealthGoal>.self
         )
 
         return response.data
@@ -107,7 +107,7 @@ final class UserProfileAPIService {
     func addDisease(
         profileId: String,
         diseaseId: String
-    ) async throws -> [Disease] {
+    ) async throws -> Disease {
         let request = try UserProfileAPI.addDiseaseRequest(
             profileId: profileId,
             diseaseId: diseaseId
@@ -115,7 +115,7 @@ final class UserProfileAPIService {
 
         let response = try await APIClient.shared.request(
             request,
-            responseType: APIResponse<[Disease]>.self
+            responseType: APIResponse<Disease>.self
         )
 
         return response.data
@@ -155,7 +155,7 @@ final class UserProfileAPIService {
     func addAllergy(
         profileId: String,
         allergyId: String
-    ) async throws -> [Allergy] {
+    ) async throws -> Allergy {
         let request = try UserProfileAPI.addAllergyRequest(
             profileId: profileId,
             allergyId: allergyId
@@ -163,7 +163,7 @@ final class UserProfileAPIService {
 
         let response = try await APIClient.shared.request(
             request,
-            responseType: APIResponse<[Allergy]>.self
+            responseType: APIResponse<Allergy>.self
         )
 
         return response.data
