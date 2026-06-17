@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct HomeHistoryItem: View {
-    let record: ProductDTO
+    let record: ScanHistory
 
 //    private var scoreColor: Color {
 //        switch record.score.lowercased() {
@@ -43,7 +43,7 @@ struct HomeHistoryItem: View {
 
             // Info
             VStack(alignment: .leading, spacing: 5) {
-                Text(record.productName)
+                Text(record.product.productName ?? "")
                     .font(.system(size: 15, weight: .semibold, design: .rounded))
                     .foregroundStyle(.primary)
                     .lineLimit(1)
@@ -52,12 +52,17 @@ struct HomeHistoryItem: View {
                     Image(systemName: "exclamationmark.triangle.fill")
                         .font(.system(size: 10))
                         .foregroundStyle(Color("ColorPrimary"))
-                    Text(record.warning ?? "")
+                    Text(record.product.warning ?? "")
                         .font(.system(size: 12, weight: .medium))
                         .foregroundStyle(.secondary)
                 }
 
-                Text(record.createdAtLocal?.formatted(date: .abbreviated, time: .shortened) ?? "")
+                Text(
+                    record.scannedAt.formatted(
+                        date: .omitted,
+                        time: .shortened
+                    )
+                )
                     .font(.system(size: 11))
                     .foregroundStyle(.tertiary)
             }
@@ -87,41 +92,31 @@ struct HomeHistoryItem: View {
 
 #Preview {
     HomeHistoryItem(
-        record: ProductDTO(
-            id: 1,
-            userId: 1,
-            productName: "Bánh quy ABC",
-            ageRange: "3+",
-            ingredients: [
-                "Bột mì",
-                "Đường",
-                "Dầu thực vật"
-            ],
-            additive: [
-                "INS 322",
-                "INS 500(ii)"
-            ],
-            nutrition: ProductDTO.Nutrition(
-                energy: "250 kcal",
-                protein: "12g",
-                fat: "10g",
-                saturatedFat: "3g",
-                transFat: "0g",
-                carbohydrate: "30g",
-                sugar: "12g",
-                fiber: "5g",
-                sodium: "200mg"
-            ),
-            manufacturer: "ABC Food",
-            mfgDate: "2026-01-01",
-            expiryDate: "2027-01-01",
-            netWeight: "200 g",
-            allergen: "Gluten",
-            warning: "Nhiều đường",
-            origin: "Việt Nam",
-            createdAt: "2026-06-09T05:27:07.241790Z",
-            timeZone: "Asia/Ho_Chi_Minh",
-            createdAtLocal: Date()
+        record: ScanHistory(
+            id: UUID(),
+            scannedAt: Date(),
+            product: Product(
+                productName: "Nestlé Milo",
+                ageRange: "4+",
+                ingredients: [
+                    "Milk powder",
+                    "Cocoa powder"
+                ],
+                additive: [
+                    "INS 322"
+                ],
+                nutrition: [
+                    "energy": "420 kcal",
+                    "protein": "14 g"
+                ],
+                manufacturer: "Nestlé Vietnam",
+                mfgDate: "2026-01-15",
+                expiryDate: "2027-01-15",
+                netWeight: "400g",
+                allergen: "Contains milk",
+                warning: "Store in a cool dry place",
+                origin: "Vietnam"
+            )
         )
     )
 }

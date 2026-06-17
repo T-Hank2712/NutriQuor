@@ -56,6 +56,15 @@ final class ScanHistoryManager {
     func clear(userId: String) {
         UserDefaults.standard.removeObject(forKey: key(for: userId))
     }
+    
+    // MARK: - Count
+    func count(on date: Date, userId: String) -> Int {
+        let histories = getAll(userId: userId)
+
+        return histories.filter {
+            Calendar.current.isDate($0.scannedAt, inSameDayAs: date)
+        }.count
+    }
 
     // MARK: - Private save helper
     private func save(_ histories: [ScanHistory], userId: String) {
@@ -63,4 +72,5 @@ final class ScanHistoryManager {
             UserDefaults.standard.set(data, forKey: key(for: userId))
         }
     }
+    
 }

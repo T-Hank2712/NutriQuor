@@ -10,7 +10,7 @@ import SwiftUI
 struct HomeView: View {
     
     @EnvironmentObject var appState: AppState
-    
+    @StateObject private var viewModel = HomeViewModel()
     var body: some View {
         NavigationStack {
             ScrollView(showsIndicators: false) {
@@ -54,7 +54,7 @@ struct HomeView: View {
                         SectionLabel(text: "THỐNG KÊ HÔM NAY")
                         
                         HStack(spacing: 14) {
-                            CountScansCard(count: 1)
+                            CountScansCard(count: viewModel.todayScanCount)
                             IndexCard()
                         }
                     }
@@ -79,21 +79,24 @@ struct HomeView: View {
                             }
                         }
                         
-//                        VStack(spacing: 12) {
-//                            ForEach(items) { item in
-//                                NavigationLink {
-//                                    //AnalystView(nutriItem: item, onDismiss: {})
-//                                } label: {
-//                                    HomeHistoryItem(record: item)
-//                                }
-//                                .buttonStyle(.plain)
-//                            }
-//                        }
+                        VStack(spacing: 12) {
+                            ForEach(viewModel.scanHistory) { item in
+                                NavigationLink {
+                                    AnalystView(product: item.product, onDismiss: {})
+                                } label: {
+                                    HomeHistoryItem(record: item)
+                                }
+                                .buttonStyle(.plain)
+                            }
+                        }
                     }
                 }
                 .padding(.horizontal, 20)
                 .padding(.bottom, 32)
             }.task {
+                viewModel.updateUserId(appState.user?.id)
+                viewModel.scanCountToday()
+                viewModel.loadTodayScanHistory()
             }
             .background(Color(.systemGroupedBackground))
         }
