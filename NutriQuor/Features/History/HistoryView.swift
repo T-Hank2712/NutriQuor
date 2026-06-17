@@ -7,19 +7,6 @@ struct HistoryView: View {
     @EnvironmentObject var appState: AppState
     @StateObject private var viewModel = HistoryViewModel()
     
-    private var filteredItems: [ScanHistory] {
-        viewModel.scanHistory
-            .filter {
-                Calendar.current.isDate(
-                    $0.scannedAt,
-                    inSameDayAs: selectedDate
-                )
-            }
-            .sorted {
-                $0.scannedAt > $1.scannedAt
-            }
-    }
-    
     var body: some View {
         NavigationStack{
             VStack(alignment: .leading) {
@@ -96,7 +83,7 @@ struct HistoryView: View {
                     }
                     
                     LazyVStack(spacing: 24) {
-                        ForEach(filteredItems) { item in
+                        ForEach(viewModel.scanHistory) { item in
                             HStack(alignment: .top, spacing: 16) {
 
                                 VStack {
@@ -139,6 +126,9 @@ struct HistoryView: View {
         }
         .onChange(of: appState.user?.id) { oldValue, newValue in
             viewModel.updateUserId(newValue)
+        }
+        .onChange(of: selectedDate) { _, newDate in
+            viewModel.loadScanHistory(for: newDate)
         }
     }
     
