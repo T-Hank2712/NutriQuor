@@ -35,34 +35,7 @@ struct SearchView: View {
                     .padding(.top, 8)
 
                     // MARK: - Search Bar
-                    HStack(spacing: 12) {
-
-                        SearchBar(text: $viewModel.query)
-
-                        if !viewModel.query.isEmpty {
-                            Button {
-                                viewModel.query = ""
-                            } label: {
-                                Image(systemName: "xmark.circle.fill")
-                                    .font(.system(size: 16))
-                                    .foregroundStyle(.secondary)
-                            }
-                        }
-                    }
-                    .background(
-                        RoundedRectangle(cornerRadius: 16)
-                            .fill(Color(.secondarySystemBackground))
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 16)
-                                    .stroke(
-                                        viewModel.query.isEmpty
-                                            ? Color.clear
-                                            : Color("ColorPrimary").opacity(0.4),
-                                        lineWidth: 1.5
-                                    )
-                            )
-                    )
-                    .animation(.easeInOut(duration: 0.2), value: viewModel.query.isEmpty)
+                    SearchBar(text: $viewModel.query)
 
                     // MARK: - Mode Switch
                     if viewModel.isSearching {

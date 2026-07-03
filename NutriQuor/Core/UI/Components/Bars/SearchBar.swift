@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// SearchBar.swift - thêm binding isFocused hoặc dùng text để detect
 struct SearchBar: View {
     @Binding var text: String
     @FocusState private var isFocused: Bool
@@ -14,7 +15,6 @@ struct SearchBar: View {
 
     var body: some View {
         HStack(spacing: 8) {
-
             Image(systemName: "magnifyingglass")
                 .foregroundColor(.secondary)
 
@@ -48,9 +48,15 @@ struct SearchBar: View {
         )
         .overlay(
             RoundedRectangle(cornerRadius: .cardRadius)
-                .stroke(Color.white.opacity(0.3), lineWidth: 1)
+                .stroke(
+                    text.isEmpty
+                        ? Color.clear
+                        : Color("ColorPrimary").opacity(0.4),
+                    lineWidth: 1.5
+                )
         )
         .shadow(color: .black.opacity(0.1), radius: .cardRadius, y: 3)
+        .animation(.easeInOut(duration: 0.2), value: text.isEmpty)
         .onTapGesture {
             isFocused = true
         }

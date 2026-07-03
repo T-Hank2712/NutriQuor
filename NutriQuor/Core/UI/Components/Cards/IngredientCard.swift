@@ -37,7 +37,6 @@ enum IngredientStatus {
 
 struct IngredientCard: View {
     var title: String
-    var description: String
     var status: IngredientStatus
 
     var body: some View {
@@ -55,16 +54,9 @@ struct IngredientCard: View {
             .padding(.top, 2)
 
             // Text content
-            VStack(alignment: .leading, spacing: 5) {
-                Text(title)
-                    .font(.system(size: 15, weight: .semibold))
-                    .foregroundColor(.primary)
-
-                Text(description)
-                    .font(.system(size: 13))
-                    .foregroundColor(.secondary)
-                    .lineSpacing(3)
-            }
+            Text(title)
+                .font(.system(size: 15, weight: .semibold))
+                .foregroundColor(.primary)
 
             Spacer()
 
@@ -102,17 +94,14 @@ struct IngredientCard: View {
     VStack(spacing: 12) {
         IngredientCard(
             title: "Spring Water",
-            description: "Natural source of hydration and essential minerals for daily metabolic functions.",
             status: .safe
         )
         IngredientCard(
             title: "Citric Acid",
-            description: "Common preservative and acidity regulator. Moderate consumption is generally acceptable.",
             status: .moderate
         )
         IngredientCard(
             title: "Sodium Benzoate",
-            description: "Synthetic preservative that may cause adverse reactions when combined with ascorbic acid.",
             status: .caution
         )
     }
