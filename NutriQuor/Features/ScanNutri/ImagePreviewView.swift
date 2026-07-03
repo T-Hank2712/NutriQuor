@@ -9,9 +9,12 @@ struct ImagePreviewView: View {
     
     let croppedImage: UIImage
     @Environment(\.dismiss) var dismiss
+    @EnvironmentObject private var appState: AppState
+    @StateObject private var viewModel = ScanNutriViewModel()
     
     @State private var selectedMode = "Tôi"
     @State private var showDropdown = false
+    @State private var showAnalyzedProduct = false
     
     let modes = ["Tôi","Anh", "Chị", "Ba", "Mẹ"]
     
@@ -93,16 +96,32 @@ struct ImagePreviewView: View {
                     }
                     
                     Button {
-                        print("Phân tích ảnh...")
+                        Task {
+                            await viewModel.analyze(
+                                image: croppedImage,
+                                userId: appState.user?.id
+                            )
+
+                            if viewModel.analyzedProduct != nil {
+                                showAnalyzedProduct = true
+                            }
+                        }
                     } label: {
                         VStack(spacing: 8) {
-                            Image(systemName: "checkmark.circle.fill")
-                                .font(.system(size: 50))
+                            if viewModel.isLoading {
+                                ProgressView()
+                                    .tint(.green)
+                                    .frame(width: 50, height: 50)
+                            } else {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .font(.system(size: 50))
+                            }
                             Text("Phân tích")
                                 .font(.caption)
                         }
                         .foregroundColor(.green)
                     }
+                    .disabled(viewModel.isLoading)
                     
                     Button {
                         saveImageToPhotoLibrary(croppedImage)
@@ -139,6 +158,22 @@ struct ImagePreviewView: View {
             }
         }
         .navigationBarHidden(true)
+        .navigationDestination(isPresented: $showAnalyzedProduct) {
+            if let product = viewModel.analyzedProduct {
+                AnalystView(product: product, onDismiss: {})
+            }
+        }
+        .alert(
+            "Không thể phân tích ảnh",
+            isPresented: Binding(
+                get: { viewModel.errorMessage != nil },
+                set: { if !$0 { viewModel.errorMessage = nil } }
+            )
+        ) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(viewModel.errorMessage ?? "")
+        }
     }
     
     private func saveImageToPhotoLibrary(_ image: UIImage) {

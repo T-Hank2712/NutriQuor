@@ -107,14 +107,14 @@ struct AnalystView: View {
 
                         // Product name + tags
                         VStack(spacing: 10) {
-                            Text(product.productName ?? "")
+                            Text(product.productName ?? "Kết quả phân tích")
                                 .font(.system(size: 26, weight: .black, design: .rounded))
                                 .foregroundStyle(.primary)
                                 .kerning(-0.4)
                                 .multilineTextAlignment(.center)
 
                             HStack(spacing: 8) {
-                                ForEach(["Drink", "Healthy"], id: \.self) { tag in
+                                ForEach(productTags, id: \.self) { tag in
                                     Text(tag)
                                         .font(.system(size: 12, weight: .bold, design: .rounded))
                                         .foregroundStyle(Color("AccentPinkLight"))
@@ -175,18 +175,33 @@ struct AnalystView: View {
                         // MARK: - Alerts
                         AnalystSection(title: "Cảnh báo", icon: "exclamationmark.triangle.fill", iconColor: Color("WarningAmber")) {
                             VStack(spacing: 10) {
-                                ModernAlertRow(
-                                    icon: "exclamationmark.triangle.fill",
-                                    color: Color("WarningAmber"),
-                                    title: "Cảnh báo",
-                                    description: "Không dành cho trẻ em dưới 3 tuổi."
-                                )
-                                ModernAlertRow(
-                                    icon: "allergens",
-                                    color: Color("AccentPink"),
-                                    title: "Dị ứng",
-                                    description: "Sản phẩm có chứa Sữa."
-                                )
+                                if let warning = product.warning, !warning.isEmpty {
+                                    ModernAlertRow(
+                                        icon: "exclamationmark.triangle.fill",
+                                        color: Color("WarningAmber"),
+                                        title: "Cảnh báo",
+                                        description: warning
+                                    )
+                                }
+
+                                if let allergen = product.allergen, !allergen.isEmpty {
+                                    ModernAlertRow(
+                                        icon: "allergens",
+                                        color: Color("AccentPink"),
+                                        title: "Dị ứng",
+                                        description: allergen
+                                    )
+                                }
+
+                                if (product.warning?.isEmpty ?? true),
+                                   (product.allergen?.isEmpty ?? true) {
+                                    ModernAlertRow(
+                                        icon: "checkmark.shield.fill",
+                                        color: Color("SuccessTeal"),
+                                        title: "Không có cảnh báo",
+                                        description: "Chưa phát hiện cảnh báo từ kết quả phân tích."
+                                    )
+                                }
                             }
                         }
 
@@ -196,15 +211,15 @@ struct AnalystView: View {
                                 HStack(spacing: 12) {
                                     ModernContainCard(
                                         title: "Thành phần",
-                                        good: "6 Tốt",
-                                        bad: "2 Hạn chế",
+                                        good: "\(product.ingredients.count) mục",
+                                        bad: "Từ nhãn sản phẩm",
                                         goodColor: Color("SuccessTeal"),
                                         badColor: Color("WarningAmber")
                                     )
                                     ModernContainCard(
                                         title: "Phụ gia",
                                         good: "",
-                                        bad: "6 Phụ gia",
+                                        bad: "\(product.additive.count) phụ gia",
                                         goodColor: Color("SuccessTeal"),
                                         badColor: Color("AccentPink")
                                     )
@@ -231,6 +246,16 @@ struct AnalystView: View {
                                                     .stroke(Color("ColorPrimary").opacity(0.25), lineWidth: 1.5)
                                             )
                                     )
+                                }
+                            }
+                        }
+
+                        if !detailRows.isEmpty {
+                            AnalystSection(title: "Thông tin sản phẩm", icon: "info.circle.fill", iconColor: Color("InfoBlue")) {
+                                VStack(spacing: 10) {
+                                    ForEach(detailRows, id: \.title) { row in
+                                        ProductInfoRow(title: row.title, value: row.value)
+                                    }
                                 }
                             }
                         }
@@ -274,14 +299,105 @@ struct AnalystView: View {
     }
     
     private var nutritionItems: [NutrientItem] {
-        product.nutrition.map { key, value in
+        product.nutrition
+            .sorted { $0.key < $1.key }
+            .map { key, value in
             NutrientItem(
-                title: key.uppercased(),
+                title: nutritionTitle(for: key),
                 value: value,
-                color: Color(.red),
-                icon: "flame"
+                color: nutritionColor(for: key),
+                icon: nutritionIcon(for: key)
             )
         }
+    }
+
+    private var productTags: [String] {
+        [
+            product.netWeight,
+            product.origin,
+            product.ageRange
+        ].compactMap { value in
+            guard let value, !value.isEmpty else { return nil }
+            return value
+        }
+    }
+
+    private var detailRows: [(title: String, value: String)] {
+        [
+            ("Nhà sản xuất", product.manufacturer),
+            ("Ngày sản xuất", product.mfgDate),
+            ("Hạn sử dụng", product.expiryDate),
+            ("Khối lượng", product.netWeight),
+            ("Xuất xứ", product.origin)
+        ].compactMap { title, value in
+            guard let value, !value.isEmpty else { return nil }
+            return (title, value)
+        }
+    }
+
+    private func nutritionTitle(for key: String) -> String {
+        switch key {
+        case "energy": return "Năng lượng"
+        case "protein": return "Protein"
+        case "carbohydrate": return "Carb"
+        case "sugars", "sugar": return "Đường"
+        case "fat": return "Chất béo"
+        case "saturated_fat", "saturatedFat": return "Béo bão hòa"
+        case "sodium": return "Natri"
+        default:
+            return key
+                .replacingOccurrences(of: "_", with: " ")
+                .capitalized
+        }
+    }
+
+    private func nutritionIcon(for key: String) -> String {
+        switch key {
+        case "energy": return "flame.fill"
+        case "protein": return "bolt.heart.fill"
+        case "carbohydrate": return "leaf.fill"
+        case "sugars", "sugar": return "cube.fill"
+        case "fat", "saturated_fat", "saturatedFat": return "drop.fill"
+        case "sodium": return "aqi.medium"
+        default: return "chart.bar.fill"
+        }
+    }
+
+    private func nutritionColor(for key: String) -> Color {
+        switch key {
+        case "energy": return Color("AccentOrange")
+        case "protein": return Color("SuccessTeal")
+        case "carbohydrate": return Color("ColorPrimary")
+        case "sugars", "sugar": return Color("AccentPink")
+        case "fat", "saturated_fat", "saturatedFat": return Color("WarningAmber")
+        case "sodium": return Color("InfoBlue")
+        default: return Color("AccentPurple")
+        }
+    }
+}
+
+private struct ProductInfoRow: View {
+    let title: String
+    let value: String
+
+    var body: some View {
+        HStack(alignment: .top, spacing: 12) {
+            Text(title)
+                .font(.system(size: 13, weight: .semibold))
+                .foregroundStyle(.secondary)
+                .frame(width: 110, alignment: .leading)
+
+            Text(value)
+                .font(.system(size: 14, weight: .medium))
+                .foregroundStyle(.primary)
+                .multilineTextAlignment(.leading)
+                .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .padding(12)
+        .background(
+            RoundedRectangle(cornerRadius: 14)
+                .fill(Color(.secondarySystemGroupedBackground))
+        )
     }
 }
 

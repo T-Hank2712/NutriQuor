@@ -35,4 +35,49 @@ struct Product: Codable {
         case warning
         case origin
     }
+
+    init(
+        productName: String?,
+        ageRange: String?,
+        ingredients: [String],
+        additive: [String],
+        nutrition: [String: String],
+        manufacturer: String?,
+        mfgDate: String?,
+        expiryDate: String?,
+        netWeight: String?,
+        allergen: String?,
+        warning: String?,
+        origin: String?
+    ) {
+        self.productName = productName
+        self.ageRange = ageRange
+        self.ingredients = ingredients
+        self.additive = additive
+        self.nutrition = nutrition
+        self.manufacturer = manufacturer
+        self.mfgDate = mfgDate
+        self.expiryDate = expiryDate
+        self.netWeight = netWeight
+        self.allergen = allergen
+        self.warning = warning
+        self.origin = origin
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        productName = try container.decodeIfPresent(String.self, forKey: .productName)
+        ageRange = try container.decodeIfPresent(String.self, forKey: .ageRange)
+        ingredients = try container.decodeIfPresent([String].self, forKey: .ingredients) ?? []
+        additive = try container.decodeIfPresent([String].self, forKey: .additive) ?? []
+        nutrition = try container.decodeIfPresent([String: String].self, forKey: .nutrition) ?? [:]
+        manufacturer = try container.decodeIfPresent(String.self, forKey: .manufacturer)
+        mfgDate = try container.decodeIfPresent(String.self, forKey: .mfgDate)
+        expiryDate = try container.decodeIfPresent(String.self, forKey: .expiryDate)
+        netWeight = try container.decodeIfPresent(String.self, forKey: .netWeight)
+        allergen = try container.decodeIfPresent(String.self, forKey: .allergen)
+        warning = try container.decodeIfPresent(String.self, forKey: .warning)
+        origin = try container.decodeIfPresent(String.self, forKey: .origin)
+    }
 }

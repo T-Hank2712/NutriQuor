@@ -13,6 +13,7 @@ struct CameraView: View {
     @State private var croppedImage: UIImage?
     @State private var cutoutRect: CGRect = .zero
     @State private var showImagePreview = false
+    @State private var showPhotoLibrary = false
     @Environment(\.dismiss) var dismiss
     
     let frameHeight: CGFloat = 550
@@ -125,10 +126,18 @@ struct CameraView: View {
                     
                     Spacer()
                     
-                    BottomControlCamera(onCapture: {
+                    BottomControlCamera(onPickImage: {
+                        showPhotoLibrary = true
+                    }, onCapture: {
                         camera.takePhoto()
                     })
                     .padding(.horizontal, 70)
+                }
+            }
+            .sheet(isPresented: $showPhotoLibrary) {
+                ImagePicker(sourceType: .photoLibrary) { image in
+                    croppedImage = image.fixedOrientation()
+                    showImagePreview = true
                 }
             }
             .navigationDestination(isPresented: $showImagePreview) {
@@ -218,5 +227,4 @@ struct CameraView: View {
 #Preview {
     CameraView()
 }
-
 

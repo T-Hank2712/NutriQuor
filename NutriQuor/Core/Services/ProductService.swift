@@ -1,4 +1,5 @@
 import Foundation
+import UIKit
 
 final class ProductService {
 
@@ -64,8 +65,7 @@ final class ProductService {
         return response.data.count
     }
     
-    func createProduct(
-    ) async throws -> Product {
+    func createProduct() async throws -> Product {
         let request = try await ProductAPI.createProduct()
 
         let response = try await APIClient.shared.request(
@@ -74,5 +74,26 @@ final class ProductService {
         )
 
         return response.data
+    }
+
+    func analyzeProduct(image: UIImage) async throws -> Product {
+        let request = try await ProductAPI.analyzeProductRequest(image: image)
+
+        let response = try await APIClient.shared.request(
+            request,
+            responseType: AnalyzeProductResponse.self
+        )
+
+        return response.data
+    }
+}
+
+private struct AnalyzeProductResponse: Decodable {
+    let s3Key: String
+    let data: Product
+
+    enum CodingKeys: String, CodingKey {
+        case s3Key = "s3_key"
+        case data
     }
 }

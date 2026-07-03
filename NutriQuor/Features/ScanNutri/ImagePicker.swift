@@ -2,13 +2,18 @@ import SwiftUI
 import UIKit
 
 struct ImagePicker: UIViewControllerRepresentable {
+    var sourceType: UIImagePickerController.SourceType = .photoLibrary
     var onImagePicked: (UIImage) -> Void
 
     func makeUIViewController(context: Context) -> UIImagePickerController {
         let picker = UIImagePickerController()
-        picker.sourceType = .camera
+        picker.sourceType = sourceType
         picker.delegate = context.coordinator
-        picker.cameraCaptureMode = .photo
+
+        if sourceType == .camera {
+            picker.cameraCaptureMode = .photo
+        }
+
         return picker
     }
 
