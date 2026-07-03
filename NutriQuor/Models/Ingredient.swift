@@ -11,6 +11,6 @@ struct Ingredient: Identifiable, Codable {
     let name: String
     let key: String
     let description: String?
-    let effects: [HealthEffect]
-    let found_in: [FoodCategory]
+    let effects: [HealthEffect]?
+    let found_in: [FoodCategory]?
 }

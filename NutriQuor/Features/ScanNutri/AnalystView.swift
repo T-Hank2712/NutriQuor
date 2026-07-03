@@ -211,7 +211,7 @@ struct AnalystView: View {
                                 }
 
                                 NavigationLink {
-                                    ContainListView()
+                                    ContainListView(ingredients: product.ingredients, additives: product.additive)
                                 } label: {
                                     HStack(spacing: 8) {
                                         Image(systemName: "ellipsis.circle.fill")

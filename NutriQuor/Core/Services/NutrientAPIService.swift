@@ -9,13 +9,13 @@ import Foundation
 
 final class NutrientAPIService {
     func fetchNutrients() async throws -> [Nutrient] {
-        let url = URL(string: "\(AppConfig.shared.devBaseURL)/api/v1/nutrients")!
+        let request = try NutrientAPI.nutrientsRequest()
+
+        let response = try await APIClient.shared.request(
+            request,
+            responseType: APIResponse<[Nutrient]>.self
+        )
         
-        let (data, _) = try await URLSession.shared.data(from: url)
-
-        let decoder = JSONDecoder()
-        let nutrients = try decoder.decode([Nutrient].self, from: data)
-
-        return nutrients
+        return response.data
     }
 }
