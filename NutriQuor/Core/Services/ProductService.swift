@@ -66,7 +66,7 @@ final class ProductService {
     }
     
     func createProduct() async throws -> Product {
-        let request = try await ProductAPI.createProduct()
+        let request = try ProductAPI.createProduct()
 
         let response = try await APIClient.shared.request(
             request,
@@ -77,7 +77,7 @@ final class ProductService {
     }
 
     func analyzeProduct(image: UIImage) async throws -> Product {
-        let request = try await ProductAPI.analyzeProductRequest(image: image)
+        let request = try ProductAPI.analyzeProductRequest(image: image)
 
         let response = try await APIClient.shared.request(
             request,

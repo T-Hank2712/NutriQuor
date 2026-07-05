@@ -10,18 +10,20 @@ import SwiftUI
 struct ModernProductCard: View {
     let name: String
     let tags: [String]
+    var description: String? = nil
+    var type: String? = nil
 
     var body: some View {
         HStack(spacing: 14) {
             // Icon
             ZStack {
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(Color("ColorPrimary").opacity(0.1))
+                    .fill(cardColor.opacity(0.1))
                     .frame(width: 46, height: 46)
 
-                Image(systemName: "leaf.fill")
+                Image(systemName: cardIcon)
                     .font(.system(size: 18, weight: .semibold))
-                    .foregroundStyle(Color("ColorPrimary"))
+                    .foregroundStyle(cardColor)
             }
 
             // Info
@@ -30,6 +32,13 @@ struct ModernProductCard: View {
                     .font(.system(size: 15, weight: .semibold, design: .rounded))
                     .foregroundStyle(.primary)
                     .lineLimit(1)
+
+                if let description, !description.isEmpty {
+                    Text(description)
+                        .font(.system(size: 12, weight: .medium))
+                        .foregroundStyle(.secondary)
+                        .lineLimit(2)
+                }
 
                 if !tags.isEmpty {
                     HStack(spacing: 6) {
@@ -61,11 +70,29 @@ struct ModernProductCard: View {
                 .shadow(color: .black.opacity(0.05), radius: 10, y: 3)
         )
     }
+
+    private var cardIcon: String {
+        switch type {
+        case "ingredient": return "leaf.fill"
+        case "nutrient": return "chart.bar.fill"
+        case "additive": return "plus.square.fill"
+        default: return "sparkle.magnifyingglass"
+        }
+    }
+
+    private var cardColor: Color {
+        switch type {
+        case "ingredient": return Color("SuccessTeal")
+        case "nutrient": return Color("ColorPrimary")
+        case "additive": return Color("AccentPink")
+        default: return Color("AccentPurple")
+        }
+    }
 }
 
 #Preview {
     VStack(spacing: 16) {
-        ModernProductCard(name: "Aspartame", tags: ["E951", "Chất tạo ngọt"])
+        ModernProductCard(name: "Aspartame", tags: ["E951", "Chất tạo ngọt"], description: "Phụ gia tạo ngọt thường gặp trong thực phẩm.", type: "additive")
         ModernProductCard(name: "Vitamin C", tags: [])
     }
     .padding()

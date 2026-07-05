@@ -72,7 +72,7 @@ final class ProductAPI {
         return request
     }
     
-    static func createProduct() async throws -> URLRequest {
+    static func createProduct() throws -> URLRequest {
         guard let url = URL(
             string: "\(AppConfig.shared.devBaseURL)/api/v1/products"
         ) else {
@@ -85,7 +85,7 @@ final class ProductAPI {
         return request
     }
 
-    static func analyzeProductRequest(image: UIImage) async throws -> URLRequest {
+    static func analyzeProductRequest(image: UIImage) throws -> URLRequest {
         guard let url = URL(
             string: "\(AppConfig.shared.devBaseURL)/api/v1/products/products/extract"
         ) else {

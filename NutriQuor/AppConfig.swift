@@ -12,5 +12,7 @@ final class AppConfig {
 
     let devBaseURL = "http://localhost:8000"
 
+//    let devBaseURL = "https://api.dvxuanbac.com"
+
     private init() {}
 }

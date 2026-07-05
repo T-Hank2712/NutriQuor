@@ -10,11 +10,12 @@ import Foundation
 extension Nutrient {
     func toSearchDTO() -> SearchDTO {
         return SearchDTO(
-            id: "nutrient-\(self.id)",
+            id: self.id,
             name: self.name,
             code: nil,
             description: self.description,
-            type: "nutrient"
+            type: "nutrient",
+            sections: self.sections
         )
     }
 }
@@ -22,11 +23,12 @@ extension Nutrient {
 extension Ingredient {
     func toSearchDTO() -> SearchDTO {
         return SearchDTO(
-            id: "ingredient-\(self.id)",
+            id: self.id,
             name: self.name,
             code: nil,
             description: self.description,
-            type: "ingredient"
+            type: "ingredient",
+            sections: self.sections
         )
     }
 }
@@ -34,12 +36,12 @@ extension Ingredient {
 extension Additive {
     func toSearchDTO() -> SearchDTO {
         return SearchDTO(
-            id: "ingredient-\(self.id)",
+            id: self.id,
             name: self.name,
             code: self.code,
             description: self.description,
-            type: "additive"
+            type: "additive",
+            sections: self.sections
         )
     }
 }
-

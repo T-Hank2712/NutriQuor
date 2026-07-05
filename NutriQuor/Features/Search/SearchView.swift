@@ -106,7 +106,9 @@ struct SearchView: View {
                             } label: {
                                 ModernProductCard(
                                     name: item.name,
-                                    tags: [item.code, item.type].compactMap { $0 }
+                                    tags: [item.code, item.type.displayTypeName].compactMap { $0 },
+                                    description: item.description,
+                                    type: item.type
                                 )
                             }
                             .buttonStyle(.plain)
@@ -140,7 +142,9 @@ struct SearchView: View {
                         } label: {
                             ModernProductCard(
                                 name: item.name,
-                                tags: [item.code, item.type].compactMap { $0 }
+                                tags: [item.code, item.type.displayTypeName].compactMap { $0 },
+                                description: item.description,
+                                type: item.type
                             )
                         }
                         .buttonStyle(.plain)
@@ -153,4 +157,15 @@ struct SearchView: View {
 
 #Preview {
     SearchView()
+}
+
+private extension String {
+    var displayTypeName: String {
+        switch self {
+        case "ingredient": return "Thành phần"
+        case "nutrient": return "Dinh dưỡng"
+        case "additive": return "Phụ gia"
+        default: return self
+        }
+    }
 }
