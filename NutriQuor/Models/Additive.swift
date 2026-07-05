@@ -13,11 +13,9 @@ struct Additive: Identifiable, Codable {
     let code: String?
     let description: String?
     let sections: [KnowledgeSection]
-    let effects: [HealthEffect]?
-    let found_in: [FoodCategory]?
 
     enum CodingKeys: String, CodingKey {
-        case id, name, key, code, description, sections, effects, found_in
+        case id, name, key, code, description, sections
     }
 
     init(
@@ -26,9 +24,7 @@ struct Additive: Identifiable, Codable {
         key: String,
         code: String?,
         description: String?,
-        sections: [KnowledgeSection] = [],
-        effects: [HealthEffect]?,
-        found_in: [FoodCategory]?
+        sections: [KnowledgeSection] = []
     ) {
         self.id = id
         self.name = name
@@ -36,8 +32,6 @@ struct Additive: Identifiable, Codable {
         self.code = code
         self.description = description
         self.sections = sections
-        self.effects = effects
-        self.found_in = found_in
     }
 
     init(from decoder: Decoder) throws {
@@ -48,8 +42,6 @@ struct Additive: Identifiable, Codable {
         key = try container.decodeIfPresent(String.self, forKey: .key) ?? id
         code = try container.decodeIfPresent(String.self, forKey: .code)
         sections = try container.decodeIfPresent([KnowledgeSection].self, forKey: .sections) ?? []
-        effects = try container.decodeIfPresent([HealthEffect].self, forKey: .effects)
-        found_in = try container.decodeIfPresent([FoodCategory].self, forKey: .found_in)
 
         let overview = sections.first { $0.sectionType == "overview" }?.content
         description = try container.decodeIfPresent(String.self, forKey: .description) ?? overview

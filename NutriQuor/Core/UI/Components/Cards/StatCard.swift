@@ -41,5 +41,5 @@ struct StatCard: View {
 }
 
 #Preview {
-    StatCard(nutri: Nutrient(id: "1", name: "Calories", key: "calo", description: "100", effects: [], found_in: []), icon: "flame", iconColor: .red)
+    StatCard(nutri: Nutrient(id: "1", name: "Calories", key: "calo", description: "100"), icon: "flame", iconColor: .red)
 }

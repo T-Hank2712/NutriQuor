@@ -26,12 +26,8 @@ struct SearchDetailDTO: Decodable {
     let description: String?
     let sections: [KnowledgeSection]
 
-    let effects: [HealthEffect]?
-    let foundIn: [FoodCategory]?
-
     enum CodingKeys: String, CodingKey {
-        case id, name, type, code, description, sections, effects
-        case foundIn = "categories"
+        case id, name, type, code, description, sections
     }
 
     init(from decoder: Decoder) throws {
@@ -42,8 +38,6 @@ struct SearchDetailDTO: Decodable {
         type = try container.decodeIfPresent(String.self, forKey: .type) ?? SearchDetailDTO.typeFromId(id)
         code = try container.decodeIfPresent(String.self, forKey: .code)
         sections = try container.decodeIfPresent([KnowledgeSection].self, forKey: .sections) ?? []
-        effects = try container.decodeIfPresent([HealthEffect].self, forKey: .effects)
-        foundIn = try container.decodeIfPresent([FoodCategory].self, forKey: .foundIn)
 
         let overview = sections.first { $0.sectionType == "overview" }?.content
         description = try container.decodeIfPresent(String.self, forKey: .description) ?? overview
