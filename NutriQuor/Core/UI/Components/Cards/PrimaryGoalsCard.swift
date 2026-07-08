@@ -19,49 +19,41 @@ struct colorPrimaryGoalsCard: View {
     
     var body: some View {
         
-        VStack(alignment: .leading, spacing: 12) {
+        BentoCard(accent: Color("SuccessTeal"), style: .plain, padding: 16) {
+            VStack(alignment: .leading, spacing: 12) {
             
-            // Header
-            HStack {
-                Image(systemName: "target")
-                    .foregroundStyle(.green)
+                HStack {
+                    Image(systemName: "target")
+                        .foregroundStyle(Color("SuccessTeal"))
                 
-                Text("colorPrimary Health Goals")
-                    .fontWeight(.bold)
+                    Text("Mục tiêu sức khoẻ")
+                        .fontWeight(.bold)
                 
-                Spacer()
+                    Spacer()
                 
-                Button {
-                    onAdd()
-                } label: {
-                    Image(systemName: "plus.circle.fill")
-                        .font(.title)
-                        .foregroundStyle(Color(.colorPrimary))
-                }
-            }
-            
-            // Goals list
-            HStack {
-                ForEach(goals) { goal in
-                    
                     Button {
-                        selectedGoal = goal
-                        showDeleteAlert = true
+                        onAdd()
                     } label: {
-                        Tag(text: goal.name, color: .green)
+                        Image(systemName: "plus.circle.fill")
+                            .font(.title3)
+                            .foregroundStyle(Color("ColorPrimary"))
                     }
-                    .buttonStyle(.plain)
+                }
+            
+                HStack {
+                    ForEach(goals) { goal in
+                    
+                        Button {
+                            selectedGoal = goal
+                            showDeleteAlert = true
+                        } label: {
+                            Tag(text: goal.name, color: Color("SuccessTeal"))
+                        }
+                        .buttonStyle(.plain)
+                    }
                 }
             }
         }
-        .padding()
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color(.systemBackground))
-        .overlay(
-            RoundedRectangle(cornerRadius: .cardRadius)
-                .stroke(Color(.colorPrimary), lineWidth: 1)
-        )
-        .cornerRadius(.cardRadius)
         
         // Delete confirm
         .alert("Remove Goal?", isPresented: $showDeleteAlert) {

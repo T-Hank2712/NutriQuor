@@ -14,61 +14,55 @@ struct ModernProductCard: View {
     var type: String? = nil
 
     var body: some View {
-        HStack(spacing: 14) {
-            // Icon
-            ZStack {
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(cardColor.opacity(0.1))
-                    .frame(width: 46, height: 46)
+        BentoCard(accent: cardColor, style: .plain, padding: 14) {
+            HStack(spacing: 14) {
+                ZStack {
+                    RoundedRectangle(cornerRadius: .cardRadius)
+                        .fill(cardColor.opacity(0.1))
+                        .frame(width: 46, height: 46)
 
-                Image(systemName: cardIcon)
-                    .font(.system(size: 18, weight: .semibold))
-                    .foregroundStyle(cardColor)
-            }
-
-            // Info
-            VStack(alignment: .leading, spacing: 5) {
-                Text(name)
-                    .font(.system(size: 15, weight: .semibold, design: .rounded))
-                    .foregroundStyle(.primary)
-                    .lineLimit(1)
-
-                if let description, !description.isEmpty {
-                    Text(description)
-                        .font(.system(size: 12, weight: .medium))
-                        .foregroundStyle(.secondary)
-                        .lineLimit(2)
+                    Image(systemName: cardIcon)
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundStyle(cardColor)
                 }
 
-                if !tags.isEmpty {
-                    HStack(spacing: 6) {
-                        ForEach(tags.prefix(2), id: \.self) { tag in
-                            Text(tag)
-                                .font(.system(size: 10, weight: .semibold, design: .rounded))
-                                .foregroundStyle(Color("AccentPinkLight"))
-                                .padding(.horizontal, 8)
-                                .padding(.vertical, 3)
-                                .background(
-                                    Capsule()
-                                        .fill(Color("ColorPrimary").opacity(0.12))
-                                )
+                VStack(alignment: .leading, spacing: 5) {
+                    Text(name)
+                        .font(.system(size: 15, weight: .semibold, design: .rounded))
+                        .foregroundStyle(.primary)
+                        .lineLimit(1)
+
+                    if let description, !description.isEmpty {
+                        Text(description)
+                            .font(.system(size: 12, weight: .medium))
+                            .foregroundStyle(.secondary)
+                            .lineLimit(2)
+                    }
+
+                    if !tags.isEmpty {
+                        HStack(spacing: 6) {
+                            ForEach(tags.prefix(2), id: \.self) { tag in
+                                Text(tag)
+                                    .font(.system(size: 10, weight: .semibold, design: .rounded))
+                                    .foregroundStyle(cardColor)
+                                    .padding(.horizontal, 8)
+                                    .padding(.vertical, 3)
+                                    .background(
+                                        Capsule()
+                                            .fill(cardColor.opacity(0.10))
+                                    )
+                            }
                         }
                     }
                 }
+
+                Spacer()
+
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(.tertiary)
             }
-
-            Spacer()
-
-            Image(systemName: "chevron.right")
-                .font(.system(size: 12, weight: .semibold))
-                .foregroundStyle(.tertiary)
         }
-        .padding(14)
-        .background(
-            RoundedRectangle(cornerRadius: 18)
-                .fill(Color(.systemBackground))
-                .shadow(color: .black.opacity(0.05), radius: 10, y: 3)
-        )
     }
 
     private var cardIcon: String {
@@ -84,7 +78,7 @@ struct ModernProductCard: View {
         switch type {
         case "ingredient": return Color("SuccessTeal")
         case "nutrient": return Color("ColorPrimary")
-        case "additive": return Color("AccentPink")
+        case "additive": return Color("AccentOrange")
         default: return Color("AccentPurple")
         }
     }

@@ -8,13 +8,13 @@ import SwiftUI
 struct ImagePreviewView: View {
     
     let croppedImage: UIImage
+    var onAnalysisComplete: (Product) -> Void = { _ in }
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject private var appState: AppState
     @StateObject private var viewModel = ScanNutriViewModel()
     
     @State private var selectedMode = "Tôi"
     @State private var showDropdown = false
-    @State private var showAnalyzedProduct = false
     
     let modes = ["Tôi","Anh", "Chị", "Ba", "Mẹ"]
     
@@ -102,8 +102,8 @@ struct ImagePreviewView: View {
                                 userId: appState.user?.id
                             )
 
-                            if viewModel.analyzedProduct != nil {
-                                showAnalyzedProduct = true
+                            if let product = viewModel.analyzedProduct {
+                                onAnalysisComplete(product)
                             }
                         }
                     } label: {
@@ -158,11 +158,6 @@ struct ImagePreviewView: View {
             }
         }
         .navigationBarHidden(true)
-        .navigationDestination(isPresented: $showAnalyzedProduct) {
-            if let product = viewModel.analyzedProduct {
-                AnalystView(product: product, onDismiss: {})
-            }
-        }
         .alert(
             "Không thể phân tích ảnh",
             isPresented: Binding(

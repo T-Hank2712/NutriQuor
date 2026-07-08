@@ -20,6 +20,7 @@ import Combine
 final class AppState: ObservableObject {
 
     @Published var authState: AuthState = .loading
+    @Published var selectedTab: Int = 0
 
     @Published var user: User?
     @Published var profile: Profile?
@@ -74,6 +75,7 @@ final class AppState: ObservableObject {
             self.user = me.data.user
             self.profile = me.data.profile
 
+            self.selectedTab = 0
             self.authState = .loggedIn
 
         } catch APIError.unauthorized {
@@ -108,6 +110,7 @@ final class AppState: ObservableObject {
 
         user = nil
         profile = nil
+        selectedTab = 0
 
         authState = .login
     }

@@ -13,68 +13,65 @@ struct FamilyProfilesCard: View {
     var onAddMember: () -> Void
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        BentoCard(accent: Color("ColorPrimary"), style: .plain, padding: 16) {
+            VStack(alignment: .leading, spacing: 12) {
 
-            HStack(spacing: 8) {
-                Image(systemName: "person.2.fill")
-                    .foregroundStyle(Color("ColorPrimary"))
+                HStack(spacing: 8) {
+                    Image(systemName: "person.2.fill")
+                        .foregroundStyle(Color("ColorPrimary"))
 
-                Text("Family Profiles")
-                    .fontWeight(.bold)
-            }
+                    Text("Hồ sơ gia đình")
+                        .fontWeight(.bold)
+                }
 
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 20) {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 20) {
 
-                    ForEach(members, id: \.profileId) { member in
-                        NavigationLink {
-                            FamilyMemberProfile(profile: member)
-                        } label: {
-                            VStack(spacing: 8) {
+                        ForEach(members, id: \.profileId) { member in
+                            NavigationLink {
+                                FamilyMemberProfile(profile: member)
+                            } label: {
+                                VStack(spacing: 8) {
 
-                                ZStack {
-                                    Circle()
-                                        .fill(Color("ColorPrimary").opacity(0.12))
-                                        .frame(width: 56, height: 56)
+                                    ZStack {
+                                        Circle()
+                                            .fill(Color("ColorPrimary").opacity(0.12))
+                                            .frame(width: 56, height: 56)
 
-                                    Text(initials(for: member))
-                                        .font(.system(size: 18, weight: .bold, design: .rounded))
-                                        .foregroundStyle(Color("ColorPrimary"))
+                                        Text(initials(for: member))
+                                            .font(.system(size: 18, weight: .bold, design: .rounded))
+                                            .foregroundStyle(Color("ColorPrimary"))
+                                    }
+
+                                    Text("\(member.lastName) \(member.firstName)")
+                                        .font(.caption)
+                                        .fontWeight(.semibold)
+                                        .lineLimit(1)
                                 }
-
-                                Text("\(member.lastName) \(member.firstName)")
-                                    .font(.caption)
-                                    .fontWeight(.semibold)
-                                    .lineLimit(1)
                             }
+                            .buttonStyle(.plain)
                         }
-                        .buttonStyle(.plain)
-                    }
 
-                    Button(action: onAddMember) {
-                        VStack(spacing: 8) {
-                            Circle()
-                                .stroke(style: StrokeStyle(lineWidth: 2, dash: [5]))
-                                .frame(width: 56, height: 56)
-                                .overlay(
-                                    Image(systemName: "plus")
-                                )
+                        Button(action: onAddMember) {
+                            VStack(spacing: 8) {
+                                Circle()
+                                    .stroke(style: StrokeStyle(lineWidth: 2, dash: [5]))
+                                    .foregroundStyle(Color("ColorPrimary").opacity(0.45))
+                                    .frame(width: 56, height: 56)
+                                    .overlay(
+                                        Image(systemName: "plus")
+                                            .foregroundStyle(Color("ColorPrimary"))
+                                    )
 
-                            Text("Add")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
+                                Text("Thêm")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
                         }
                     }
                 }
             }
         }
-        .padding()
-        .background(Color(.systemBackground))
-        .overlay(
-            RoundedRectangle(cornerRadius: .cardRadius)
-                .stroke(Color("ColorPrimary").opacity(0.2), lineWidth: 1)
-        )
-        .cornerRadius(.cardRadius)
     }
 
     private func initials(for profile: Profile) -> String {

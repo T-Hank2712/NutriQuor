@@ -14,29 +14,47 @@ struct SubmitButton: View {
     
     var body: some View {
         
-        Button(action: action) {
+        Button {
+            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+            action()
+        } label: {
             
             HStack(spacing: 12) {
                 
                 Text(title)
-                    .font(.title)
+                    .font(.system(size: 16, weight: .bold, design: .rounded))
                 
                 Image(systemName: "arrow.right")
-                    .font(.text)
+                    .font(.system(size: 15, weight: .bold))
             }
             .foregroundStyle(.white)
             .frame(maxWidth: .infinity)
-            .frame(height: 50)
+            .frame(height: 52)
             .background(
                 RoundedRectangle(cornerRadius: .cardRadius)
-                    .fill(Color(.heading))
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                Color.nqPrimary,
+                                Color.nqPrimary.opacity(0.78),
+                                Color.nqInfo.opacity(0.86)
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .overlay(
+                        RoundedRectangle(cornerRadius: .cardRadius, style: .continuous)
+                            .stroke(Color.white.opacity(0.28), lineWidth: 1)
+                    )
             )
             .shadow(
-                color: Color(.colorPrimary).opacity(0.35),
-                radius: .cardRadius,
-                y: 10
+                color: Color.nqPrimary.opacity(0.22),
+                radius: 18,
+                y: 9
             )
         }
+        .buttonStyle(PressScaleButtonStyle())
         .padding(.top, 10)
     }
 }

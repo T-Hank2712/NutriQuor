@@ -23,12 +23,12 @@ struct EditNamePopup: View {
 
                 ZStack {
                     Circle()
-                        .fill(Color(.colorPrimary).opacity(0.15))
+                        .fill(Color("ColorPrimary").opacity(0.12))
                         .frame(width: 70, height: 70)
 
                     Image(systemName: "person.text.rectangle.fill")
                         .font(.system(size: 30))
-                        .foregroundStyle(Color(.colorPrimary))
+                        .foregroundStyle(Color("ColorPrimary"))
                 }
 
                 VStack(spacing: 4) {
@@ -69,10 +69,10 @@ struct EditNamePopup: View {
         .padding(24)
         .frame(maxWidth: 420)
         .background {
-            RoundedRectangle(cornerRadius: 28)
+            RoundedRectangle(cornerRadius: .cardRadius)
                 .fill(Color(.systemBackground))
                 .overlay {
-                    RoundedRectangle(cornerRadius: 28)
+                    RoundedRectangle(cornerRadius: .cardRadius)
                         .stroke(
                             Color.primary.opacity(0.08),
                             lineWidth: 1
@@ -80,8 +80,8 @@ struct EditNamePopup: View {
                 }
                 .shadow(
                     color: .black.opacity(0.12),
-                    radius: 30,
-                    y: 12
+                    radius: 18,
+                    y: 8
                 )
         }
         .overlay(alignment: .topTrailing) {

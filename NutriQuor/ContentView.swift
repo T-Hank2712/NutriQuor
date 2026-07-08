@@ -8,30 +8,40 @@
 import SwiftUI
 
 struct ContentView: View {
+    @EnvironmentObject private var appState: AppState
+
     var body: some View {
         ZStack {
-            TabView{
+            TabView(selection: $appState.selectedTab) {
                 // HOME
                 HomeView()
                     .tabItem {
-                        Label("Home", systemImage: "house")
+                        Label("Trang chủ", systemImage: "house")
                     }
+                    .tag(0)
                 // SEARCH
                 SearchView()
                     .tabItem {
-                        Label("Search", systemImage: "magnifyingglass")
+                        Label("Tra cứu", systemImage: "magnifyingglass")
                     }
+                    .tag(1)
                 // HISTORY
                 HistoryView()
                     .tabItem {
-                        Label("History", systemImage: "clock.arrow.circlepath")
+                        Label("Lịch sử", systemImage: "clock.arrow.circlepath")
                     }
+                    .tag(2)
                 // PROFILE
                 SettingView()
                     .tabItem {
-                        Label("Setting", systemImage: "person")
+                        Label("Hồ sơ", systemImage: "person")
                     }
-            }.accentColor(Color(.colorPrimary))
+                    .tag(3)
+            }
+            .tint(Color.nqPrimary)
+            .toolbarBackground(.ultraThinMaterial, for: .tabBar)
+            .toolbarBackground(.visible, for: .tabBar)
+            .animation(.spring(response: 0.34, dampingFraction: 0.82), value: appState.selectedTab)
             CameraButton()
 
         }
@@ -41,4 +51,5 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
+        .environmentObject(AppState())
 }

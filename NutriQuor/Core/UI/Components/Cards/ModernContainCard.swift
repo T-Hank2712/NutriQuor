@@ -41,8 +41,12 @@ struct ModernContainCard: View {
         .frame(maxWidth: .infinity, minHeight: 70, alignment: .top)
         .padding(14)
         .background(
-            RoundedRectangle(cornerRadius: 16)
-                .fill(Color(.secondarySystemBackground))
+            RoundedRectangle(cornerRadius: .cardRadius)
+                .fill(Color("Background"))
+                .overlay(
+                    RoundedRectangle(cornerRadius: .cardRadius)
+                        .stroke(Color.primary.opacity(0.06), lineWidth: 1)
+                )
         )
     }
 }

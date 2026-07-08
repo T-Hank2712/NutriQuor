@@ -21,54 +21,43 @@ struct LoginView: View {
             ZStack {
                 LinearGradient(
                     colors: [
-                        Color(.systemBackground),
-                        Color("ColorPrimary").opacity(0.12)
+                        Color("Background"),
+                        Color.nqPrimary.opacity(0.10),
+                        Color.nqInfo.opacity(0.08)
                     ],
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
                 )
                 .ignoresSafeArea()
 
-                Circle()
-                    .fill(Color("ColorPrimary").opacity(0.18))
-                    .frame(width: 360)
-                    .blur(radius: 90)
-                    .offset(x: -90, y: -320)
-
-                Circle()
-                    .fill(Color("ColorPrimary").opacity(0.12))
-                    .frame(width: 260)
-                    .blur(radius: 80)
-                    .offset(x: 120, y: 260)
-
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 24) {
                         VStack(spacing: 16) {
                             ZStack {
-                                Circle()
-                                    .fill(
+                                RoundedRectangle(cornerRadius: .cardRadius, style: .continuous)
+                                    .fill(.ultraThinMaterial)
+                                    .frame(width: 84, height: 84)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: .cardRadius, style: .continuous)
+                                            .stroke(Color.white.opacity(0.28), lineWidth: 1)
+                                    )
+                                    .shadow(color: Color.nqPrimary.opacity(0.18), radius: 18, y: 8)
+
+                                Image(systemName: "heart.fill")
+                                    .font(.system(size: 32, weight: .bold))
+                                    .foregroundStyle(
                                         LinearGradient(
-                                            colors: [
-                                                Color("ColorPrimary"),
-                                                Color("ColorPrimary").opacity(0.7)
-                                            ],
+                                            colors: [Color.nqPrimary, Color.nqInfo],
                                             startPoint: .topLeading,
                                             endPoint: .bottomTrailing
                                         )
                                     )
-                                    .frame(width: 84, height: 84)
-                                    .shadow(color: Color("ColorPrimary").opacity(0.4), radius: 22, y: 8)
-
-                                Image(systemName: "heart.fill")
-                                    .font(.system(size: 32, weight: .bold))
-                                    .foregroundStyle(Color(.systemBackground))
                             }
 
                             VStack(spacing: 6) {
                                 Text("NutriQuor")
                                     .font(.system(size: 32, weight: .black, design: .rounded))
                                     .foregroundStyle(.primary)
-                                    .kerning(-0.5)
 
                                 Text("Know What's In Your Food")
                                     .font(.system(size: 14, weight: .medium))
@@ -167,13 +156,10 @@ struct LoginView: View {
                         }
                         .padding(24)
                         .background(
-                            RoundedRectangle(cornerRadius: 28, style: .continuous)
-                                .fill(.ultraThinMaterial)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: .cardRadius, style: .continuous)
-                                        .stroke(Color.primary.opacity(0.06), lineWidth: 1)
-                                )
+                            RoundedRectangle(cornerRadius: .cardRadius, style: .continuous)
+                                .fill(Color.clear)
                         )
+                        .glassPanel()
                         .padding(.horizontal, 20)
                         .padding(.bottom, 40)
                     }

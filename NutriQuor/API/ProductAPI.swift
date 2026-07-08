@@ -87,7 +87,7 @@ final class ProductAPI {
 
     static func analyzeProductRequest(image: UIImage) throws -> URLRequest {
         guard let url = URL(
-            string: "\(AppConfig.shared.devBaseURL)/api/v1/products/products/extract"
+            string: "\(AppConfig.shared.devBaseURL)/api/v1/products/extract"
         ) else {
             throw URLError(.badURL)
         }

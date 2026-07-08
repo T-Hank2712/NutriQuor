@@ -12,33 +12,37 @@ struct CountScansCard: View {
     var count: Int
     
     var body: some View {
-        VStack(spacing: 8) {
-            
-            Text("TODAY'S SCANS")
-                .font(.caption)
-                .foregroundColor(.gray)
-            
-            HStack(alignment: .bottom, spacing: 8) {
-                
-                Text("\(count)")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                
-                Text("+4 vs avg")
-                    .font(.caption)
-                    .foregroundColor(Color(.colorPrimary))
-            }
-        }
-        .padding()
-        .frame(maxWidth: .infinity, minHeight: 130, alignment: .leading)
-        .background(Color(.systemBackground))
-        .cornerRadius(.cardRadius)
-        .overlay(
-            RoundedRectangle(cornerRadius: .cardRadius)
-                .stroke(Color.gray.opacity(.opacityLight), lineWidth: 1)
-        )
+        BentoCard(accent: Color("ColorPrimary"), style: .tinted, padding: 16) {
+            VStack(alignment: .leading, spacing: 12) {
+                HStack {
+                    Image(systemName: "viewfinder.circle.fill")
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundStyle(Color("ColorPrimary"))
+                        .frame(width: 36, height: 36)
+                        .background(
+                            RoundedRectangle(cornerRadius: .cardRadius)
+                                .fill(Color("ColorPrimary").opacity(0.12))
+                        )
 
-        .shadow(color: Color.black.opacity(.opacityLight), radius: 1, x: 0, y: 3)
+                    Spacer()
+                }
+            
+                Text("LƯỢT QUÉT HÔM NAY")
+                    .font(.system(size: 11, weight: .bold, design: .rounded))
+                    .foregroundStyle(.secondary)
+            
+                HStack(alignment: .lastTextBaseline, spacing: 6) {
+                    Text("\(count)")
+                        .font(.system(size: 40, weight: .black, design: .rounded))
+                        .foregroundStyle(Color("Heading"))
+
+                    Text("lượt")
+                        .font(.caption)
+                        .foregroundStyle(Color("ColorPrimary"))
+                }
+            }
+            .frame(maxWidth: .infinity, minHeight: 132, alignment: .leading)
+        }
     }
 }
 

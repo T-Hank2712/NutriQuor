@@ -20,12 +20,12 @@ struct ProductCard: View {
 
             ZStack {
 
-                RoundedRectangle(cornerRadius: 20)
+                RoundedRectangle(cornerRadius: .cardRadius)
                     .fill(
                         LinearGradient(
                             colors: [
-                                .green.opacity(0.15),
-                                .green.opacity(0.05)
+                                Color("SuccessTeal").opacity(0.16),
+                                Color("ColorPrimary").opacity(0.06)
                             ],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
@@ -34,7 +34,7 @@ struct ProductCard: View {
 
                 Image(systemName: "leaf.fill")
                     .font(.system(size: 28))
-                    .foregroundStyle(.green)
+                    .foregroundStyle(Color("SuccessTeal"))
 
             }
             .frame(width: 88, height: 88)
@@ -53,7 +53,7 @@ struct ProductCard: View {
                         ForEach(tags, id: \.self) { tag in
                             Tag(
                                 text: tag,
-                                color: .green
+                                color: Color("SuccessTeal")
                             )
                         }
                     }
@@ -63,11 +63,11 @@ struct ProductCard: View {
         .padding(16)
         .background {
 
-            RoundedRectangle(cornerRadius: 24)
+            RoundedRectangle(cornerRadius: .cardRadius)
                 .fill(Color(.systemBackground))
                 .overlay {
 
-                    RoundedRectangle(cornerRadius: 24)
+                    RoundedRectangle(cornerRadius: .cardRadius)
                         .stroke(
                             .primary.opacity(0.06),
                             lineWidth: 1
@@ -75,7 +75,7 @@ struct ProductCard: View {
                 }
                 .shadow(
                     color: .black.opacity(0.04),
-                    radius: 12,
+                    radius: 8,
                     y: 4
                 )
         }

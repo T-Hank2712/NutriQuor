@@ -18,52 +18,46 @@ struct AllergiesCard: View {
 
     var body: some View {
 
-        VStack(alignment: .leading, spacing: 12) {
+        BentoCard(accent: Color("AccentOrange"), style: .plain, padding: 16) {
+            VStack(alignment: .leading, spacing: 12) {
 
-            HStack {
-                Image(systemName: "exclamationmark.triangle")
-                    .foregroundStyle(.orange)
+                HStack {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .foregroundStyle(Color("AccentOrange"))
 
-                Text("Allergies")
-                    .fontWeight(.bold)
-            }
-
-            HStack {
-
-                ForEach(allergies) { allergy in
-                    Button {
-                        selectedAllergy = allergy
-                        showDeleteAlert = true
-                    } label: {
-                        TagWithXmark(text: allergy.name, color: .orange)
-                    }
-                    .buttonStyle(.plain)
+                    Text("Dị ứng")
+                        .fontWeight(.bold)
                 }
 
-                Button {
-                    onAdd()
-                } label: {
-                    HStack {
-                        Image(systemName: "plus")
-                        Text("Add")
+                HStack {
+
+                    ForEach(allergies) { allergy in
+                        Button {
+                            selectedAllergy = allergy
+                            showDeleteAlert = true
+                        } label: {
+                            TagWithXmark(text: allergy.name, color: Color("AccentOrange"))
+                        }
+                        .buttonStyle(.plain)
                     }
-                    .padding(8)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: .cardRadius)
-                            .stroke(style: StrokeStyle(lineWidth: 2, dash: [5]))
-                            .foregroundColor(.gray)
-                    )
+
+                    Button {
+                        onAdd()
+                    } label: {
+                        HStack {
+                            Image(systemName: "plus")
+                            Text("Thêm")
+                        }
+                        .padding(8)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: .cardRadius)
+                                .stroke(style: StrokeStyle(lineWidth: 2, dash: [5]))
+                                .foregroundColor(Color("AccentOrange").opacity(0.45))
+                        )
+                    }
                 }
             }
         }
-        .padding()
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color(.systemBackground))
-        .overlay(
-            RoundedRectangle(cornerRadius: .cardRadius)
-                .stroke(Color(.colorPrimary), lineWidth: 1)
-        )
-        .cornerRadius(.cardRadius)
 
         // MARK: - Delete Alert
         .alert("Remove Allergy?", isPresented: $showDeleteAlert) {

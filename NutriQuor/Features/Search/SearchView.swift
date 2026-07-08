@@ -47,7 +47,7 @@ struct SearchView: View {
                 .padding(.horizontal, 20)
                 .padding(.bottom, 32)
             }
-            .background(Color(.systemGroupedBackground))
+            .background(Color("Background"))
             .onAppear {
                 Task { await viewModel.loadByCategory(selectedCategory) }
             }

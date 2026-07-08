@@ -81,19 +81,9 @@ final class ProductService {
 
         let response = try await APIClient.shared.request(
             request,
-            responseType: AnalyzeProductResponse.self
+            responseType: APIResponse<Product>.self
         )
 
         return response.data
-    }
-}
-
-private struct AnalyzeProductResponse: Decodable {
-    let s3Key: String
-    let data: Product
-
-    enum CodingKeys: String, CodingKey {
-        case s3Key = "s3_key"
-        case data
     }
 }

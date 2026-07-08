@@ -50,7 +50,7 @@ struct AnalystView: View {
                             colors: [
                                 Color("SoftPink1"),
                                 Color("SoftPink2"),
-                                Color("ColorPrimary").opacity(0.25)
+                                Color("SuccessTeal").opacity(0.18)
                             ],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
@@ -70,16 +70,16 @@ struct AnalystView: View {
                         VStack(spacing: 14) {
                             // Product image
                             ZStack {
-                                RoundedRectangle(cornerRadius: 24)
+                                RoundedRectangle(cornerRadius: .cardRadius)
                                     .fill(.white)
                                     .frame(width: 110, height: 110)
-                                    .shadow(color: Color("ColorPrimary").opacity(0.3), radius: 20, y: 8)
+                                    .shadow(color: Color("ColorPrimary").opacity(0.16), radius: 16, y: 6)
 
                                 Image("Example")
                                     .resizable()
                                     .scaledToFill()
                                     .frame(width: 110, height: 110)
-                                    .clipShape(RoundedRectangle(cornerRadius: 24))
+                                    .clipShape(RoundedRectangle(cornerRadius: .cardRadius))
                             }
 
                             // Score badge
@@ -117,13 +117,13 @@ struct AnalystView: View {
                                 ForEach(productTags, id: \.self) { tag in
                                     Text(tag)
                                         .font(.system(size: 12, weight: .bold, design: .rounded))
-                                        .foregroundStyle(Color("AccentPinkLight"))
+                                        .foregroundStyle(Color("ColorPrimary"))
                                         .padding(.horizontal, 12)
                                         .padding(.vertical, 5)
                                         .background(
                                             Capsule()
                                                 .fill(Color("ColorPrimary").opacity(0.15))
-                                                .overlay(Capsule().stroke(Color("ColorPrimary").opacity(0.3), lineWidth: 1))
+                                                .overlay(Capsule().stroke(Color("ColorPrimary").opacity(0.18), lineWidth: 1))
                                         )
                                 }
                             }
@@ -206,7 +206,7 @@ struct AnalystView: View {
                         }
 
                         // MARK: - Contains
-                        AnalystSection(title: "Thành phần", icon: "list.bullet.clipboard.fill", iconColor: Color("AccentPurple")) {
+                        AnalystSection(title: "Thành phần", icon: "list.bullet.clipboard.fill", iconColor: Color("ColorPrimary")) {
                             VStack(spacing: 12) {
                                 HStack(spacing: 12) {
                                     ModernContainCard(
@@ -221,7 +221,7 @@ struct AnalystView: View {
                                         good: "",
                                         bad: "\(product.additive.count) phụ gia",
                                         goodColor: Color("SuccessTeal"),
-                                        badColor: Color("AccentPink")
+                                        badColor: Color("AccentOrange")
                                     )
                                 }
 
@@ -266,13 +266,13 @@ struct AnalystView: View {
                                 AnalystOptionRow(
                                     title: "Thêm vào yêu thích",
                                     icon: "heart.fill",
-                                    color: Color("AccentPink")
+                                    color: Color("ColorPrimary")
                                 )
                                 Divider().padding(.leading, 48)
                                 AnalystOptionRow(
                                     title: "Chia sẻ sản phẩm",
                                     icon: "square.and.arrow.up.fill",
-                                    color: Color("AccentPurple")
+                                    color: Color("InfoBlue")
                                 )
                             }
                         }
@@ -285,7 +285,10 @@ struct AnalystView: View {
             .navigationBarBackButtonHidden(true)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button { dismiss() } label: {
+                    Button {
+                        onDismiss()
+                        dismiss()
+                    } label: {
                         ZStack {
                             Image(systemName: "chevron.left")
                                 .font(.system(size: 13, weight: .bold))
@@ -294,7 +297,7 @@ struct AnalystView: View {
                     }
                 }
             }
-            .background(Color(.systemGroupedBackground))
+            .background(Color("Background"))
         }
     }
     

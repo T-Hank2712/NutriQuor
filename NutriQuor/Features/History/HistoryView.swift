@@ -9,13 +9,12 @@ struct HistoryView: View {
     
     var body: some View {
         NavigationStack{
-            VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: 18) {
                 
                 HStack {
                     Text("Lịch sử")
-                        .font(.largeTitle)
-                        .bold()
-                        .foregroundStyle(Color(.colorPrimary))
+                        .font(.system(size: 30, weight: .black, design: .rounded))
+                        .foregroundStyle(Color("Heading"))
 
                     Spacer()
 
@@ -31,12 +30,12 @@ struct HistoryView: View {
                                 .font(.title2)
                         }
                     }
-                    .foregroundStyle(Color(.colorPrimary))
+                    .foregroundStyle(Color("ColorPrimary"))
                 }
                 
                 HStack {
                     Image(systemName: "calendar")
-                        .foregroundStyle(Color(.colorPrimary))
+                        .foregroundStyle(Color("ColorPrimary"))
 
                     Text("Lọc theo ngày")
                         .font(.subheadline)
@@ -54,8 +53,12 @@ struct HistoryView: View {
                 .padding(.horizontal, 16)
                 .padding(.vertical, 12)
                 .background(
-                    RoundedRectangle(cornerRadius: 16)
-                        .fill(Color(.secondarySystemBackground))
+                    RoundedRectangle(cornerRadius: .cardRadius)
+                        .fill(Color(.systemBackground))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: .cardRadius)
+                                .stroke(Color.primary.opacity(0.06), lineWidth: 1)
+                        )
                 )
                 
                 
@@ -88,7 +91,7 @@ struct HistoryView: View {
 
                                 VStack {
                                     Rectangle()
-                                        .fill(Color(.colorPrimary).opacity(.opacityStrong))
+                                        .fill(Color("ColorPrimary").opacity(0.2))
                                         .frame(width: 2)
                                         .frame(maxHeight: .infinity)
 
@@ -96,10 +99,10 @@ struct HistoryView: View {
                                         formatTime(item.scannedAt)
                                     )
                                     .font(.caption)
-                                    .foregroundColor(Color(.heading))
+                                    .foregroundColor(Color("Heading"))
 
                                     Rectangle()
-                                        .fill(Color(.colorPrimary).opacity(.opacityStrong))
+                                        .fill(Color("ColorPrimary").opacity(0.2))
                                         .frame(width: 2)
                                         .frame(maxHeight: .infinity)
                                 }
@@ -119,7 +122,8 @@ struct HistoryView: View {
                     }
                 }.padding(.top, 20)
             }
-            .padding()
+            .padding(20)
+            .background(Color("Background"))
         }
         .task {
             viewModel.updateUserId(appState.user?.id)

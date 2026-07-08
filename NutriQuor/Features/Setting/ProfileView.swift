@@ -54,8 +54,8 @@ struct ProfileView: View {
                                         .fill(
                                             LinearGradient(
                                                 colors: [
-                                                    Color.blue.opacity(0.15),
-                                                    Color.purple.opacity(0.12)
+                                                    Color("ColorPrimary").opacity(0.14),
+                                                    Color("SuccessTeal").opacity(0.12)
                                                 ],
                                                 startPoint: .topLeading,
                                                 endPoint: .bottomTrailing
@@ -70,7 +70,7 @@ struct ProfileView: View {
                                         .frame(width: 55, height: 55)
                                         .foregroundStyle(
                                             LinearGradient(
-                                                colors: [.blue, .purple],
+                                                colors: [Color("ColorPrimary"), Color("SuccessTeal")],
                                                 startPoint: .topLeading,
                                                 endPoint: .bottomTrailing
                                             )
@@ -83,14 +83,14 @@ struct ProfileView: View {
                                 } label: {
                                     ZStack {
                                         Circle()
-                                            .fill(.blue)
+                                            .fill(Color("ColorPrimary"))
                                             .frame(width: 38, height: 38)
                                         
                                         Image(systemName: "camera.fill")
                                             .font(.system(size: 16, weight: .semibold))
                                             .foregroundStyle(.white)
                                     }
-                                    .shadow(color: .blue.opacity(0.3), radius: 8, y: 4)
+                                    .shadow(color: Color("ColorPrimary").opacity(0.22), radius: 8, y: 4)
                                 }
                             }
                         }
@@ -117,13 +117,13 @@ struct ProfileView: View {
                                     .padding(.vertical, 9)
                                     .background(
                                         LinearGradient(
-                                            colors: [.blue, .purple],
+                                            colors: [Color("ColorPrimary"), Color("SuccessTeal")],
                                             startPoint: .leading,
                                             endPoint: .trailing
                                         )
                                     )
                                     .clipShape(Capsule())
-                                    .shadow(color: .blue.opacity(0.3), radius: 6, y: 3)
+                                    .shadow(color: Color("ColorPrimary").opacity(0.18), radius: 6, y: 3)
                             }
                             .padding(.top, 6)
                         }
@@ -262,7 +262,8 @@ struct ProfileView: View {
                     )
                 }
 
-            } // end ZStack
+            }
+            .background(Color("Background"))
         }
         .task {
             firstName = appState.profile?.firstName ?? ""

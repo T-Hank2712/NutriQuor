@@ -42,7 +42,7 @@ struct FamilyMemberProfile: View {
                             colors: [
                                 Color("DeepNavyDark"),
                                 Color("DeepNavyMid"),
-                                Color("DeepNavy")
+                                Color("ColorPrimary")
                             ],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
@@ -57,7 +57,7 @@ struct FamilyMemberProfile: View {
                             .offset(x: -80, y: -20)
 
                         Circle()
-                            .fill(Color.white.opacity(0.05))
+                            .fill(Color("SuccessTeal").opacity(0.16))
                             .frame(width: 150, height: 150)
                             .offset(x: 100, y: 30)
 
@@ -69,15 +69,15 @@ struct FamilyMemberProfile: View {
                                         .fill(
                                             LinearGradient(
                                                 colors: [
-                                                    Color("AccentPink").opacity(0.8),
-                                                    Color("DeepNavy").opacity(0.9)
+                                                    Color("SuccessTeal"),
+                                                    Color("ColorPrimary")
                                                 ],
                                                 startPoint: .topLeading,
                                                 endPoint: .bottomTrailing
                                             )
                                         )
                                         .frame(width: 100, height: 100)
-                                        .shadow(color: Color("AccentPink").opacity(0.4), radius: 20, y: 8)
+                                        .shadow(color: Color("ColorPrimary").opacity(0.2), radius: 18, y: 8)
 
                                     Text(initials)
                                         .font(.system(size: 36, weight: .bold, design: .rounded))
@@ -89,13 +89,13 @@ struct FamilyMemberProfile: View {
                                 } label: {
                                     ZStack {
                                         Circle()
-                                            .fill(Color("AccentPink"))
+                                            .fill(Color("ColorPrimary"))
                                             .frame(width: 30, height: 30)
                                         Image(systemName: "camera.fill")
                                             .font(.system(size: 13, weight: .semibold))
                                             .foregroundStyle(.white)
                                     }
-                                    .shadow(color: Color("AccentPink").opacity(0.5), radius: 8, y: 3)
+                                    .shadow(color: Color("ColorPrimary").opacity(0.22), radius: 8, y: 3)
                                 }
                             }
                             
@@ -116,13 +116,13 @@ struct FamilyMemberProfile: View {
                                     .padding(.vertical, 9)
                                     .background(
                                         LinearGradient(
-                                            colors: [.blue, .purple],
+                                            colors: [Color("ColorPrimary"), Color("SuccessTeal")],
                                             startPoint: .leading,
                                             endPoint: .trailing
                                         )
                                     )
                                     .clipShape(Capsule())
-                                    .shadow(color: .blue.opacity(0.3), radius: 6, y: 3)
+                                    .shadow(color: Color("ColorPrimary").opacity(0.18), radius: 6, y: 3)
                             }.padding(.bottom, 20)
                         }.padding(.top, 70)
                     }
@@ -201,6 +201,7 @@ struct FamilyMemberProfile: View {
                 }
                 
             }
+            .background(Color("Background"))
             if showEditNameSheet {
                 Color.black.opacity(0.4)
                     .ignoresSafeArea()

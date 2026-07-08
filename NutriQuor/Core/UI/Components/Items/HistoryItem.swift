@@ -11,42 +11,50 @@ struct HistoryItem: View {
     let record: ScanHistory
     
     var body: some View {
-        HStack {
+        HStack(spacing: 14) {
             Image("Example")
                 .resizable()
-                .frame(width: 80, height: 80)
-                .clipShape(Circle())
-                .padding(10)
+                .scaledToFill()
+                .frame(width: 64, height: 64)
+                .clipShape(RoundedRectangle(cornerRadius: .cardRadius))
             
             VStack(alignment: .leading, spacing: 4) {
                 Text(record.product.productName ?? "")
-                    .font(.subheadline)
+                    .font(.system(size: 15, weight: .semibold, design: .rounded))
+                    .foregroundStyle(.primary)
                     .lineLimit(1)
                 HStack {
-                    Image(systemName: "exclamationmark.triangle.fill").foregroundColor(.yellow).opacity(.opacityStrong)
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .foregroundStyle(Color("WarningAmber"))
                     Text(record.product.warning ?? "")
                         .font(.caption)
-                        .foregroundColor(.gray)
+                        .foregroundStyle(.secondary)
                         .lineLimit(1)
                 }
                 HStack {
-                    Image(systemName: "circle.fill").foregroundColor(.orange).opacity(.opacityStrong)
+                    Image(systemName: "clock.fill")
+                        .foregroundStyle(Color("ColorPrimary"))
                     Text(
                         record.scannedAt.formatted(
                             date: .omitted,
                             time: .shortened
                         )
-                    )
+                        )
                         .font(.caption)
-                        .foregroundColor(.gray)
+                        .foregroundStyle(.secondary)
                 }
             }
             Spacer()
 
         }
+        .padding(12)
+        .background(
+            RoundedRectangle(cornerRadius: .cardRadius)
+                .fill(Color(.systemBackground))
+        )
         .overlay(
             RoundedRectangle(cornerRadius: .cardRadius)
-                .stroke(Color(.colorPrimary).opacity(.opacityMedium), lineWidth: 1.5)
+                .stroke(Color.primary.opacity(0.06), lineWidth: 1)
         )
     }
 }

@@ -15,43 +15,36 @@ struct MedicalConditionsCard: View {
     
     var body: some View {
         
-        VStack(alignment: .leading, spacing: 12) {
+        BentoCard(accent: Color("InfoBlue"), style: .plain, padding: 16) {
+            VStack(alignment: .leading, spacing: 12) {
             
             // Header
-            HStack {
-                Image(systemName: "cross.case.fill")
-                    .foregroundStyle(.blue)
+                HStack {
+                    Image(systemName: "cross.case.fill")
+                        .foregroundStyle(Color("InfoBlue"))
                 
-                Text("Medical Conditions")
-                    .fontWeight(.bold)
+                    Text("Bệnh lý")
+                        .fontWeight(.bold)
                 
-                Spacer()
+                    Spacer()
                 
-                Button {
-                    onAdd()
-                } label: {
-                    Image(systemName: "plus")
+                    Button {
+                        onAdd()
+                    } label: {
+                        Image(systemName: "plus")
+                    }
                 }
-            }
             
-            // LIST CONDITIONS
-            ForEach(diseases) { disease in
-                ConditionRow(
-                    title: disease.name,
-                    color: .colorPrimary.opacity(.opacityMedium)
-                ) {
-                    onDelete(disease)
+                ForEach(diseases) { disease in
+                    ConditionRow(
+                        title: disease.name,
+                        color: Color("InfoBlue").opacity(.opacityMedium)
+                    ) {
+                        onDelete(disease)
+                    }
                 }
             }
         }
-        .padding()
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color(.systemBackground))
-        .overlay(
-            RoundedRectangle(cornerRadius: .cardRadius)
-                .stroke(Color(.colorPrimary))
-        )
-        .cornerRadius(.cardRadius)
     }
 }
 

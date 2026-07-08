@@ -11,40 +11,56 @@ struct HomeView: View {
     
     @EnvironmentObject var appState: AppState
     @StateObject private var viewModel = HomeViewModel()
+
+    private let bentoColumns = [
+        GridItem(.flexible(), spacing: 14),
+        GridItem(.flexible(), spacing: 14)
+    ]
+
     var body: some View {
         NavigationStack {
             ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 28) {
                     
                     // MARK: - Header
-                    HStack(alignment: .center) {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("Xin chào 👋")
-                                .font(.system(size: 14, weight: .medium))
-                                .foregroundStyle(.secondary)
-                            Text("\(appState.profile?.lastName ?? "") \(appState.profile?.firstName ?? "Người dùng")")
-                                .font(.system(size: 24, weight: .black, design: .rounded))
-                                .foregroundStyle(.primary)
-                                .kerning(-0.3)
-                        }
-                        
-                        Spacer()
-                        
-                        ZStack {
-                            Circle()
-                                .fill(
-                                    LinearGradient(
-                                        colors: [Color("ColorPrimary"), Color("AccentPinkLight")],
-                                        startPoint: .topLeading,
-                                        endPoint: .bottomTrailing
+                    BentoCard(accent: Color.nqPrimary, style: .tinted, padding: 20) {
+                        HStack(alignment: .center, spacing: 16) {
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text("Xin chào")
+                                    .font(.system(size: 14, weight: .semibold, design: .rounded))
+                                    .foregroundStyle(.secondary)
+                                Text("\(appState.profile?.lastName ?? "") \(appState.profile?.firstName ?? "Người dùng")")
+                                    .font(.system(size: 30, weight: .black, design: .rounded))
+                                    .foregroundStyle(.primary)
+                                    .lineLimit(2)
+
+                                Text("Theo dõi thành phần, phụ gia và dinh dưỡng trong từng lần quét.")
+                                    .font(.system(size: 14, weight: .medium, design: .rounded))
+                                    .foregroundStyle(.secondary)
+                                    .lineSpacing(3)
+                            }
+
+                            Spacer(minLength: 10)
+
+                            ZStack {
+                                RoundedRectangle(cornerRadius: .smallRadius, style: .continuous)
+                                    .fill(
+                                        LinearGradient(
+                                            colors: [Color.nqPrimary, Color.nqInfo],
+                                            startPoint: .topLeading,
+                                            endPoint: .bottomTrailing
+                                        )
                                     )
-                                )
-                                .frame(width: 46, height: 46)
-                                .shadow(color: Color("ColorPrimary").opacity(0.5), radius: 10, y: 4)
-                            
-                            Image(systemName: "person.fill")
-                                .font(.system(size: 18, weight: .semibold))
-                                .foregroundStyle(.white)
+                                    .frame(width: 60, height: 60)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: .smallRadius, style: .continuous)
+                                            .stroke(Color.white.opacity(0.28), lineWidth: 1)
+                                    )
+
+                                Image(systemName: "heart.text.square.fill")
+                                    .font(.system(size: 25, weight: .semibold))
+                                    .foregroundStyle(.white)
+                            }
                         }
                     }
                     .padding(.top, 8)
@@ -53,7 +69,7 @@ struct HomeView: View {
                     VStack(alignment: .leading, spacing: 14) {
                         SectionLabel(text: "THỐNG KÊ HÔM NAY")
                         
-                        HStack(spacing: 14) {
+                        LazyVGrid(columns: bentoColumns, spacing: 14) {
                             CountScansCard(count: viewModel.todayScanCount)
                             IndexCard()
                         }
@@ -64,6 +80,14 @@ struct HomeView: View {
                         SectionLabel(text: "GỢI Ý CHO BẠN")
                         if let daily = viewModel.daily {
                             InsightCard(item: daily)
+                        } else {
+                            BentoCard(accent: Color("ColorPrimary"), style: .plain) {
+                                VStack(alignment: .leading, spacing: 12) {
+                                    SkeletonLine(height: 16, width: 190)
+                                    SkeletonLine(height: 12)
+                                    SkeletonLine(height: 12, width: 240)
+                                }
+                            }
                         }
                     }
                     
@@ -102,7 +126,7 @@ struct HomeView: View {
                 
                 await viewModel.loadDailyFeature()
             }
-            .background(Color(.systemGroupedBackground))
+            .background(Color("Background"))
         }
     }
 }

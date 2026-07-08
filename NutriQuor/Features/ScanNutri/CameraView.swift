@@ -15,6 +15,7 @@ struct CameraView: View {
     @State private var showImagePreview = false
     @State private var showPhotoLibrary = false
     @Environment(\.dismiss) var dismiss
+    var onAnalysisComplete: (Product) -> Void = { _ in }
     
     let frameHeight: CGFloat = 550
     let horizontalPadding: CGFloat = 20
@@ -52,7 +53,7 @@ struct CameraView: View {
                                 }
                             }
                             .padding()
-                            .background(Color.blue)
+                            .background(Color("ColorPrimary"))
                             .foregroundColor(.white)
                             .cornerRadius(.smallRadius)
                         }
@@ -142,7 +143,10 @@ struct CameraView: View {
             }
             .navigationDestination(isPresented: $showImagePreview) {
                 if let cropped = croppedImage {
-                    ImagePreviewView(croppedImage: cropped)
+                    ImagePreviewView(
+                        croppedImage: cropped,
+                        onAnalysisComplete: onAnalysisComplete
+                    )
                 }
             }
         }
@@ -227,4 +231,3 @@ struct CameraView: View {
 #Preview {
     CameraView()
 }
-

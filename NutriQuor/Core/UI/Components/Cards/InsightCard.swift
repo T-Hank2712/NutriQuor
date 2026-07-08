@@ -13,51 +13,46 @@ struct InsightCard: View {
     
     var body: some View {
         
-        VStack(alignment: .leading, spacing: 14) {
+        BentoCard(accent: Color("ColorPrimary"), style: .tinted, padding: 18) {
+            VStack(alignment: .leading, spacing: 14) {
             
-            HStack {
-                Image(systemName: "lightbulb.fill")
-                    .foregroundColor(Color(.colorPrimary))
+                HStack {
+                    Image(systemName: "lightbulb.fill")
+                        .foregroundColor(Color("ColorPrimary"))
                 
-                Text("INSIGHT OF THE DAY")
-                    .font(.caption)
-                    .fontWeight(.bold)
-                    .foregroundColor(Color(.white))
-            }
+                    Text("GỢI Ý HÔM NAY")
+                        .font(.caption)
+                        .fontWeight(.bold)
+                        .foregroundStyle(Color("Heading").opacity(0.75))
+                }
             
-            Text(
-                item.code?.isEmpty == false
-                ? "\(item.name) (\(item.code!))"
-                : item.name
-            )
+                Text(
+                    item.code?.isEmpty == false
+                    ? "\(item.name) (\(item.code!))"
+                    : item.name
+                )
                 .font(.title2)
                 .fontWeight(.bold)
-                .foregroundStyle(.white)
+                .foregroundStyle(Color("Heading"))
             
-            Text(item.description ?? "")
-                .foregroundColor(.white)
+                Text(item.description ?? "")
+                    .foregroundStyle(.secondary)
+                    .lineLimit(3)
             
-            NavigationLink {
-                SearchDetailView(id: item.id)
-            } label: {
-                Text("LEARN MORE")
-                    .padding(.horizontal, 20)
-                    .padding(.vertical, 10)
-                    .background(Color(.colorPrimary))
-                    .foregroundColor(.black)
-                    .cornerRadius(.smallRadius)
+                NavigationLink {
+                    SearchDetailView(id: item.id)
+                } label: {
+                    Text("XEM CHI TIẾT")
+                        .font(.system(size: 12, weight: .bold, design: .rounded))
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 9)
+                        .background(Color("ColorPrimary"))
+                        .foregroundColor(.white)
+                        .cornerRadius(.smallRadius)
+                }
+                .buttonStyle(.plain)
             }
-            .buttonStyle(.plain)
         }
-        .padding()
-        .background(
-            LinearGradient(
-                colors: [.black, Color(.colorPrimary).opacity(.opacityStrong)],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-        )
-        .cornerRadius(.cardRadius)
     }
 }
 

@@ -30,7 +30,7 @@ struct HomeHistoryItem: View {
         HStack(spacing: 14) {
             // Thumbnail
             ZStack {
-                RoundedRectangle(cornerRadius: 14)
+                RoundedRectangle(cornerRadius: .cardRadius)
                     .fill(Color("ColorPrimary").opacity(0.12))
                     .frame(width: 58, height: 58)
 
@@ -38,7 +38,7 @@ struct HomeHistoryItem: View {
                     .resizable()
                     .scaledToFill()
                     .frame(width: 58, height: 58)
-                    .clipShape(RoundedRectangle(cornerRadius: 14))
+                    .clipShape(RoundedRectangle(cornerRadius: .cardRadius))
             }
 
             // Info
@@ -51,7 +51,7 @@ struct HomeHistoryItem: View {
                 HStack(spacing: 5) {
                     Image(systemName: "exclamationmark.triangle.fill")
                         .font(.system(size: 10))
-                        .foregroundStyle(Color("ColorPrimary"))
+                        .foregroundStyle(Color("WarningAmber"))
                     Text(record.product.warning ?? "")
                         .font(.system(size: 12, weight: .medium))
                         .foregroundStyle(.secondary)
@@ -83,9 +83,13 @@ struct HomeHistoryItem: View {
         }
         .padding(14)
         .background(
-            RoundedRectangle(cornerRadius: 18)
+            RoundedRectangle(cornerRadius: .cardRadius)
                 .fill(Color(.systemBackground))
-                .shadow(color: .black.opacity(0.05), radius: 12, y: 4)
+                .overlay(
+                    RoundedRectangle(cornerRadius: .cardRadius)
+                        .stroke(Color.primary.opacity(0.06), lineWidth: 1)
+                )
+                .shadow(color: .black.opacity(0.03), radius: 8, y: 3)
         )
     }
 }
@@ -120,4 +124,3 @@ struct HomeHistoryItem: View {
         )
     )
 }
-

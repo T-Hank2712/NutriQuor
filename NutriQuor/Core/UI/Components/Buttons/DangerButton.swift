@@ -14,7 +14,10 @@ struct DangerButton: View {
     let action: () -> Void
     
     var body: some View {
-        Button(action: action) {
+        Button {
+            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+            action()
+        } label: {
             HStack(spacing: 12) {
                 Image(systemName: icon)
                     .font(.system(size: 16, weight: .semibold))
@@ -26,14 +29,15 @@ struct DangerButton: View {
             .frame(maxWidth: .infinity)
             .padding(.vertical, 16)
             .background(
-                RoundedRectangle(cornerRadius: 16)
+                RoundedRectangle(cornerRadius: .cardRadius, style: .continuous)
                     .fill(color.opacity(0.08))
                     .overlay(
-                        RoundedRectangle(cornerRadius: 16)
-                            .stroke(color.opacity(0.25), lineWidth: 1.5)
+                        RoundedRectangle(cornerRadius: .cardRadius, style: .continuous)
+                            .stroke(color.opacity(0.18), lineWidth: 1)
                     )
             )
         }
+        .buttonStyle(PressScaleButtonStyle())
     }
 }
 

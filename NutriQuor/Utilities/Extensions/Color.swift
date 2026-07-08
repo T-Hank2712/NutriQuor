@@ -6,6 +6,15 @@
 //
 import SwiftUI
 extension Color {
+    static let nqPrimary = Color("ColorPrimary")
+    static let nqBackground = Color("Background")
+    static let nqCard = Color(.systemBackground)
+    static let nqText = Color("Heading")
+    static let nqSuccess = Color("SuccessTeal")
+    static let nqWarning = Color("WarningAmber")
+    static let nqDanger = Color("AccentPink")
+    static let nqInfo = Color("InfoBlue")
+    static let nqBorder = Color("Border")
     
     init(hex: String) {
         let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)

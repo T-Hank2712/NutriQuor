@@ -15,55 +15,64 @@ struct DarkSecureField: View {
 
     @FocusState private var isFocused: Bool
     @State private var isVisible = false
+    private var isLifted: Bool { isFocused || !text.isEmpty }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(title)
-                .font(.system(size: 12, weight: .semibold, design: .rounded))
-                .foregroundStyle(.secondary)
-                .kerning(0.5)
-
+        VStack(alignment: .leading, spacing: 6) {
             HStack(spacing: 12) {
                 Image(systemName: icon)
                     .font(.system(size: 15, weight: .semibold))
-                    .foregroundStyle(isFocused ? Color("ColorPrimary") : .secondary)
+                    .foregroundStyle(isFocused ? Color.nqPrimary : .secondary)
                     .frame(width: 20)
-                    .animation(.easeInOut(duration: 0.2), value: isFocused)
+                    .animation(.spring(response: 0.25, dampingFraction: 0.82), value: isFocused)
 
-                Group {
-                    if isVisible {
-                        TextField(placeholder, text: $text)
-                    } else {
-                        SecureField(placeholder, text: $text)
+                ZStack(alignment: .leading) {
+                    Group {
+                        if isVisible {
+                            TextField("", text: $text, prompt: Text(isLifted ? placeholder : title).foregroundStyle(.secondary))
+                        } else {
+                            SecureField("", text: $text, prompt: Text(isLifted ? placeholder : title).foregroundStyle(.secondary))
+                        }
                     }
+                    .font(.system(size: 15, weight: .medium, design: .rounded))
+                    .foregroundStyle(.primary)
+                    .tint(Color.nqPrimary)
+                    .focused($isFocused)
+                    .padding(.top, isLifted ? 16 : 0)
+
+                    Text(title)
+                        .font(.system(size: 11, weight: .semibold, design: .rounded))
+                        .foregroundStyle(isFocused ? Color.nqPrimary : .secondary)
+                        .scaleEffect(isLifted ? 1 : 0.92, anchor: .leading)
+                        .offset(y: isLifted ? -14 : 0)
+                        .opacity(isLifted ? 1 : 0)
                 }
-                .font(.system(size: 15, weight: .medium))
-                .foregroundStyle(.primary)
-                .tint(Color("ColorPrimary"))
-                .focused($isFocused)
+                .frame(height: 40)
 
                 Button {
+                    UIImpactFeedbackGenerator(style: .light).impactOccurred()
                     isVisible.toggle()
                 } label: {
                     Image(systemName: isVisible ? "eye.slash.fill" : "eye.fill")
                         .font(.system(size: 14))
-                        .foregroundStyle(.white.opacity(0.3))
+                        .foregroundStyle(.secondary)
                 }
+                .buttonStyle(PressScaleButtonStyle())
             }
             .padding(.horizontal, 16)
-            .padding(.vertical, 14)
+            .frame(height: 58)
             .background(
-                RoundedRectangle(cornerRadius: 14)
-                    .fill(Color(.tertiarySystemBackground))
+                RoundedRectangle(cornerRadius: .smallRadius, style: .continuous)
+                    .fill(.ultraThinMaterial)
                     .overlay(
-                        RoundedRectangle(cornerRadius: 14)
+                        RoundedRectangle(cornerRadius: .smallRadius, style: .continuous)
                             .stroke(
-                                isFocused ? Color("ColorPrimary") : Color.primary.opacity(0.12),
-                                lineWidth: 1.5
+                                isFocused ? Color.nqPrimary.opacity(0.62) : Color.white.opacity(0.22),
+                                lineWidth: 1
                             )
                     )
-                    .animation(.easeInOut(duration: 0.2), value: isFocused)
             )
+            .animation(.spring(response: 0.26, dampingFraction: 0.88), value: isLifted)
         }
     }
 }

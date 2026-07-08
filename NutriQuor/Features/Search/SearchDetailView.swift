@@ -33,53 +33,49 @@ struct SearchDetailView: View {
                 Button { dismiss() } label: {
                     ZStack {
                         Circle()
-                            .fill(.white.opacity(0.9))
+                            .fill(.ultraThinMaterial)
                             .frame(width: 34, height: 34)
-                            .shadow(color: .black.opacity(0.08), radius: 8, y: 2)
+                            .overlay(Circle().stroke(Color.white.opacity(0.26), lineWidth: 1))
+                            .shadow(color: .black.opacity(0.08), radius: 10, y: 4)
                         Image(systemName: "chevron.left")
                             .font(.system(size: 13, weight: .bold))
                             .foregroundStyle(.primary)
                     }
                 }
+                .buttonStyle(PressScaleButtonStyle())
             }
         }
-        .background(Color(.systemGroupedBackground))
+        .background(Color("Background"))
     }
 
     private var hero: some View {
         ZStack(alignment: .bottom) {
             LinearGradient(
                 colors: [
-                    Color("SoftPink1"),
-                    Color("SoftPink2"),
-                    Color("ColorPrimary").opacity(0.3)
+                    Color("Background"),
+                    heroColor.opacity(0.14),
+                    Color.nqInfo.opacity(0.10)
                 ],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
             .frame(height: 250)
 
-            Circle()
-                .fill(Color("ColorPrimary").opacity(0.2))
-                .frame(width: 200)
-                .offset(x: 105, y: -45)
-
-            Circle()
-                .fill(Color("AccentPinkLight").opacity(0.16))
-                .frame(width: 150)
-                .offset(x: -90, y: 18)
-
             ZStack {
-                RoundedRectangle(cornerRadius: 26)
-                    .fill(.white)
+                RoundedRectangle(cornerRadius: .cardRadius)
+                    .fill(.ultraThinMaterial)
                     .frame(width: 112, height: 112)
-                    .shadow(color: Color("ColorPrimary").opacity(0.3), radius: 20, y: 8)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: .cardRadius, style: .continuous)
+                            .stroke(Color.white.opacity(0.32), lineWidth: 1)
+                    )
+                    .shadow(color: heroColor.opacity(0.18), radius: 20, y: 8)
 
                 Image(systemName: heroIcon)
                     .font(.system(size: 44, weight: .semibold))
                     .foregroundStyle(
                         LinearGradient(
-                            colors: [heroColor, Color("AccentPinkLight")],
+                            colors: [heroColor, Color.nqInfo],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
                         )
@@ -103,7 +99,7 @@ struct SearchDetailView: View {
                     }
 
                     if let code = detail.code, !code.isEmpty {
-                        DetailChip(text: code, color: Color("AccentPink"))
+                        DetailChip(text: code, color: Color("AccentOrange"))
                     }
 
                     DetailChip(text: "\(detail.sections.count) mục", color: Color("AccentPurple"))
@@ -143,16 +139,34 @@ struct SearchDetailView: View {
     }
 
     private var loadingContent: some View {
-        VStack(spacing: 14) {
-            ProgressView()
-                .tint(Color("ColorPrimary"))
+        VStack(spacing: 18) {
+            SkeletonLine(height: 24, width: 180)
+                .padding(.top, 10)
 
-            Text("Đang tải thông tin")
-                .font(.system(size: 15, weight: .semibold, design: .rounded))
-                .foregroundStyle(.secondary)
+            HStack(spacing: 8) {
+                SkeletonLine(height: 26, width: 88)
+                SkeletonLine(height: 26, width: 104)
+                SkeletonLine(height: 26, width: 72)
+            }
+
+            ForEach(0..<3, id: \.self) { index in
+                DetailSection(
+                    title: index == 0 ? "Đang tải" : " ",
+                    icon: "doc.text.fill",
+                    iconColor: Color.nqPrimary.opacity(0.7)
+                ) {
+                    VStack(alignment: .leading, spacing: 10) {
+                        SkeletonLine(height: 12)
+                        SkeletonLine(height: 12)
+                        SkeletonLine(height: 12, width: 210)
+                    }
+                }
+            }
         }
         .frame(maxWidth: .infinity)
-        .padding(.top, 48)
+        .padding(.horizontal, 20)
+        .padding(.top, 28)
+        .padding(.bottom, 40)
     }
 
     private var itemType: SearchItemType? {
@@ -213,11 +227,7 @@ struct DetailSection<Content: View>: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(18)
-        .background(
-            RoundedRectangle(cornerRadius: 20)
-                .fill(Color(.systemBackground))
-                .shadow(color: .black.opacity(0.04), radius: 12, y: 4)
-        )
+        .glassPanel()
     }
 }
 
@@ -258,7 +268,7 @@ private enum SearchItemType {
         switch self {
         case .ingredient: return Color("SuccessTeal")
         case .nutrient: return Color("ColorPrimary")
-        case .additive: return Color("AccentPink")
+        case .additive: return Color("AccentOrange")
         }
     }
 }

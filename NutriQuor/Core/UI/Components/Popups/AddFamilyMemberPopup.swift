@@ -37,7 +37,7 @@ struct AddFamilyMemberPopup: View {
                 Circle()
                     .fill(
                         LinearGradient(
-                            colors: [.blue, .purple],
+                            colors: [Color("ColorPrimary"), Color("SuccessTeal")],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
                         )
@@ -84,11 +84,11 @@ struct AddFamilyMemberPopup: View {
         .frame(maxWidth: 420)
         .background {
 
-            RoundedRectangle(cornerRadius: 30)
+            RoundedRectangle(cornerRadius: .cardRadius)
                 .fill(Color(.systemBackground))
                 .overlay {
 
-                    RoundedRectangle(cornerRadius: 30)
+                    RoundedRectangle(cornerRadius: .cardRadius)
                         .stroke(
                             .primary.opacity(0.06),
                             lineWidth: 1
@@ -96,8 +96,8 @@ struct AddFamilyMemberPopup: View {
                 }
                 .shadow(
                     color: .black.opacity(0.12),
-                    radius: 30,
-                    y: 12
+                    radius: 18,
+                    y: 8
                 )
         }
         .overlay(alignment: .topTrailing) {

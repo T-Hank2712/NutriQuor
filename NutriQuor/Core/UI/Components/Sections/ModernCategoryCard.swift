@@ -16,7 +16,7 @@ struct ModernCategoryCard: View {
         HStack(spacing: 10) {
             ZStack {
                 RoundedRectangle(cornerRadius: 10)
-                    .fill(active ? Color("ColorPrimary") : Color("ColorPrimary").opacity(0.12))
+                    .fill(active ? Color("ColorPrimary") : Color("ColorPrimary").opacity(0.1))
                     .frame(width: 36, height: 36)
 
                 Image(systemName: icon)
@@ -26,7 +26,7 @@ struct ModernCategoryCard: View {
 
             Text(title)
                 .font(.system(size: 14, weight: active ? .bold : .medium, design: .rounded))
-                .foregroundStyle(active ? Color("AccentPinkLight") : .primary)
+                .foregroundStyle(active ? Color("ColorPrimary") : .primary)
                 .lineLimit(1)
 
             Spacer()
@@ -40,18 +40,18 @@ struct ModernCategoryCard: View {
         .padding(.horizontal, 14)
         .padding(.vertical, 12)
         .background(
-            RoundedRectangle(cornerRadius: 16)
+            RoundedRectangle(cornerRadius: .cardRadius)
                 .fill(active
                       ? Color("ColorPrimary").opacity(0.1)
                       : Color(.systemBackground))
                 .overlay(
-                    RoundedRectangle(cornerRadius: 16)
+                    RoundedRectangle(cornerRadius: .cardRadius)
                         .stroke(
-                            active ? Color("ColorPrimary").opacity(0.5) : Color.clear,
-                            lineWidth: 1.5
+                            active ? Color("ColorPrimary").opacity(0.24) : Color.primary.opacity(0.05),
+                            lineWidth: 1
                         )
                 )
-                .shadow(color: .black.opacity(active ? 0 : 0.04), radius: 8, y: 3)
+                .shadow(color: .black.opacity(active ? 0.02 : 0.03), radius: 8, y: 3)
         )
         .animation(.easeInOut(duration: 0.2), value: active)
     }

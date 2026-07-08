@@ -16,12 +16,14 @@ struct SearchBar: View {
     var body: some View {
         HStack(spacing: 8) {
             Image(systemName: "magnifyingglass")
-                .foregroundColor(.secondary)
+                .foregroundStyle(isFocused ? Color.nqPrimary : .secondary)
 
             TextField("Search", text: $text)
                 .focused($isFocused)
                 .textInputAutocapitalization(.never)
                 .disableAutocorrection(true)
+                .font(.system(size: 15, weight: .medium, design: .rounded))
+                .tint(Color.nqPrimary)
                 .onSubmit {
                     isFocused = false
                 }
@@ -34,29 +36,37 @@ struct SearchBar: View {
                     Image(systemName: "xmark.circle.fill")
                         .foregroundColor(.secondary)
                 }
+                .buttonStyle(PressScaleButtonStyle())
             }
         }
-        .padding(.horizontal, 14)
-        .padding(.vertical, 11)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 13)
         .background(
-            RoundedRectangle(cornerRadius: .cardRadius)
-                .fill(
-                    scheme == .dark
-                    ? Color.white.opacity(.opacityMedium)
-                    : Color.black.opacity(.opacityLight)
+            RoundedRectangle(cornerRadius: .cardRadius, style: .continuous)
+                .fill(.ultraThinMaterial)
+                .overlay(
+                    LinearGradient(
+                        colors: [
+                            Color.white.opacity(scheme == .dark ? 0.08 : 0.34),
+                            Color.white.opacity(scheme == .dark ? 0.02 : 0.10)
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
                 )
         )
         .overlay(
-            RoundedRectangle(cornerRadius: .cardRadius)
+            RoundedRectangle(cornerRadius: .cardRadius, style: .continuous)
                 .stroke(
-                    text.isEmpty
-                        ? Color.clear
-                        : Color("ColorPrimary").opacity(0.4),
-                    lineWidth: 1.5
+                    !isFocused && text.isEmpty
+                        ? Color.white.opacity(scheme == .dark ? 0.12 : 0.26)
+                        : Color.nqPrimary.opacity(0.44),
+                    lineWidth: 1
                 )
         )
-        .shadow(color: .black.opacity(0.1), radius: .cardRadius, y: 3)
-        .animation(.easeInOut(duration: 0.2), value: text.isEmpty)
+        .shadow(color: .black.opacity(scheme == .dark ? 0.28 : 0.06), radius: 16, y: 8)
+        .animation(.spring(response: 0.28, dampingFraction: 0.82), value: text.isEmpty)
+        .animation(.spring(response: 0.28, dampingFraction: 0.82), value: isFocused)
         .onTapGesture {
             isFocused = true
         }

@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct CameraButton: View {
-    @State private var showCamera = false
+    @State private var activeRoute: CameraRoute?
 
     var body: some View {
         VStack {
             Spacer()
 
             Button {
-                showCamera = true
+                activeRoute = .camera
             } label: {
                 Image(systemName: "camera.fill")
                     .font(.system(size: 26))
@@ -28,13 +28,35 @@ struct CameraButton: View {
                     )
             }
             .offset(y: -30)
-            .fullScreenCover(isPresented: $showCamera) {
-                CameraView()
+            .fullScreenCover(item: $activeRoute) { route in
+                switch route {
+                case .camera:
+                    CameraView { product in
+                        activeRoute = .analysis(product)
+                    }
+                case .analysis(let product):
+                    AnalystView(product: product) {
+                        activeRoute = nil
+                    }
+                }
             }
         }
     }
 }
 
+private enum CameraRoute: Identifiable {
+    case camera
+    case analysis(Product)
+
+    var id: String {
+        switch self {
+        case .camera:
+            return "camera"
+        case .analysis:
+            return "analysis"
+        }
+    }
+}
 
 #Preview {
     CameraButton()

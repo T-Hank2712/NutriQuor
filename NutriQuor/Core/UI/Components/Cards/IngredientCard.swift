@@ -12,81 +12,104 @@ enum IngredientStatus {
 
     var color: Color {
         switch self {
-        case .safe:     return Color(red: 0.13, green: 0.77, blue: 0.37)
-        case .moderate: return Color(red: 0.96, green: 0.62, blue: 0.04)
-        case .caution:  return Color(red: 0.94, green: 0.27, blue: 0.27)
+        case .safe:     return Color("SuccessTeal")
+        case .moderate: return Color("WarningAmber")
+        case .caution:  return Color("AccentOrange")
         }
     }
 
     var backgroundColor: Color {
-        switch self {
-        case .safe:     return Color(red: 0.86, green: 0.99, blue: 0.90)
-        case .moderate: return Color(red: 0.99, green: 0.95, blue: 0.78)
-        case .caution:  return Color(red: 0.99, green: 0.89, blue: 0.89)
-        }
+        color.opacity(0.12)
+    }
+
+    var borderColor: Color {
+        color.opacity(0.18)
     }
 
     var label: String {
         switch self {
-        case .safe:     return "Safe"
-        case .moderate: return "Moderate"
-        case .caution:  return "Caution"
+        case .safe:     return "Thành phần"
+        case .moderate: return "Cần lưu ý"
+        case .caution:  return "Phụ gia"
+        }
+    }
+
+    var icon: String {
+        switch self {
+        case .safe: return "checkmark.circle.fill"
+        case .moderate: return "info.circle.fill"
+        case .caution: return "exclamationmark.triangle.fill"
         }
     }
 }
 
 struct IngredientCard: View {
     var title: String
+    var index: Int? = nil
     var status: IngredientStatus
 
     var body: some View {
-        HStack(alignment: .top, spacing: 14) {
+        HStack(alignment: .center, spacing: 12) {
 
-            // Dot icon with soft background circle
             ZStack {
-                Circle()
+                RoundedRectangle(cornerRadius: 8, style: .continuous)
                     .fill(status.backgroundColor)
-                    .frame(width: 15, height: 15)
-                Circle()
-                    .fill(status.color)
-                    .frame(width: 5, height: 5)
-            }
-            .padding(.top, 2)
+                    .frame(width: 38, height: 38)
 
-            // Text content
-            Text(title)
-                .font(.system(size: 15, weight: .semibold))
-                .foregroundColor(.primary)
+                if let index {
+                    Text("\(index)")
+                        .font(.system(size: 13, weight: .bold, design: .rounded))
+                        .foregroundStyle(status.color)
+                } else {
+                    Image(systemName: status.icon)
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundStyle(status.color)
+                }
+            }
+
+            VStack(alignment: .leading, spacing: 5) {
+                Text(title)
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundStyle(.primary)
+                    .lineLimit(2)
+                    .fixedSize(horizontal: false, vertical: true)
+
+                HStack(spacing: 5) {
+                    Image(systemName: status.icon)
+                        .font(.system(size: 10, weight: .bold))
+
+                    Text(status.label)
+                        .font(.system(size: 11, weight: .bold))
+                        .lineLimit(1)
+                }
+                .foregroundStyle(status.color)
+            }
 
             Spacer()
 
-            // Status badge
-            Text(status.label)
-                .font(.system(size: 11, weight: .medium))
-                .padding(.horizontal, 10)
-                .padding(.vertical, 4)
-                .background(status.backgroundColor)
-                .foregroundColor(status.color.opacity(0.85))
-                .clipShape(Capsule())
-                .padding(.top, 2)
+            Image(systemName: "chevron.right")
+                .font(.system(size: 12, weight: .bold))
+                .foregroundStyle(.secondary.opacity(0.45))
         }
-        .padding(.horizontal, 18)
-        .padding(.vertical, 16)
-        .background(Color(.systemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-        .overlay(
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .stroke(Color.gray.opacity(0.12), lineWidth: 0.5)
+        .padding(14)
+        .frame(maxWidth: .infinity, minHeight: 66, alignment: .leading)
+        .background(
+            RoundedRectangle(cornerRadius: 8, style: .continuous)
+                .fill(Color(.secondarySystemGroupedBackground))
         )
         .overlay(
-            // Left accent bar
-            HStack {
-                RoundedRectangle(cornerRadius: 16, style: .continuous)
+            HStack(spacing: 0) {
+                RoundedRectangle(cornerRadius: 8, style: .continuous)
                     .fill(status.color)
                     .frame(width: 3)
                 Spacer()
             }
         )
+        .overlay(
+            RoundedRectangle(cornerRadius: 8, style: .continuous)
+                .stroke(status.borderColor, lineWidth: 1)
+        )
+        .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
     }
 }
 
@@ -94,14 +117,17 @@ struct IngredientCard: View {
     VStack(spacing: 12) {
         IngredientCard(
             title: "Spring Water",
+            index: 1,
             status: .safe
         )
         IngredientCard(
             title: "Citric Acid",
+            index: 2,
             status: .moderate
         )
         IngredientCard(
             title: "Sodium Benzoate",
+            index: 3,
             status: .caution
         )
     }

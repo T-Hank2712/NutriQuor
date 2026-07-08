@@ -17,22 +17,19 @@ struct ModernSection<Content: View>: View {
             HStack(spacing: 6) {
                 Image(systemName: icon)
                     .font(.system(size: 10, weight: .bold))
-                    .foregroundStyle(Color("AccentPink"))
+                    .foregroundStyle(Color("ColorPrimary"))
                 Text(title)
                     .font(.system(size: 11, weight: .bold, design: .rounded))
                     .foregroundStyle(.secondary)
                     .kerning(1.2)
             }
 
-            VStack(spacing: 0) {
-                content
+            BentoCard(accent: Color("ColorPrimary"), style: .plain, padding: 16) {
+                VStack(spacing: 0) {
+                    content
+                }
+                .padding(.vertical, 2)
             }
-            .padding(.vertical, 8)
-            .padding(.horizontal, 16)
-            .background(
-                RoundedRectangle(cornerRadius: 18)
-                    .fill(Color(.secondarySystemBackground))
-            )
         }
     }
 }

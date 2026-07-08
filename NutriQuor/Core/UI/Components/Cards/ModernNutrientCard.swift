@@ -34,10 +34,10 @@ struct ModernNutrientCard: View {
         .frame(maxWidth: .infinity)
         .padding(.vertical, 16)
         .background(
-            RoundedRectangle(cornerRadius: 16)
+            RoundedRectangle(cornerRadius: .cardRadius)
                 .fill(color.opacity(0.05))
                 .overlay(
-                    RoundedRectangle(cornerRadius: 16)
+                    RoundedRectangle(cornerRadius: .cardRadius)
                         .stroke(color.opacity(0.15), lineWidth: 1)
                 )
         )
