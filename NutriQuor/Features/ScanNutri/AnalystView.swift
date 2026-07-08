@@ -242,17 +242,25 @@ struct AnalystView: View {
 
                                 if !product.additiveItems.isEmpty {
                                     VStack(spacing: 10) {
-                                        ForEach(Array(product.additiveItems.prefix(3).enumerated()), id: \.element.id) { index, item in
-                                            NavigationLink {
-                                                SearchDetailView(id: item.id)
-                                            } label: {
+                                        ForEach(Array(product.additiveItems.prefix(3).enumerated()), id: \.element.stableID) { index, item in
+                                            if let id = item.id, !id.isEmpty {
+                                                NavigationLink {
+                                                    SearchDetailView(id: id)
+                                                } label: {
+                                                    IngredientCard(
+                                                        title: item.displayName,
+                                                        index: index + 1,
+                                                        status: .caution
+                                                    )
+                                                }
+                                                .buttonStyle(.plain)
+                                            } else {
                                                 IngredientCard(
                                                     title: item.displayName,
                                                     index: index + 1,
                                                     status: .caution
                                                 )
                                             }
-                                            .buttonStyle(.plain)
                                         }
                                     }
                                 }
@@ -343,7 +351,7 @@ struct AnalystView: View {
             return product.nutrientItems.map { item in
                 let key = item.normalizedKey
                 return NutrientItem(
-                    id: item.id,
+                    id: item.stableID,
                     title: nutritionTitle(for: key, fallback: item.name),
                     value: item.displayValue,
                     color: nutritionColor(for: key),

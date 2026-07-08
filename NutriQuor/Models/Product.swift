@@ -8,19 +8,27 @@
 import Foundation
 
 struct ProductIngredient: Codable, Identifiable {
-    let id: String
+    let id: String?
     let name: String
+
+    var stableID: String {
+        id ?? "ingredient-\(displayName)"
+    }
 
     var displayName: String {
         let cleanName = name.trimmingCharacters(in: .whitespacesAndNewlines)
-        return cleanName.isEmpty ? id : cleanName
+        return cleanName.isEmpty ? (id ?? "Thành phần") : cleanName
     }
 }
 
 struct ProductAdditive: Codable, Identifiable {
-    let id: String
+    let id: String?
     let name: String
     let ins: String?
+
+    var stableID: String {
+        id ?? "additive-\(displayName)"
+    }
 
     var displayName: String {
         let cleanName = name.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -30,15 +38,19 @@ struct ProductAdditive: Codable, Identifiable {
             return "\(cleanName) (INS \(cleanIns))"
         }
 
-        return cleanName.isEmpty ? id : cleanName
+        return cleanName.isEmpty ? (id ?? "Phụ gia") : cleanName
     }
 }
 
 struct ProductNutrient: Codable, Identifiable {
-    let id: String
+    let id: String?
     let name: String
     let value: String
     let unit: String?
+
+    var stableID: String {
+        id ?? "nutrient-\(name)-\(displayValue)"
+    }
 
     var displayValue: String {
         [value, unit]
@@ -50,7 +62,7 @@ struct ProductNutrient: Codable, Identifiable {
     }
 
     var normalizedKey: String {
-        let source = "\(id) \(name)".lowercased()
+        let source = "\(id ?? "") \(name)".lowercased()
 
         if source.contains("enerc") || source.contains("năng lượng") { return "energy" }
         if source.contains("procnt") || source.contains("đạm") || source.contains("protein") { return "protein" }
