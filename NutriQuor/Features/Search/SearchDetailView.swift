@@ -88,7 +88,7 @@ struct SearchDetailView: View {
     private func detailContent(_ detail: SearchDetailDTO) -> some View {
         VStack(spacing: 22) {
             VStack(spacing: 12) {
-                Text(detail.name)
+                Text(detail.displayName)
                     .font(.system(size: 28, weight: .black, design: .rounded))
                     .foregroundStyle(.primary)
                     .multilineTextAlignment(.center)
@@ -100,6 +100,10 @@ struct SearchDetailView: View {
 
                     if let code = detail.code, !code.isEmpty {
                         DetailChip(text: code, color: Color("AccentOrange"))
+                    }
+
+                    if let unit = detail.defaultUnit, !unit.isEmpty {
+                        DetailChip(text: unit, color: Color("InfoBlue"))
                     }
 
                     DetailChip(text: "\(detail.sections.count) mục", color: Color("AccentPurple"))
@@ -275,6 +279,10 @@ private enum SearchItemType {
 
 private extension KnowledgeSection {
     var displayTitle: String {
+        if let title, !title.isEmpty {
+            return title
+        }
+
         switch sectionType {
         case "overview": return "Tổng quan"
         case "classification_and_role": return "Phân loại & vai trò"

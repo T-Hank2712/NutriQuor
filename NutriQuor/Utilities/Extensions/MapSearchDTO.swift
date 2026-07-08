@@ -12,7 +12,9 @@ extension Nutrient {
         return SearchDTO(
             id: self.id,
             name: self.name,
-            code: nil,
+            nameVi: self.nameVi,
+            code: self.externalCode,
+            defaultUnit: self.defaultUnit,
             description: self.description,
             type: "nutrient",
             sections: self.sections
@@ -38,6 +40,7 @@ extension Additive {
         return SearchDTO(
             id: self.id,
             name: self.name,
+            nameVi: self.nameVi,
             code: self.code,
             description: self.description,
             type: "additive",

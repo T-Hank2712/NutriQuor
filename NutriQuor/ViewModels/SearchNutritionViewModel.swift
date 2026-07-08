@@ -84,13 +84,23 @@ final class SearchNutritionViewModel: ObservableObject {
 
     // MARK: - Search
     func applySearch() {
-        guard !query.isEmpty else {
+        let normalizedQuery = query.normalizedSearchText
+
+        guard !normalizedQuery.isEmpty else {
             filteredList = list
             return
         }
 
         filteredList = list.filter {
-            $0.name.localizedCaseInsensitiveContains(query)
+            $0.searchText.normalizedSearchText.contains(normalizedQuery)
         }
+    }
+}
+
+private extension String {
+    var normalizedSearchText: String {
+        folding(options: [.caseInsensitive, .diacriticInsensitive], locale: .current)
+            .lowercased()
+            .trimmingCharacters(in: .whitespacesAndNewlines)
     }
 }

@@ -6,9 +6,11 @@
 //
 
 import Foundation
-struct Additive: Identifiable, Codable {
+
+struct Additive: Identifiable, Decodable {
     let id: String
     let name: String
+    let nameVi: String?
     let key: String
     let code: String?
     let description: String?
@@ -16,11 +18,14 @@ struct Additive: Identifiable, Codable {
 
     enum CodingKeys: String, CodingKey {
         case id, name, key, code, description, sections
+        case nameVi = "name_vi"
+        case ins
     }
 
     init(
         id: String,
         name: String,
+        nameVi: String? = nil,
         key: String,
         code: String?,
         description: String?,
@@ -28,6 +33,7 @@ struct Additive: Identifiable, Codable {
     ) {
         self.id = id
         self.name = name
+        self.nameVi = nameVi
         self.key = key
         self.code = code
         self.description = description
@@ -39,11 +45,23 @@ struct Additive: Identifiable, Codable {
 
         id = try container.decode(String.self, forKey: .id)
         name = try container.decode(String.self, forKey: .name)
-        key = try container.decodeIfPresent(String.self, forKey: .key) ?? id
-        code = try container.decodeIfPresent(String.self, forKey: .code)
+        nameVi = try container.decodeIfPresent(String.self, forKey: .nameVi)
+        code = try container.decodeFirstString(forKeys: [.code, .ins])
+        key = try container.decodeIfPresent(String.self, forKey: .key) ?? code ?? id
         sections = try container.decodeIfPresent([KnowledgeSection].self, forKey: .sections) ?? []
 
         let overview = sections.first { $0.sectionType == "overview" }?.content
         description = try container.decodeIfPresent(String.self, forKey: .description) ?? overview
+    }
+}
+
+private extension KeyedDecodingContainer where K == Additive.CodingKeys {
+    func decodeFirstString(forKeys keys: [K]) throws -> String? {
+        for key in keys {
+            if let value = try decodeIfPresent(String.self, forKey: key), !value.isEmpty {
+                return value
+            }
+        }
+        return nil
     }
 }

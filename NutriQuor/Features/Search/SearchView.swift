@@ -105,8 +105,8 @@ struct SearchView: View {
                                 SearchDetailView(id: item.id)
                             } label: {
                                 ModernProductCard(
-                                    name: item.name,
-                                    tags: [item.code, item.type.displayTypeName].compactMap { $0 },
+                                    name: item.displayName,
+                                    tags: [item.displayCode, item.type.displayTypeName].compactMap { $0 },
                                     description: item.description,
                                     type: item.type
                                 )
@@ -141,8 +141,8 @@ struct SearchView: View {
                             SearchDetailView(id: item.id)
                         } label: {
                             ModernProductCard(
-                                name: item.name,
-                                tags: [item.code, item.type.displayTypeName].compactMap { $0 },
+                                name: item.displayName,
+                                tags: [item.displayCode, item.type.displayTypeName].compactMap { $0 },
                                 description: item.description,
                                 type: item.type
                             )
