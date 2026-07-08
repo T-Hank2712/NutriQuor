@@ -32,11 +32,12 @@ struct AnalystView: View {
 //    }
     
     struct NutrientItem: Identifiable {
-        let id = UUID()
+        let id: String
         let title: String
         let value: String?
         let color: Color
         let icon: String
+        let detailID: String?
     }
 
     var body: some View {
@@ -148,12 +149,26 @@ struct AnalystView: View {
                                         spacing: 12
                                     ) {
                                         ForEach(displayItems) { item in
-                                            ModernNutrientCard(
-                                                title: item.title,
-                                                value: item.value ?? "0",
-                                                color: item.color,
-                                                icon: item.icon
-                                            )
+                                            if let detailID = item.detailID {
+                                                NavigationLink {
+                                                    SearchDetailView(id: detailID)
+                                                } label: {
+                                                    ModernNutrientCard(
+                                                        title: item.title,
+                                                        value: item.value ?? "0",
+                                                        color: item.color,
+                                                        icon: item.icon
+                                                    )
+                                                }
+                                                .buttonStyle(.plain)
+                                            } else {
+                                                ModernNutrientCard(
+                                                    title: item.title,
+                                                    value: item.value ?? "0",
+                                                    color: item.color,
+                                                    icon: item.icon
+                                                )
+                                            }
                                         }
                                     }
 
@@ -225,8 +240,30 @@ struct AnalystView: View {
                                     )
                                 }
 
+                                if !product.additiveItems.isEmpty {
+                                    VStack(spacing: 10) {
+                                        ForEach(Array(product.additiveItems.prefix(3).enumerated()), id: \.element.id) { index, item in
+                                            NavigationLink {
+                                                SearchDetailView(id: item.id)
+                                            } label: {
+                                                IngredientCard(
+                                                    title: item.displayName,
+                                                    index: index + 1,
+                                                    status: .caution
+                                                )
+                                            }
+                                            .buttonStyle(.plain)
+                                        }
+                                    }
+                                }
+
                                 NavigationLink {
-                                    ContainListView(ingredients: product.ingredients, additives: product.additive)
+                                    ContainListView(
+                                        ingredients: product.ingredients,
+                                        additives: product.additive,
+                                        ingredientItems: product.ingredientItems,
+                                        additiveItems: product.additiveItems
+                                    )
                                 } label: {
                                     HStack(spacing: 8) {
                                         Image(systemName: "ellipsis.circle.fill")
@@ -302,14 +339,30 @@ struct AnalystView: View {
     }
     
     private var nutritionItems: [NutrientItem] {
-        product.nutrition
+        if !product.nutrientItems.isEmpty {
+            return product.nutrientItems.map { item in
+                let key = item.normalizedKey
+                return NutrientItem(
+                    id: item.id,
+                    title: nutritionTitle(for: key, fallback: item.name),
+                    value: item.displayValue,
+                    color: nutritionColor(for: key),
+                    icon: nutritionIcon(for: key),
+                    detailID: item.id
+                )
+            }
+        }
+
+        return product.nutrition
             .sorted { $0.key < $1.key }
             .map { key, value in
             NutrientItem(
+                id: key,
                 title: nutritionTitle(for: key),
                 value: value,
                 color: nutritionColor(for: key),
-                icon: nutritionIcon(for: key)
+                icon: nutritionIcon(for: key),
+                detailID: nil
             )
         }
     }
@@ -339,6 +392,10 @@ struct AnalystView: View {
     }
 
     private func nutritionTitle(for key: String) -> String {
+        nutritionTitle(for: key, fallback: nil)
+    }
+
+    private func nutritionTitle(for key: String, fallback: String?) -> String {
         switch key {
         case "energy": return "Năng lượng"
         case "protein": return "Protein"
@@ -348,6 +405,10 @@ struct AnalystView: View {
         case "saturated_fat", "saturatedFat": return "Béo bão hòa"
         case "sodium": return "Natri"
         default:
+            if let fallback, !fallback.isEmpty {
+                return fallback
+            }
+
             return key
                 .replacingOccurrences(of: "_", with: " ")
                 .capitalized

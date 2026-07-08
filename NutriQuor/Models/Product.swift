@@ -7,12 +7,75 @@
 
 import Foundation
 
+struct ProductIngredient: Codable, Identifiable {
+    let id: String
+    let name: String
+
+    var displayName: String {
+        let cleanName = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        return cleanName.isEmpty ? id : cleanName
+    }
+}
+
+struct ProductAdditive: Codable, Identifiable {
+    let id: String
+    let name: String
+    let ins: String?
+
+    var displayName: String {
+        let cleanName = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        let cleanIns = ins?.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        if let cleanIns, !cleanIns.isEmpty {
+            return "\(cleanName) (INS \(cleanIns))"
+        }
+
+        return cleanName.isEmpty ? id : cleanName
+    }
+}
+
+struct ProductNutrient: Codable, Identifiable {
+    let id: String
+    let name: String
+    let value: String
+    let unit: String?
+
+    var displayValue: String {
+        [value, unit]
+            .compactMap { text in
+                let trimmed = text?.trimmingCharacters(in: .whitespacesAndNewlines)
+                return trimmed?.isEmpty == false ? trimmed : nil
+            }
+            .joined(separator: " ")
+    }
+
+    var normalizedKey: String {
+        let source = "\(id) \(name)".lowercased()
+
+        if source.contains("enerc") || source.contains("năng lượng") { return "energy" }
+        if source.contains("procnt") || source.contains("đạm") || source.contains("protein") { return "protein" }
+        if source.contains("chocdf") || source.contains("carbo") { return "carbohydrate" }
+        if source.contains("sugar") || source.contains("đường") { return "sugars" }
+        if source.contains("fasat") || source.contains("bão hòa") { return "saturated_fat" }
+        if source.contains("fat") || source.contains("béo") { return "fat" }
+        if source.contains("_na") || source.contains("natri") || source.contains("sodium") { return "sodium" }
+
+        return name
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .lowercased()
+            .replacingOccurrences(of: " ", with: "_")
+    }
+}
+
 struct Product: Codable {
     let productName: String?
     let ageRange: String?
     let ingredients: [String]
     let additive: [String]
     let nutrition: [String: String]
+    let ingredientItems: [ProductIngredient]
+    let additiveItems: [ProductAdditive]
+    let nutrientItems: [ProductNutrient]
     let manufacturer: String?
     let mfgDate: String?
     let expiryDate: String?
@@ -28,6 +91,9 @@ struct Product: Codable {
         case ingredients
         case additive
         case nutrition
+        case ingredientItems = "ingredient_items"
+        case additiveItems = "additive_items"
+        case nutrientItems = "nutrient_items"
         case manufacturer
         case mfgDate = "mfg_date"
         case expiryDate = "expiry_date"
@@ -44,6 +110,9 @@ struct Product: Codable {
         ingredients: [String],
         additive: [String],
         nutrition: [String: String],
+        ingredientItems: [ProductIngredient] = [],
+        additiveItems: [ProductAdditive] = [],
+        nutrientItems: [ProductNutrient] = [],
         manufacturer: String?,
         mfgDate: String?,
         expiryDate: String?,
@@ -58,6 +127,9 @@ struct Product: Codable {
         self.ingredients = ingredients
         self.additive = additive
         self.nutrition = nutrition
+        self.ingredientItems = ingredientItems
+        self.additiveItems = additiveItems
+        self.nutrientItems = nutrientItems
         self.manufacturer = manufacturer
         self.mfgDate = mfgDate
         self.expiryDate = expiryDate
@@ -73,15 +145,19 @@ struct Product: Codable {
 
         productName = try container.decodeIfPresent(String.self, forKey: .productName)
         ageRange = try container.decodeIfPresent(String.self, forKey: .ageRange)
-        ingredients = try container.decodeIfPresent([String].self, forKey: .ingredients) ?? []
-        additive = try container
-            .decodeIfPresent([ExtractedAdditive].self, forKey: .additive)?
-            .map(\.displayName) ?? []
-        nutrition = try container
-            .decodeIfPresent([ExtractedNutrient].self, forKey: .nutrition)?
-            .reduce(into: [:]) { result, item in
-                result[item.normalizedKey] = item.displayValue
-            } ?? [:]
+
+        let decodedIngredients = try container.decodeFlexibleIngredients()
+        ingredientItems = try container.decodeIfPresent([ProductIngredient].self, forKey: .ingredientItems) ?? decodedIngredients.items
+        ingredients = decodedIngredients.names
+
+        let decodedAdditives = try container.decodeFlexibleAdditives()
+        additiveItems = try container.decodeIfPresent([ProductAdditive].self, forKey: .additiveItems) ?? decodedAdditives.items
+        additive = decodedAdditives.names
+
+        let decodedNutrients = try container.decodeFlexibleNutrients()
+        nutrientItems = try container.decodeIfPresent([ProductNutrient].self, forKey: .nutrientItems) ?? decodedNutrients.items
+        nutrition = decodedNutrients.values
+
         manufacturer = try container.decodeIfPresent(String.self, forKey: .manufacturer)
         mfgDate = try container.decodeIfPresent(String.self, forKey: .mfgDate)
         expiryDate = try container.decodeIfPresent(String.self, forKey: .expiryDate)
@@ -93,59 +169,36 @@ struct Product: Codable {
     }
 }
 
-private struct ExtractedAdditive: Decodable {
-    let id: String?
-    let name: String?
-    let ins: String?
-
-    var displayName: String {
-        let cleanName = name?.trimmingCharacters(in: .whitespacesAndNewlines)
-        let cleanIns = ins?.trimmingCharacters(in: .whitespacesAndNewlines)
-
-        switch (cleanName?.isEmpty == false ? cleanName : nil, cleanIns?.isEmpty == false ? cleanIns : nil) {
-        case let (.some(name), .some(ins)):
-            return "\(name) (INS \(ins))"
-        case let (.some(name), nil):
-            return name
-        case let (nil, .some(ins)):
-            return "INS \(ins)"
-        default:
-            return id ?? "Phụ gia"
+private extension KeyedDecodingContainer where K == Product.CodingKeys {
+    func decodeFlexibleIngredients() throws -> (items: [ProductIngredient], names: [String]) {
+        if let items = try? decodeIfPresent([ProductIngredient].self, forKey: .ingredients) {
+            return (items, items.map(\.displayName))
         }
-    }
-}
 
-private struct ExtractedNutrient: Decodable {
-    let id: String?
-    let name: String?
-    let value: String?
-    let unit: String?
-
-    var displayValue: String {
-        [value, unit]
-            .compactMap { text in
-                let trimmed = text?.trimmingCharacters(in: .whitespacesAndNewlines)
-                return trimmed?.isEmpty == false ? trimmed : nil
-            }
-            .joined(separator: " ")
+        let names = try decodeIfPresent([String].self, forKey: .ingredients) ?? []
+        return ([], names)
     }
 
-    var normalizedKey: String {
-        let source = [id, name]
-            .compactMap { $0?.lowercased() }
-            .joined(separator: " ")
+    func decodeFlexibleAdditives() throws -> (items: [ProductAdditive], names: [String]) {
+        if let items = try? decodeIfPresent([ProductAdditive].self, forKey: .additive) {
+            return (items, items.map(\.displayName))
+        }
 
-        if source.contains("enerc") || source.contains("năng lượng") { return "energy" }
-        if source.contains("procnt") || source.contains("đạm") || source.contains("protein") { return "protein" }
-        if source.contains("chocdf") || source.contains("carbo") { return "carbohydrate" }
-        if source.contains("sugar") || source.contains("đường") { return "sugars" }
-        if source.contains("fasat") || source.contains("bão hòa") { return "saturated_fat" }
-        if source.contains("fat") || source.contains("béo") { return "fat" }
-        if source.contains("_na") || source.contains("natri") || source.contains("sodium") { return "sodium" }
+        let names = try decodeIfPresent([String].self, forKey: .additive) ?? []
+        return ([], names)
+    }
 
-        return name?
-            .trimmingCharacters(in: .whitespacesAndNewlines)
-            .lowercased()
-            .replacingOccurrences(of: " ", with: "_") ?? id ?? "nutrition"
+    func decodeFlexibleNutrients() throws -> (items: [ProductNutrient], values: [String: String]) {
+        if let items = try? decodeIfPresent([ProductNutrient].self, forKey: .nutrition) {
+            return (
+                items,
+                items.reduce(into: [:]) { result, item in
+                    result[item.normalizedKey] = item.displayValue
+                }
+            )
+        }
+
+        let values = try decodeIfPresent([String: String].self, forKey: .nutrition) ?? [:]
+        return ([], values)
     }
 }

@@ -10,6 +10,20 @@ import SwiftUI
 struct ContainListView: View {
     let ingredients: [String]
     let additives: [String]
+    let ingredientItems: [ProductIngredient]
+    let additiveItems: [ProductAdditive]
+
+    init(
+        ingredients: [String],
+        additives: [String],
+        ingredientItems: [ProductIngredient] = [],
+        additiveItems: [ProductAdditive] = []
+    ) {
+        self.ingredients = ingredients
+        self.additives = additives
+        self.ingredientItems = ingredientItems
+        self.additiveItems = additiveItems
+    }
 
     var body: some View {
         ScrollView {
@@ -18,14 +32,16 @@ struct ContainListView: View {
 
                 IngredientSection(
                     title: "Thành phần",
-                    tag: "\(ingredients.count) mục",
-                    ingredients: ingredients
+                    tag: "\(ingredientNames.count) mục",
+                    ingredients: ingredientNames,
+                    detailIDs: ingredientDetailIDs
                 )
 
                 IngredientSection(
                     title: "Phụ gia",
-                    tag: "\(additives.count) mục",
-                    ingredients: additives
+                    tag: "\(additiveNames.count) mục",
+                    ingredients: additiveNames,
+                    detailIDs: additiveDetailIDs
                 )
             }
             .padding(.horizontal, 16)
@@ -35,6 +51,22 @@ struct ContainListView: View {
         .background(Color("Background"))
         .navigationTitle("Chi tiết thành phần")
         .navigationBarTitleDisplayMode(.inline)
+    }
+
+    private var additiveNames: [String] {
+        additiveItems.isEmpty ? additives : additiveItems.map(\.displayName)
+    }
+
+    private var ingredientNames: [String] {
+        ingredientItems.isEmpty ? ingredients : ingredientItems.map(\.displayName)
+    }
+
+    private var ingredientDetailIDs: [String?] {
+        ingredientItems.isEmpty ? [] : ingredientItems.map(\.id)
+    }
+
+    private var additiveDetailIDs: [String?] {
+        additiveItems.isEmpty ? [] : additiveItems.map(\.id)
     }
 }
 

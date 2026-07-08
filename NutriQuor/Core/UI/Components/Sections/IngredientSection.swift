@@ -11,6 +11,7 @@ struct IngredientSection: View {
     let title: String
     let tag: String
     let ingredients: [String]?
+    var detailIDs: [String?] = []
 
     private var status: IngredientStatus {
         isAdditiveSection ? .caution : .safe
@@ -65,11 +66,24 @@ struct IngredientSection: View {
             } else {
                 LazyVStack(spacing: 10) {
                     ForEach(Array(items.enumerated()), id: \.offset) { index, item in
-                        IngredientCard(
-                            title: item,
-                            index: index + 1,
-                            status: status
-                        )
+                        if let detailID = detailID(at: index) {
+                            NavigationLink {
+                                SearchDetailView(id: detailID)
+                            } label: {
+                                IngredientCard(
+                                    title: item,
+                                    index: index + 1,
+                                    status: status
+                                )
+                            }
+                            .buttonStyle(.plain)
+                        } else {
+                            IngredientCard(
+                                title: item,
+                                index: index + 1,
+                                status: status
+                            )
+                        }
                     }
                 }
             }
@@ -83,6 +97,17 @@ struct IngredientSection: View {
             RoundedRectangle(cornerRadius: 8, style: .continuous)
                 .stroke(Color.primary.opacity(0.06), lineWidth: 1)
         )
+    }
+
+    private func detailID(at index: Int) -> String? {
+        guard detailIDs.indices.contains(index),
+              let id = detailIDs[index],
+              !id.isEmpty
+        else {
+            return nil
+        }
+
+        return id
     }
 }
 
