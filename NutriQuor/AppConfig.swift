@@ -10,9 +10,7 @@ import Foundation
 final class AppConfig {
     static let shared = AppConfig()
 
-//    let devBaseURL = "http://localhost:8000"
-
-    let devBaseURL = "https://api.dvxuanbac.com"
+//    let devBaseURL = "http://localhost:8002"
 
     private init() {}
 }
