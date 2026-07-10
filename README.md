@@ -57,12 +57,6 @@ flowchart LR
 
 ## API
 
-Base URL được cấu hình trong `NutriQuor/AppConfig.swift`.
-
-```swift
-let devBaseURL = "https://api.dvxuanbac.com"
-```
-
 Các nhóm API chính:
 
 - Auth: đăng nhập, đăng ký, refresh token.
