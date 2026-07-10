@@ -1,0 +1,53 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Xcode user state
+*.xcuserstate
+*.xcuserdata/
+xcuserdata/
+*.moved-aside
+DerivedData/
+build/
+
+# Swift Package Manager / Xcode generated files
+.build/
+Package.resolved
+*.xcodeproj/project.xcworkspace/xcuserdata/
+*.xcworkspace/xcuserdata/
+
+# CocoaPods / Carthage / dependency artifacts
+Pods/
+Carthage/Build/
+
+# Secrets and local environment files
+.env
+.env.*
+*.env
+Secrets.plist
+GoogleService-Info.plist
+*.p8
+*.p12
+*.cer
+*.mobileprovision
+*.provisionprofile
+
+# Local app configuration
+AppConfig.local.swift
+*.local.swift
+*.xcconfig.local
+Config.local.xcconfig
+
+# Logs and archives
+*.log
+*.ipa
+*.dSYM.zip
+*.dSYM
+*.xcarchive
+
+# Temporary files
+*.tmp
+*.swp
+*.bak
+*~
