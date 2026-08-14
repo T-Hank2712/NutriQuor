@@ -62,8 +62,6 @@ final class AuthService {
         guard let refreshToken = TokenStorage.shared.getRefreshToken() else {
             throw URLError(.userAuthenticationRequired)
         }
-        
-        print(refreshToken)
 
         let request = try AuthAPI.refreshAccessTokenRequest(refreshToken: refreshToken)
 

@@ -51,3 +51,10 @@ Config.local.xcconfig
 *.swp
 *.bak
 *~
+
+# Local Spec Kit / agent workflow artifacts
+.specify/
+.agents/
+specs/
+AGENTS.md
+RTK.md

@@ -26,6 +26,25 @@ struct ProductAdditive: Codable, Identifiable {
     let name: String
     let ins: String?
 
+    enum CodingKeys: String, CodingKey {
+        case id
+        case name
+        case ins
+    }
+
+    init(id: String? = nil, name: String, ins: String? = nil) {
+        self.id = id
+        self.name = name
+        self.ins = ins
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decodeFlexibleStringIfPresent(forKey: .id)
+        name = try container.decodeFlexibleStringIfPresent(forKey: .name) ?? ""
+        ins = try container.decodeFlexibleStringIfPresent(forKey: .ins)
+    }
+
     var stableID: String {
         id ?? "additive-\(displayName)"
     }
@@ -47,6 +66,28 @@ struct ProductNutrient: Codable, Identifiable {
     let name: String
     let value: String
     let unit: String?
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case name
+        case value
+        case unit
+    }
+
+    init(id: String? = nil, name: String, value: String, unit: String? = nil) {
+        self.id = id
+        self.name = name
+        self.value = value
+        self.unit = unit
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decodeFlexibleStringIfPresent(forKey: .id)
+        name = try container.decodeFlexibleStringIfPresent(forKey: .name) ?? ""
+        value = try container.decodeFlexibleStringIfPresent(forKey: .value) ?? ""
+        unit = try container.decodeFlexibleStringIfPresent(forKey: .unit)
+    }
 
     var stableID: String {
         id ?? "nutrient-\(name)-\(displayValue)"
@@ -80,6 +121,7 @@ struct ProductNutrient: Codable, Identifiable {
 }
 
 struct Product: Codable {
+    let analysisId: String?
     let productName: String?
     let ageRange: String?
     let ingredients: [String]
@@ -95,14 +137,18 @@ struct Product: Codable {
     let allergen: String?
     let warning: String?
     let origin: String?
+    let imageRef: String?
     let s3Key: String?
     
     enum CodingKeys: String, CodingKey {
+        case analysisId = "analysis_id"
         case productName = "product_name"
         case ageRange = "age_range"
         case ingredients
         case additive
+        case additives
         case nutrition
+        case nutritions
         case ingredientItems = "ingredient_items"
         case additiveItems = "additive_items"
         case nutrientItems = "nutrient_items"
@@ -113,10 +159,12 @@ struct Product: Codable {
         case allergen
         case warning
         case origin
+        case imageRef = "image_ref"
         case s3Key = "s3_key"
     }
 
     init(
+        analysisId: String? = nil,
         productName: String?,
         ageRange: String?,
         ingredients: [String],
@@ -132,8 +180,10 @@ struct Product: Codable {
         allergen: String?,
         warning: String?,
         origin: String?,
+        imageRef: String? = nil,
         s3Key: String? = nil
     ) {
+        self.analysisId = analysisId
         self.productName = productName
         self.ageRange = ageRange
         self.ingredients = ingredients
@@ -149,12 +199,14 @@ struct Product: Codable {
         self.allergen = allergen
         self.warning = warning
         self.origin = origin
+        self.imageRef = imageRef
         self.s3Key = s3Key
     }
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
+        analysisId = try container.decodeIfPresent(String.self, forKey: .analysisId)
         productName = try container.decodeIfPresent(String.self, forKey: .productName)
         ageRange = try container.decodeIfPresent(String.self, forKey: .ageRange)
 
@@ -177,7 +229,31 @@ struct Product: Codable {
         allergen = try container.decodeIfPresent(String.self, forKey: .allergen)
         warning = try container.decodeIfPresent(String.self, forKey: .warning)
         origin = try container.decodeIfPresent(String.self, forKey: .origin)
+        imageRef = try container.decodeIfPresent(String.self, forKey: .imageRef)
         s3Key = try container.decodeIfPresent(String.self, forKey: .s3Key)
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+
+        try container.encodeIfPresent(analysisId, forKey: .analysisId)
+        try container.encodeIfPresent(productName, forKey: .productName)
+        try container.encodeIfPresent(ageRange, forKey: .ageRange)
+        try container.encode(ingredients, forKey: .ingredients)
+        try container.encode(additive, forKey: .additives)
+        try container.encode(nutrition, forKey: .nutritions)
+        try container.encode(ingredientItems, forKey: .ingredientItems)
+        try container.encode(additiveItems, forKey: .additiveItems)
+        try container.encode(nutrientItems, forKey: .nutrientItems)
+        try container.encodeIfPresent(manufacturer, forKey: .manufacturer)
+        try container.encodeIfPresent(mfgDate, forKey: .mfgDate)
+        try container.encodeIfPresent(expiryDate, forKey: .expiryDate)
+        try container.encodeIfPresent(netWeight, forKey: .netWeight)
+        try container.encodeIfPresent(allergen, forKey: .allergen)
+        try container.encodeIfPresent(warning, forKey: .warning)
+        try container.encodeIfPresent(origin, forKey: .origin)
+        try container.encodeIfPresent(imageRef, forKey: .imageRef)
+        try container.encodeIfPresent(s3Key, forKey: .s3Key)
     }
 }
 
@@ -192,8 +268,16 @@ private extension KeyedDecodingContainer where K == Product.CodingKeys {
     }
 
     func decodeFlexibleAdditives() throws -> (items: [ProductAdditive], names: [String]) {
+        if let items = try? decodeIfPresent([ProductAdditive].self, forKey: .additives) {
+            return (items, items.map(\.displayName))
+        }
+
         if let items = try? decodeIfPresent([ProductAdditive].self, forKey: .additive) {
             return (items, items.map(\.displayName))
+        }
+
+        if let names = try decodeIfPresent([String].self, forKey: .additives) {
+            return ([], names)
         }
 
         let names = try decodeIfPresent([String].self, forKey: .additive) ?? []
@@ -201,6 +285,24 @@ private extension KeyedDecodingContainer where K == Product.CodingKeys {
     }
 
     func decodeFlexibleNutrients() throws -> (items: [ProductNutrient], values: [String: String]) {
+        if let items = try? decodeIfPresent([ProductNutrient].self, forKey: .nutritions) {
+            return (
+                items,
+                items.reduce(into: [:]) { result, item in
+                    result[item.normalizedKey] = item.displayValue
+                }
+            )
+        }
+
+        if let keyedItems = try decodeKeyedNutrientsIfPresent(forKey: .nutritions) {
+            return (
+                keyedItems.items,
+                keyedItems.values.reduce(into: [:]) { result, entry in
+                    result[entry.key] = entry.value.displayValue
+                }
+            )
+        }
+
         if let items = try? decodeIfPresent([ProductNutrient].self, forKey: .nutrition) {
             return (
                 items,
@@ -210,7 +312,70 @@ private extension KeyedDecodingContainer where K == Product.CodingKeys {
             )
         }
 
+        if let values = try? decodeIfPresent([String: String].self, forKey: .nutritions) {
+            return ([], values)
+        }
+
         let values = try decodeIfPresent([String: String].self, forKey: .nutrition) ?? [:]
         return ([], values)
+    }
+
+    func decodeKeyedNutrientsIfPresent(
+        forKey key: Product.CodingKeys
+    ) throws -> (items: [ProductNutrient], values: [(key: String, value: ProductNutrient)])? {
+        guard contains(key) else {
+            return nil
+        }
+
+        let nested = try nestedContainer(
+            keyedBy: DynamicCodingKey.self,
+            forKey: key
+        )
+
+        var values: [(key: String, value: ProductNutrient)] = []
+        for nestedKey in nested.allKeys.sorted(by: { $0.stringValue < $1.stringValue }) {
+            if let item = try? nested.decode(ProductNutrient.self, forKey: nestedKey) {
+                values.append((nestedKey.stringValue, item))
+            }
+        }
+
+        guard !values.isEmpty else {
+            return nil
+        }
+
+        return (values.map(\.value), values)
+    }
+}
+
+private extension KeyedDecodingContainer {
+    func decodeFlexibleStringIfPresent(forKey key: K) throws -> String? {
+        if let value = try decodeIfPresent(String.self, forKey: key) {
+            return value
+        }
+
+        if let value = try decodeIfPresent(Int.self, forKey: key) {
+            return String(value)
+        }
+
+        if let value = try decodeIfPresent(Double.self, forKey: key) {
+            return String(value)
+        }
+
+        return nil
+    }
+}
+
+private struct DynamicCodingKey: CodingKey {
+    let stringValue: String
+    let intValue: Int?
+
+    init?(stringValue: String) {
+        self.stringValue = stringValue
+        self.intValue = nil
+    }
+
+    init?(intValue: Int) {
+        self.stringValue = String(intValue)
+        self.intValue = intValue
     }
 }
