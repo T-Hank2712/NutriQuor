@@ -17,20 +17,6 @@ struct HistoryView: View {
                         .foregroundStyle(Color("Heading"))
 
                     Spacer()
-
-                    Button {
-                        Task {
-                            await viewModel.createProduct()
-                        }
-                    } label: {
-                        if viewModel.isLoading {
-                            ProgressView()
-                        } else {
-                            Image(systemName: "plus.circle.fill")
-                                .font(.title2)
-                        }
-                    }
-                    .foregroundStyle(Color("ColorPrimary"))
                 }
                 
                 HStack {
@@ -96,7 +82,7 @@ struct HistoryView: View {
                                         .frame(maxHeight: .infinity)
 
                                     Text(
-                                        formatTime(item.scannedAt)
+                                        formatTime(item.createdAt)
                                     )
                                     .font(.caption)
                                     .foregroundColor(Color("Heading"))
@@ -109,10 +95,7 @@ struct HistoryView: View {
                                 .frame(width: 60)
 
                                 NavigationLink {
-                                    AnalystView(
-                                        product: item.product,
-                                        onDismiss: {}
-                                    )
+                                    HistoryDetailView(analysisId: item.analysisId)
                                 } label: {
                                     HistoryItem(record: item)
                                 }
@@ -127,54 +110,27 @@ struct HistoryView: View {
         }
         .task {
             viewModel.updateUserId(appState.user?.id)
+            await viewModel.loadScanHistory(for: selectedDate)
         }
         .onChange(of: appState.user?.id) { oldValue, newValue in
             viewModel.updateUserId(newValue)
+            Task {
+                await viewModel.loadScanHistory(for: selectedDate)
+            }
         }
         .onChange(of: selectedDate) { _, newDate in
-            viewModel.loadScanHistory(for: newDate)
+            Task {
+                await viewModel.loadScanHistory(for: newDate)
+            }
         }
     }
     
     // MARK: - Format Time
-    func formatTime(_ date: Date) -> String {
+    func formatTime(_ date: Date?) -> String {
+        guard let date else { return "--:--" }
         let formatter = DateFormatter()
         formatter.dateFormat = "HH:mm"
         return formatter.string(from: date)
-    }
-
-    private func parseDate(_ raw: String?) -> Date? {
-        guard let raw else { return nil }
-
-        let isoWithFraction = ISO8601DateFormatter()
-        isoWithFraction.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
-
-        let isoWithoutFraction = ISO8601DateFormatter()
-        isoWithoutFraction.formatOptions = [.withInternetDateTime]
-
-        if let d = isoWithFraction.date(from: raw) ?? isoWithoutFraction.date(from: raw) {
-            return d
-        }
-
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-        formatter.timeZone = .current
-
-        let formats = [
-            "yyyy-MM-dd HH:mm:ss",
-            "yyyy-MM-dd'T'HH:mm:ss",
-            "yyyy-MM-dd'T'HH:mm:ss.SSS",
-            "yyyy-MM-dd'T'HH:mm:ss.SSSSSS"
-        ]
-
-        for format in formats {
-            formatter.dateFormat = format
-            if let d = formatter.date(from: raw) {
-                return d
-            }
-        }
-
-        return nil
     }
 }
 

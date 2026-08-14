@@ -116,6 +116,10 @@ final class APIClient {
         case "Cannot connect to Builder analyze service",
              "Builder analyze request failed":
             return "Hệ thống phân tích đang bận. Vui lòng thử lại sau."
+        case "Scan history storage is not available":
+            return "Lịch sử quét hiện chưa sẵn sàng. Vui lòng thử lại sau."
+        case "Scan history not found":
+            return "Không tìm thấy lịch sử quét này."
         case "Uploaded image is empty":
             return "Ảnh tải lên đang trống. Vui lòng chọn ảnh khác."
         case "Uploaded image is too large":

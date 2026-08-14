@@ -14,7 +14,6 @@ final class ScanNutriViewModel: ObservableObject {
     @Published var errorMessage: String?
 
     private let productService = ProductService()
-    private let scanHistoryManager = ScanHistoryManager.shared
 
     func analyze(image: UIImage, userId: String?) async {
         guard let userId else {
@@ -29,7 +28,6 @@ final class ScanNutriViewModel: ObservableObject {
         do {
             let product = try await productService.analyzeProduct(image: image)
             analyzedProduct = product
-            scanHistoryManager.save(product: product, userId: userId)
         } catch {
             errorMessage = UserMessageMapper.message(for: error)
         }

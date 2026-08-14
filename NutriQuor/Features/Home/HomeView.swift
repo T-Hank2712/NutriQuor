@@ -108,7 +108,7 @@ struct HomeView: View {
                         VStack(spacing: 12) {
                             ForEach(viewModel.scanHistory) { item in
                                 NavigationLink {
-                                    AnalystView(product: item.product, onDismiss: {})
+                                    HistoryDetailView(analysisId: item.analysisId)
                                 } label: {
                                     HomeHistoryItem(record: item)
                                 }
@@ -121,10 +121,15 @@ struct HomeView: View {
                 .padding(.bottom, 32)
             }.task {
                 viewModel.updateUserId(appState.user?.id)
-                viewModel.scanCountToday()
-                viewModel.loadTodayScanHistory()
+                await viewModel.loadTodayScanHistory()
                 
                 await viewModel.loadDailyFeature()
+            }
+            .onChange(of: appState.user?.id) { _, newValue in
+                viewModel.updateUserId(newValue)
+                Task {
+                    await viewModel.loadTodayScanHistory()
+                }
             }
             .background(Color("Background"))
         }

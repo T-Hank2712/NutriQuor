@@ -18,8 +18,7 @@ final class HomeViewModel: ObservableObject {
     
     @Published var todayScanCount = 0
     
-    private let productService = ProductService()
-    private let scanHistoryManager = ScanHistoryManager.shared
+    private let scanHistoryService = ScanHistoryService()
     private let searchService = SearchService()
     
     private var userId: String?
@@ -28,29 +27,22 @@ final class HomeViewModel: ObservableObject {
         self.userId = id
     }
     
-    func scanCountToday() {
-        guard let userId else {
-               todayScanCount = 0
-                return
-           }
-
-           todayScanCount = scanHistoryManager.count(
-               on: Date(),
-               userId: userId
-           )
-    }
-    
-    func loadTodayScanHistory() {
-        guard let userId else {
+    func loadTodayScanHistory() async {
+        guard userId != nil else {
             scanHistory = []
+            todayScanCount = 0
             return
         }
-        
-        scanHistory = scanHistoryManager
-            .getAll(userId: userId)
-            .filter {
-                Calendar.current.isDateInToday($0.scannedAt)
-            }
+
+        do {
+            let histories = try await scanHistoryService.fetchHistory(date: Date(), limit: 20)
+            scanHistory = histories
+            todayScanCount = histories.count
+        } catch {
+            scanHistory = []
+            todayScanCount = 0
+            errorMessage = UserMessageMapper.message(for: error)
+        }
     }
     
     func loadDailyFeature() async {

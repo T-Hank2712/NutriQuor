@@ -43,7 +43,7 @@ struct HomeHistoryItem: View {
 
             // Info
             VStack(alignment: .leading, spacing: 5) {
-                Text(record.product.productName ?? "")
+                Text(record.productName ?? "Sản phẩm chưa đặt tên")
                     .font(.system(size: 15, weight: .semibold, design: .rounded))
                     .foregroundStyle(.primary)
                     .lineLimit(1)
@@ -52,13 +52,13 @@ struct HomeHistoryItem: View {
                     Image(systemName: "exclamationmark.triangle.fill")
                         .font(.system(size: 10))
                         .foregroundStyle(Color("WarningAmber"))
-                    Text(record.product.warning ?? "")
+                    Text(record.warning ?? "Không có cảnh báo")
                         .font(.system(size: 12, weight: .medium))
                         .foregroundStyle(.secondary)
                 }
 
                 Text(
-                    record.scannedAt.formatted(
+                    (record.createdAt ?? Date()).formatted(
                         date: .omitted,
                         time: .shortened
                     )
@@ -97,30 +97,10 @@ struct HomeHistoryItem: View {
 #Preview {
     HomeHistoryItem(
         record: ScanHistory(
-            id: UUID(),
-            scannedAt: Date(),
-            product: Product(
-                productName: "Nestlé Milo",
-                ageRange: "4+",
-                ingredients: [
-                    "Milk powder",
-                    "Cocoa powder"
-                ],
-                additive: [
-                    "INS 322"
-                ],
-                nutrition: [
-                    "energy": "420 kcal",
-                    "protein": "14 g"
-                ],
-                manufacturer: "Nestlé Vietnam",
-                mfgDate: "2026-01-15",
-                expiryDate: "2027-01-15",
-                netWeight: "400g",
-                allergen: "Contains milk",
-                warning: "Store in a cool dry place",
-                origin: "Vietnam"
-            )
+            analysisId: "analysis-1",
+            productName: "Nestlé Milo",
+            warning: "Có chứa sữa",
+            createdAt: Date()
         )
     )
 }
