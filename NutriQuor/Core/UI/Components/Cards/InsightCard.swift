@@ -26,18 +26,16 @@ struct InsightCard: View {
                         .foregroundStyle(Color("Heading").opacity(0.75))
                 }
             
-                Text(
-                    item.code?.isEmpty == false
-                    ? "\(item.name) (\(item.code!))"
-                    : item.name
-                )
+                Text(title)
                 .font(.title2)
                 .fontWeight(.bold)
                 .foregroundStyle(Color("Heading"))
-            
-                Text(item.description ?? "")
-                    .foregroundStyle(.secondary)
-                    .lineLimit(3)
+
+                if let description {
+                    Text(description)
+                        .foregroundStyle(.secondary)
+                        .lineLimit(3)
+                }
             
                 NavigationLink {
                     SearchDetailView(id: item.id)
@@ -53,6 +51,23 @@ struct InsightCard: View {
                 .buttonStyle(.plain)
             }
         }
+    }
+
+    private var title: String {
+        guard let code = item.displayCode, !code.isEmpty else {
+            return item.displayName
+        }
+
+        return "\(item.displayName) (\(code))"
+    }
+
+    private var description: String? {
+        guard let description = item.description?.trimmingCharacters(in: .whitespacesAndNewlines),
+              !description.isEmpty else {
+            return nil
+        }
+
+        return description
     }
 }
 

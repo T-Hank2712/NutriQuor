@@ -25,8 +25,6 @@ struct FamilyMemberProfile: View {
     @State private var editLastName: String = ""
 
     @State private var showAllergyPicker = false
-    @State private var showDiseasePicker = false
-    @State private var showHealthGoalPicker = false
 
     @StateObject private var viewModel = UserProfileViewModel()
 
@@ -129,46 +127,6 @@ struct FamilyMemberProfile: View {
                     // MARK: - Content
                     VStack(spacing: 16) {
 
-                        // Health Goals
-                        VStack(alignment: .leading, spacing: 12) {
-                            SectionLabel(text: "MỤC TIÊU SỨC KHOẺ")
-
-                            colorPrimaryGoalsCard(
-                                goals: viewModel.selectedHealthGoals,
-                                onAdd: { showHealthGoalPicker = true },
-                                onDelete: { goal in
-                                    Task {
-                                        _ = await viewModel.deleteHealthGoal(
-                                            profileId: profile.profileId,
-                                            healthGoalId: goal.id
-                                        )
-                                    }
-                                }
-                            )
-                        }
-
-                        Divider().opacity(0.2)
-
-                        // Diseases
-                        VStack(alignment: .leading, spacing: 12) {
-                            SectionLabel(text: "BỆNH LÝ")
-
-                            MedicalConditionsCard(
-                                diseases: viewModel.selectedDiseases,
-                                onAdd: { showDiseasePicker = true },
-                                onDelete: { disease in
-                                    Task {
-                                        _ = await viewModel.deleteDisease(
-                                            profileId: profile.profileId,
-                                            diseaseId: disease.id
-                                        )
-                                    }
-                                }
-                            )
-                        }
-
-                        Divider().opacity(0.2)
-
                         // Allergies
                         VStack(alignment: .leading, spacing: 12) {
                             SectionLabel(text: "DỊ ỨNG")
@@ -256,8 +214,6 @@ struct FamilyMemberProfile: View {
             lastName = profile.lastName
             avatar = profile.avatar ?? ""
 
-            await viewModel.loadProfileGoals(profileId: profile.profileId)
-            await viewModel.loadProfileDiseases(profileId: profile.profileId)
             await viewModel.loadProfileAllergies(profileId: profile.profileId)
         }
 
@@ -267,22 +223,6 @@ struct FamilyMemberProfile: View {
                 Task {
                     await viewModel.addAllergy(profileId: profile.profileId, allergyId: allergy.id)
                     await viewModel.loadProfileAllergies(profileId: profile.profileId)
-                }
-            }
-        }
-        .sheet(isPresented: $showDiseasePicker) {
-            MedicalPicker(selectedDiseases: viewModel.selectedDiseases) { disease in
-                Task {
-                    await viewModel.addDisease(profileId: profile.profileId, diseaseId: disease.id)
-                    await viewModel.loadProfileDiseases(profileId: profile.profileId)
-                }
-            }
-        }
-        .sheet(isPresented: $showHealthGoalPicker) {
-            GoalPicker(selectedGoals: viewModel.selectedHealthGoals) { goal in
-                Task {
-                    await viewModel.addHealthGoal(profileId: profile.profileId, healthGoalId: goal.id)
-                    await viewModel.loadProfileGoals(profileId: profile.profileId)
                 }
             }
         }

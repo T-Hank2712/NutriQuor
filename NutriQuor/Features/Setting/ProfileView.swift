@@ -8,168 +8,52 @@
 import SwiftUI
 
 struct ProfileView: View {
-    
-    @Environment(\.dismiss) private var dismiss
-    
     @EnvironmentObject private var appState: AppState
 
+    @StateObject private var viewModel = UserProfileViewModel()
+
     @State private var showAllergyPicker = false
-    @State private var showDiseasePicker = false
-    @State private var showHealthGoalPicker = false
     @State private var showEditNameSheet = false
-    @State private var showAddFamilySheet = false
-    
-    @State private var firstName: String = ""
-    @State private var lastName: String = ""
-    @State private var email: String = ""
-    @State private var avatar: String = ""
-    
-    // Temporary fields used inside the edit sheet
-    @State private var editFirstName: String = ""
-    @State private var editLastName: String = ""
-    
-    // Temporary fields for add family member
-    @State private var newFamilyFirstName: String = ""
-    @State private var newFamilyLastName: String = ""
-    @State private var newFamilyAvatar: String = ""
-    
-    var profileId: String {
+
+    @State private var firstName = ""
+    @State private var lastName = ""
+    @State private var email = ""
+    @State private var avatar = ""
+
+    @State private var editFirstName = ""
+    @State private var editLastName = ""
+
+    private var profileId: String {
         appState.profile?.profileId ?? ""
     }
-    
-    @StateObject private var viewModel = UserProfileViewModel()
+
+    private var displayName: String {
+        let name = "\(lastName) \(firstName)"
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+        return name.isEmpty ? "Chưa có tên" : name
+    }
+
+    private var initials: String {
+        let first = firstName.first.map(String.init) ?? ""
+        let last = lastName.first.map(String.init) ?? ""
+        let value = (last + first).uppercased()
+        return value.isEmpty ? "NQ" : value
+    }
+
     var body: some View {
-        NavigationStack{
+        NavigationStack {
             ZStack {
                 ScrollView {
-                    VStack(spacing: 20) {
-                        
-                        VStack(spacing: 16) {
-                            
-                            ZStack(alignment: .bottomTrailing) {
-                                
-                                // Avatar
-                                ZStack {
-                                    Circle()
-                                        .fill(
-                                            LinearGradient(
-                                                colors: [
-                                                    Color("ColorPrimary").opacity(0.14),
-                                                    Color("SuccessTeal").opacity(0.12)
-                                                ],
-                                                startPoint: .topLeading,
-                                                endPoint: .bottomTrailing
-                                            )
-                                        )
-                                        .frame(width: 130, height: 130)
-                                        .shadow(color: .black.opacity(0.08), radius: 12, y: 6)
-                                    
-                                    Image(systemName: "person.fill")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 55, height: 55)
-                                        .foregroundStyle(
-                                            LinearGradient(
-                                                colors: [Color("ColorPrimary"), Color("SuccessTeal")],
-                                                startPoint: .topLeading,
-                                                endPoint: .bottomTrailing
-                                            )
-                                        )
-                                }
-                                
-                                // Camera Button
-                                Button {
-                                } label: {
-                                    ZStack {
-                                        Circle()
-                                            .fill(Color("ColorPrimary"))
-                                            .frame(width: 38, height: 38)
-                                        
-                                        Image(systemName: "camera.fill")
-                                            .font(.system(size: 16, weight: .semibold))
-                                            .foregroundStyle(.white)
-                                    }
-                                    .shadow(color: Color("ColorPrimary").opacity(0.22), radius: 8, y: 4)
-                                }
-                            }
-                        }
-                        
-                        // Display name + edit button
-                        VStack(spacing: 6) {
-                            Text("\(lastName) \(firstName)".trimmingCharacters(in: .whitespaces).isEmpty ? "Chưa có tên" : "\(lastName) \(firstName)")
-                                .font(.title2)
-                                .fontWeight(.semibold)
-                            
-                            Text(email)
-                                .font(.subheadline)
-                                .foregroundStyle(.secondary)
-                            
-                            Button {
-                                editFirstName = firstName
-                                editLastName = lastName
-                                showEditNameSheet = true
-                            } label: {
-                                Label("Chỉnh sửa thông tin", systemImage: "pencil")
-                                    .font(.subheadline.weight(.medium))
-                                    .foregroundStyle(.white)
-                                    .padding(.horizontal, 18)
-                                    .padding(.vertical, 9)
-                                    .background(
-                                        LinearGradient(
-                                            colors: [Color("ColorPrimary"), Color("SuccessTeal")],
-                                            startPoint: .leading,
-                                            endPoint: .trailing
-                                        )
-                                    )
-                                    .clipShape(Capsule())
-                                    .shadow(color: Color("ColorPrimary").opacity(0.18), radius: 6, y: 3)
-                            }
-                            .padding(.top, 6)
-                        }
+                    VStack(spacing: 22) {
+                        profileHeader
+                        accountSummaryCard
 
-                        colorPrimaryGoalsCard(
-                            goals: viewModel.selectedHealthGoals,
-                            
-                            onAdd: {
-                                showHealthGoalPicker = true
-                            },
-                            
-                            onDelete: { goal in
-                                
-                                Task {
-                                    _ = await viewModel.deleteHealthGoal(
-                                        profileId: profileId,
-                                        healthGoalId: goal.id
-                                    )
-                                }
-                            }
-                        )
-
-                        // MARK: Medical Conditions
-                        MedicalConditionsCard(
-                            diseases: viewModel.selectedDiseases,
-                            onAdd: {
-                                showDiseasePicker = true
-                            },
-                            onDelete: { disease in
-                                
-                                Task {
-                                    _ = await viewModel.deleteDisease(
-                                        profileId: profileId,
-                                        diseaseId: disease.id
-                                    )
-                                }
-                            }
-                        )
-
-                        // MARK: Allergies
                         AllergiesCard(
                             allergies: viewModel.selectedAllergies,
                             onAdd: {
                                 showAllergyPicker = true
                             },
                             onDelete: { allergy in
-                                
                                 Task {
                                     _ = await viewModel.deleteAllergy(
                                         profileId: profileId,
@@ -178,23 +62,12 @@ struct ProfileView: View {
                                 }
                             }
                         )
-
-                        FamilyProfilesCard(
-                            members: viewModel.members,
-                            onAddMember: {
-                                newFamilyFirstName = ""
-                                newFamilyLastName = ""
-                                newFamilyAvatar = ""
-                                showAddFamilySheet = true
-                            }
-                        )
-
                     }
-                    .padding()
-                    .padding(.bottom, 20)
+                    .padding(.horizontal, 20)
+                    .padding(.top, 18)
+                    .padding(.bottom, 28)
                 }
 
-                // MARK: - Edit Name Popup
                 if showEditNameSheet {
                     Color.black.opacity(0.4)
                         .ignoresSafeArea()
@@ -227,111 +100,176 @@ struct ProfileView: View {
                         }
                     )
                 }
-
-                // MARK: - Add Family Member Popup
-                if showAddFamilySheet {
-                    Color.black.opacity(0.4)
-                        .ignoresSafeArea()
-                        .onTapGesture {
-                            showAddFamilySheet = false
-                        }
-
-                    AddFamilyMemberPopup(
-                        firstName: $newFamilyFirstName,
-                        lastName: $newFamilyLastName,
-                        avatar: $newFamilyAvatar,
-                        onClose: {
-                            showAddFamilySheet = false
-                        },
-                        onSave: {
-                            Task {
-                                await viewModel.addUserProfile(
-                                    firstName: newFamilyFirstName,
-                                    lastName: newFamilyLastName,
-                                    avatar: newFamilyAvatar
-                                )
-
-                                await viewModel.loadFamilyMembers(profileId: profileId)
-
-                                await MainActor.run {
-                                    showAddFamilySheet = false
-                                }
-                            }
-                        }
-                    )
-                }
-
             }
             .background(Color("Background"))
+            .navigationTitle("Hồ sơ")
+            .navigationBarTitleDisplayMode(.inline)
         }
         .task {
-            firstName = appState.profile?.firstName ?? ""
-            lastName = appState.profile?.lastName ?? ""
-            email = appState.user?.email ?? ""
-            
-            
-            guard profileId != "" else { return }
-            
-            await withTaskGroup(of: Void.self) { group in
-                group.addTask {
-                    await viewModel.loadProfileGoals(profileId: profileId)
-                }
-
-                group.addTask {
-                    await viewModel.loadProfileDiseases(profileId: profileId)
-                }
-
-                group.addTask {
-                    await viewModel.loadProfileAllergies(profileId: profileId)
-                }
-                
-                group.addTask {
-                    await viewModel.loadFamilyMembers(profileId: profileId)
-                }
-            }
+            syncProfileState()
+            guard !profileId.isEmpty else { return }
+            await viewModel.loadProfileAllergies(profileId: profileId)
         }
-
-
-
-        // MARK: - Allergy Picker
         .sheet(isPresented: $showAllergyPicker) {
             AllergyPicker(
                 selectedAllergies: viewModel.selectedAllergies
             ) { allergy in
-                
                 Task {
                     await viewModel.addAllergy(profileId: profileId, allergyId: allergy.id)
                     await viewModel.loadProfileAllergies(profileId: profileId)
                 }
             }
         }
+    }
 
-        // MARK: - Disease Picker
-        .sheet(isPresented: $showDiseasePicker) {
-            MedicalPicker(
-                selectedDiseases: viewModel.selectedDiseases
-            ) { disease in
-                
-                Task {
-                    await viewModel.addDisease(profileId: profileId, diseaseId: disease.id)
-                    await viewModel.loadProfileDiseases(profileId: profileId)
+    private var profileHeader: some View {
+        VStack(spacing: 16) {
+            ZStack {
+                RoundedRectangle(cornerRadius: .cardRadius, style: .continuous)
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                Color("DeepNavyDark"),
+                                Color("DeepNavyMid"),
+                                Color("ColorPrimary")
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+
+                Circle()
+                    .fill(Color.white.opacity(0.05))
+                    .frame(width: 180, height: 180)
+                    .offset(x: -120, y: -55)
+
+                Circle()
+                    .fill(Color("SuccessTeal").opacity(0.20))
+                    .frame(width: 140, height: 140)
+                    .offset(x: 130, y: 48)
+
+                VStack(spacing: 14) {
+                    ZStack {
+                        Circle()
+                            .fill(
+                                LinearGradient(
+                                    colors: [
+                                        Color("SuccessTeal"),
+                                        Color("ColorPrimary")
+                                    ],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                )
+                            )
+                            .frame(width: 104, height: 104)
+                            .shadow(color: Color("ColorPrimary").opacity(0.22), radius: 18, y: 8)
+
+                        Text(initials)
+                            .font(.system(size: 30, weight: .bold, design: .rounded))
+                            .foregroundStyle(.white)
+                    }
+
+                    VStack(spacing: 5) {
+                        Text(displayName)
+                            .font(.system(size: 23, weight: .bold, design: .rounded))
+                            .foregroundStyle(.white)
+                            .multilineTextAlignment(.center)
+
+                        Text(email.isEmpty ? "Chưa có email" : email)
+                            .font(.system(size: 13, weight: .medium))
+                            .foregroundStyle(.white.opacity(0.68))
+                            .lineLimit(1)
+                    }
+
+                    Button {
+                        editFirstName = firstName
+                        editLastName = lastName
+                        showEditNameSheet = true
+                    } label: {
+                        Label("Chỉnh sửa", systemImage: "pencil")
+                            .font(.system(size: 14, weight: .semibold, design: .rounded))
+                            .foregroundStyle(Color("DeepNavyDark"))
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 9)
+                            .background(.white.opacity(0.92))
+                            .clipShape(Capsule())
+                    }
+                    .buttonStyle(.plain)
+                }
+                .padding(.vertical, 28)
+                .padding(.horizontal, 18)
+            }
+            .frame(maxWidth: .infinity)
+            .frame(minHeight: 260)
+        }
+    }
+
+    private var accountSummaryCard: some View {
+        BentoCard(accent: Color("InfoBlue"), style: .plain, padding: 16) {
+            VStack(alignment: .leading, spacing: 14) {
+                HStack(spacing: 10) {
+                    Image(systemName: "person.text.rectangle.fill")
+                        .font(.system(size: 17, weight: .semibold))
+                        .foregroundStyle(Color("InfoBlue"))
+
+                    Text("Thông tin tài khoản")
+                        .font(.headline.weight(.bold))
+
+                    Spacer()
+                }
+
+                VStack(spacing: 12) {
+                    profileInfoRow(
+                        icon: "person.fill",
+                        title: "Họ và tên",
+                        value: displayName
+                    )
+
+                    Divider()
+
+                    profileInfoRow(
+                        icon: "envelope.fill",
+                        title: "Email",
+                        value: email.isEmpty ? "Chưa có email" : email
+                    )
                 }
             }
         }
-        
-        // MARK: - Health Goal Picker
-        .sheet(isPresented: $showHealthGoalPicker) {
-            
-            GoalPicker(
-                selectedGoals: viewModel.selectedHealthGoals
-            ) { goal in
-                
-                Task {
-                    await viewModel.addHealthGoal(profileId: profileId, healthGoalId: goal.id)
-                    await viewModel.loadProfileGoals(profileId: profileId)
-                }
+    }
+
+    private func profileInfoRow(icon: String, title: String, value: String) -> some View {
+        HStack(spacing: 12) {
+            ZStack {
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                    .fill(Color("InfoBlue").opacity(0.12))
+                    .frame(width: 36, height: 36)
+
+                Image(systemName: icon)
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundStyle(Color("InfoBlue"))
             }
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+
+                Text(value)
+                    .font(.system(size: 15, weight: .semibold, design: .rounded))
+                    .foregroundStyle(.primary)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.82)
+            }
+
+            Spacer(minLength: 0)
         }
+    }
+
+    private func syncProfileState() {
+        firstName = appState.profile?.firstName ?? ""
+        lastName = appState.profile?.lastName ?? ""
+        email = appState.user?.email ?? ""
+        avatar = appState.profile?.avatar ?? ""
     }
 }
 

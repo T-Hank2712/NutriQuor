@@ -12,10 +12,6 @@ import Combine
 final class UserProfileViewModel: ObservableObject {
     @Published var currentProfile: Profile?
     @Published var allergyList: [Allergy] = []
-    @Published var diseaseList: [Disease] = []
-    @Published var healthGoals: [HealthGoal] = []
-    @Published var selectedHealthGoals: [HealthGoal] = []
-    @Published var selectedDiseases: [Disease] = []
     @Published var selectedAllergies: [Allergy] = []
     
     @Published var profiles: [Profile] = []
@@ -29,33 +25,13 @@ final class UserProfileViewModel: ObservableObject {
         }
     }
     
-    func loadDiseases() async {
-        do {
-            let result = try await userProfileService.fetchDiseases()
-            diseaseList = result
-        } catch {
-        }
-    }
-    
-    func loadHealthGoals() async {
-        do {
-            let result = try await userProfileService.fetchHealthGoals()
-            healthGoals = result
-        } catch {
-        }
-    }
-    
     func bootstrap(profileId: String) async {
         do {
-            async let goals = userProfileService.getHealthGoalProfile(profileId: profileId)
-            async let diseases = userProfileService.getDiseaseProfile(profileId: profileId)
             async let allergies = userProfileService.getAllergyProfile(profileId: profileId)
             async let members = userProfileService.getFamilyMembers(profileId: profileId)
 
-            let (g, d, a, m) = try await (goals, diseases, allergies, members)
+            let (a, m) = try await (allergies, members)
 
-            self.selectedHealthGoals = g
-            self.selectedDiseases = d
             self.selectedAllergies = a
             self.members = m
 
@@ -64,85 +40,6 @@ final class UserProfileViewModel: ObservableObject {
     }
     
     // MARK: - Profile
-    // Health Goals Profile
-    func loadProfileGoals(profileId: String) async {
-        
-        do {
-            
-            selectedHealthGoals = try await userProfileService
-                .getHealthGoalProfile(profileId: profileId)
-            
-        } catch {
-        }
-    }
-    
-    func addHealthGoal(profileId: String, healthGoalId: String) async {
-        do {
-            let newHealthGoal = try await userProfileService
-                .addHealthGoal(profileId: profileId, healthGoalId: healthGoalId)
-
-            selectedHealthGoals.append(newHealthGoal)
-
-        } catch {
-        }
-    }
-    
-    func deleteHealthGoal(profileId: String, healthGoalId: String) async -> Bool {
-        do {
-            
-            let success = try await userProfileService
-                .deleteHealthGoal(profileId: profileId, healthGoalId: healthGoalId)
-            if success {
-                selectedHealthGoals.removeAll {
-                    $0.id == healthGoalId
-                }
-            }
-            return success
-        } catch {
-            return false
-        }
-    }
-    
-    // Diseases Profile
-    func loadProfileDiseases(profileId: String) async {
-        
-        do {
-            
-            selectedDiseases = try await userProfileService
-                .getDiseaseProfile(profileId: profileId)
-            
-        } catch {
-        }
-    }
-    
-    func addDisease(profileId: String, diseaseId: String) async {
-        do {
-            let newDisease = try await userProfileService
-                .addDisease(profileId: profileId, diseaseId: diseaseId)
-
-            selectedDiseases.append(newDisease)
-
-        } catch {
-        }
-    }
-
-    func deleteDisease(profileId: String, diseaseId: String) async -> Bool {
-        do {
-            let success = try await userProfileService
-                .deleteDisease(
-                    profileId: profileId,
-                    diseaseId: diseaseId
-                )
-            if success {
-                selectedDiseases.removeAll {
-                    $0.id == diseaseId
-                }
-            }
-            return success
-        } catch {
-            return false
-        }
-    }
     // Allergies Profile
     func loadProfileAllergies(profileId: String) async {
         
