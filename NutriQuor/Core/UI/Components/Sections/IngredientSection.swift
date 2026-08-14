@@ -126,11 +126,11 @@ private struct EmptyIngredientRow: View {
                 )
 
             VStack(alignment: .leading, spacing: 3) {
-                Text("Chưa có dữ liệu")
+                Text("Chưa ghi nhận mục nào")
                     .font(.system(size: 14, weight: .semibold))
                     .foregroundStyle(.primary)
 
-                Text("API chưa trả về mục nào cho nhóm này")
+                Text("Kết quả phân tích chưa ghi nhận nội dung thuộc nhóm này")
                     .font(.system(size: 12, weight: .medium))
                     .foregroundStyle(.secondary)
             }

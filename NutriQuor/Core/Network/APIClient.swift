@@ -86,44 +86,42 @@ final class APIClient {
     // MARK: - VALIDATION
     private func validate(_ response: URLResponse, _ data: Data) throws {
         guard let http = response as? HTTPURLResponse else {
-            print("❌ Invalid response type:", response)
-            throw URLError(.badServerResponse)
+            throw APIError.invalidResponse
         }
-
-        print("\n================ API RESPONSE ================")
-        print("🔵 URL:", http.url?.absoluteString ?? "unknown")
-        print("🔵 Status Code:", http.statusCode)
-        print("🔵 Headers:", http.allHeaderFields)
-
-        // Try decode JSON pretty
-        if let jsonObject = try? JSONSerialization.jsonObject(with: data),
-           let prettyData = try? JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted),
-           let prettyString = String(data: prettyData, encoding: .utf8) {
-            print("🔵 Body (JSON pretty):\n", prettyString)
-        } else {
-            print("🔵 Body (raw):\n", String(data: data, encoding: .utf8) ?? "nil")
-        }
-
-        print("=============================================\n")
 
         guard 200...299 ~= http.statusCode else {
 
             if http.statusCode == 401 {
-                print("❌ Unauthorized (401) - check token or auth header")
                 throw APIError.unauthorized
             }
 
-            // Try extract message field nếu backend trả JSON kiểu {message: ...}
-            var serverMessage = "Request failed"
+            var serverMessage = "Yêu cầu chưa thực hiện được. Vui lòng thử lại."
 
             if let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-               let message = json["message"] as? String {
-                serverMessage = message
+               let message = json["message"] as? String ?? json["detail"] as? String {
+                serverMessage = Self.userFriendlyServerMessage(message)
             }
 
-            print("❌ API ERROR MESSAGE:", serverMessage)
-
             throw APIError.serverError(serverMessage)
+        }
+    }
+
+    private static func userFriendlyServerMessage(_ message: String) -> String {
+        switch message {
+        case "Token không hợp lệ":
+            return "Phiên đăng nhập không hợp lệ. Vui lòng đăng nhập lại."
+        case "Missing API Key. Please provide X-API-Key header",
+             "Invalid API Key":
+            return "Ứng dụng chưa được cấu hình quyền truy cập phù hợp."
+        case "Cannot connect to Builder analyze service",
+             "Builder analyze request failed":
+            return "Hệ thống phân tích đang bận. Vui lòng thử lại sau."
+        case "Uploaded image is empty":
+            return "Ảnh tải lên đang trống. Vui lòng chọn ảnh khác."
+        case "Uploaded image is too large":
+            return "Ảnh quá lớn. Vui lòng chọn ảnh có dung lượng nhỏ hơn."
+        default:
+            return message
         }
     }
 

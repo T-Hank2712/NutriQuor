@@ -21,7 +21,7 @@ struct SettingsSection<Content: View>: View {
         VStack(alignment: .leading, spacing: 10) {
             Text(title)
                 .font(.title3)
-                .foregroundColor(Color(.colorPrimary))
+                .foregroundColor(Color.nqPrimary)
                 .padding(.horizontal)
             
             VStack(spacing: 16) {
@@ -32,7 +32,7 @@ struct SettingsSection<Content: View>: View {
         .frame(maxWidth: .infinity)
         .background(
             RoundedRectangle(cornerRadius: .cardRadius)
-                .stroke(Color.gray.opacity(.opacityMedium))
+                .stroke(Color.nqBorder.opacity(0.9))
         )
     }
 }

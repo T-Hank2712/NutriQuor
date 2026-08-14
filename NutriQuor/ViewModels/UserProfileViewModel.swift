@@ -25,9 +25,7 @@ final class UserProfileViewModel: ObservableObject {
         do {
             let result = try await userProfileService.fetchAllergies()
             allergyList = result
-            print(allergyList)
         } catch {
-            print("Error loading data:", error)
         }
     }
     
@@ -36,7 +34,6 @@ final class UserProfileViewModel: ObservableObject {
             let result = try await userProfileService.fetchDiseases()
             diseaseList = result
         } catch {
-            print("Error loading data:", error)
         }
     }
     
@@ -45,7 +42,6 @@ final class UserProfileViewModel: ObservableObject {
             let result = try await userProfileService.fetchHealthGoals()
             healthGoals = result
         } catch {
-            print("Error loading data:", error)
         }
     }
     
@@ -64,7 +60,6 @@ final class UserProfileViewModel: ObservableObject {
             self.members = m
 
         } catch {
-            print("BOOTSTRAP ERROR:", error)
         }
     }
     
@@ -78,7 +73,6 @@ final class UserProfileViewModel: ObservableObject {
                 .getHealthGoalProfile(profileId: profileId)
             
         } catch {
-            print(error)
         }
     }
     
@@ -90,7 +84,6 @@ final class UserProfileViewModel: ObservableObject {
             selectedHealthGoals.append(newHealthGoal)
 
         } catch {
-            print(error)
         }
     }
     
@@ -106,7 +99,6 @@ final class UserProfileViewModel: ObservableObject {
             }
             return success
         } catch {
-            print(error)
             return false
         }
     }
@@ -120,7 +112,6 @@ final class UserProfileViewModel: ObservableObject {
                 .getDiseaseProfile(profileId: profileId)
             
         } catch {
-            print(error)
         }
     }
     
@@ -132,7 +123,6 @@ final class UserProfileViewModel: ObservableObject {
             selectedDiseases.append(newDisease)
 
         } catch {
-            print(error)
         }
     }
 
@@ -150,7 +140,6 @@ final class UserProfileViewModel: ObservableObject {
             }
             return success
         } catch {
-            print(error)
             return false
         }
     }
@@ -163,7 +152,6 @@ final class UserProfileViewModel: ObservableObject {
                 .getAllergyProfile(profileId: profileId)
             
         } catch {
-            print(error)
         }
     }
     
@@ -175,7 +163,6 @@ final class UserProfileViewModel: ObservableObject {
             selectedAllergies.append(newAllergy)
 
         } catch {
-            print(error)
         }
     }
     
@@ -191,7 +178,6 @@ final class UserProfileViewModel: ObservableObject {
             }
             return success
         } catch {
-            print(error)
             return false
         }
     }
@@ -204,7 +190,6 @@ final class UserProfileViewModel: ObservableObject {
             self.currentProfile = updatedProfile
             return updatedProfile 
         } catch {
-            print(error)
             return nil
         }
     }
@@ -216,7 +201,6 @@ final class UserProfileViewModel: ObservableObject {
                 .getFamilyMembers(profileId: profileId)
             
         } catch {
-            print(error)
         }
     }
     
@@ -232,7 +216,6 @@ final class UserProfileViewModel: ObservableObject {
             profiles.append(profile)
 
         } catch {
-            print(error)
         }
     }
     
@@ -247,7 +230,6 @@ final class UserProfileViewModel: ObservableObject {
             }
             return success
         } catch {
-            print(error)
             return false
         }
     }

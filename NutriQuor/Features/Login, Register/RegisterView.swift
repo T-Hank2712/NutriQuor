@@ -69,14 +69,14 @@ struct RegisterView: View {
                         HStack(spacing: 12) {
                             DarkValidatedField(
                                 title: "Tên",
-                                placeholder: "Jane",
+                                placeholder: "An",
                                 icon: "person.fill",
                                 text: $viewModel.firstName.value,
                                 error: viewModel.firstName.error
                             )
                             DarkValidatedField(
                                 title: "Họ",
-                                placeholder: "Doe",
+                                placeholder: "Nguyễn",
                                 icon: "person.fill",
                                 text: $viewModel.lastName.value,
                                 error: viewModel.lastName.error
@@ -85,7 +85,7 @@ struct RegisterView: View {
 
                         DarkValidatedField(
                             title: "Email",
-                            placeholder: "jane@example.com",
+                            placeholder: "ten@example.com",
                             icon: "envelope.fill",
                             text: $viewModel.email.value,
                             error: viewModel.email.error,

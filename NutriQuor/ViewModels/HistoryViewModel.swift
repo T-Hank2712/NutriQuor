@@ -37,7 +37,7 @@ final class HistoryViewModel: ObservableObject {
 
     func createProduct() async {
         guard let userId else {
-            errorMessage = "User not logged in"
+            errorMessage = "Vui lòng đăng nhập để xem lịch sử."
             return
         }
 
@@ -52,7 +52,7 @@ final class HistoryViewModel: ObservableObject {
             loadScanHistory()
 
         } catch {
-            errorMessage = error.localizedDescription
+            errorMessage = UserMessageMapper.message(for: error)
         }
     }
 }

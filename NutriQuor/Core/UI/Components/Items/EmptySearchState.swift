@@ -22,10 +22,10 @@ struct EmptySearchState: View {
             }
 
             VStack(spacing: 4) {
-                Text(isSearching ? "Không tìm thấy kết quả" : "Chưa có dữ liệu")
+                Text(isSearching ? "Không tìm thấy kết quả phù hợp" : "Chưa có nội dung để hiển thị")
                     .font(.system(size: 16, weight: .bold, design: .rounded))
                     .foregroundStyle(.primary)
-                Text(isSearching ? "Thử từ khoá khác nhé" : "Dữ liệu sẽ xuất hiện ở đây")
+                Text(isSearching ? "Thử từ khóa khác nhé" : "Nội dung sẽ xuất hiện khi sẵn sàng")
                     .font(.system(size: 13))
                     .foregroundStyle(.secondary)
             }

@@ -79,7 +79,6 @@ struct ProfileView: View {
                                 
                                 // Camera Button
                                 Button {
-                                    print("Change avatar")
                                 } label: {
                                     ZStack {
                                         Circle()
@@ -272,7 +271,6 @@ struct ProfileView: View {
             
             
             guard profileId != "" else { return }
-            print(profileId)
             
             await withTaskGroup(of: Void.self) { group in
                 group.addTask {

@@ -94,9 +94,9 @@ struct BentoCard<Content: View>: View {
 #Preview {
     BentoCard(accent: Color("ColorPrimary"), style: .tinted) {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Bento Tile")
+            Text("Ô thông tin")
                 .font(.headline)
-            Text("A calm health dashboard surface.")
+            Text("Bề mặt hiển thị thông tin sức khỏe.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }

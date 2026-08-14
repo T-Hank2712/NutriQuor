@@ -67,7 +67,7 @@ struct DarkSecureField: View {
                     .overlay(
                         RoundedRectangle(cornerRadius: .smallRadius, style: .continuous)
                             .stroke(
-                                isFocused ? Color.nqPrimary.opacity(0.62) : Color.white.opacity(0.22),
+                                isFocused ? Color.nqPrimary.opacity(0.62) : Color.nqBorder.opacity(0.9),
                                 lineWidth: 1
                             )
                     )

@@ -36,16 +36,13 @@ final class SearchNutritionViewModel: ObservableObject {
             }
 
         } catch {
-            print("Error loading data:", error)
         }
     }
     
     func loadDetail(id: String) async {
         do {
             detail = try await searchService.fetchDetail(id: id)
-            print(detail ?? "")
         } catch {
-            print("Error:", error)
         }
     }
 
@@ -78,7 +75,6 @@ final class SearchNutritionViewModel: ObservableObject {
             }
 
         } catch {
-            print("Error loading data:", error)
         }
     }
 

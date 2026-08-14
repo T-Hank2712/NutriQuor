@@ -35,7 +35,7 @@ struct GoalPicker: View {
                     Text(healthGoal.name)
                 }
             }
-            .navigationTitle("Select Health Goal")
+            .navigationTitle("Chọn mục tiêu sức khỏe")
         }
         .task {
             await viewModel.loadHealthGoals()

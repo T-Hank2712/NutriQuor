@@ -24,7 +24,7 @@ struct SummaryCard: View {
             
             HStack {
                 Image(systemName: icon).foregroundColor(color)
-                Text("Calories")
+                Text("Calo")
                     .font(.title2)
                     .fontWeight(.bold)
             }

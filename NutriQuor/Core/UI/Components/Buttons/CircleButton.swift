@@ -13,15 +13,15 @@ struct CircleButton: View {
         ZStack {
             
             Circle()
-                .fill(Color.white.opacity(.opacityLight))
+                .fill(Color(.secondarySystemBackground))
                 .frame(width:50,height:50)
                 .overlay(
                     Circle()
-                        .stroke(Color(.colorPrimary), lineWidth: 2)
+                        .stroke(Color.nqPrimary.opacity(0.35), lineWidth: 1)
                 )
             
             Image(systemName: icon)
-                .foregroundColor(.black)
+                .foregroundColor(Color.nqPrimary)
         }
     }
 }

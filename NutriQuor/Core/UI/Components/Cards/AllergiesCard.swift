@@ -60,18 +60,18 @@ struct AllergiesCard: View {
         }
 
         // MARK: - Delete Alert
-        .alert("Remove Allergy?", isPresented: $showDeleteAlert) {
+        .alert("Xóa dị ứng?", isPresented: $showDeleteAlert) {
 
-            Button("Cancel", role: .cancel) {}
+            Button("Hủy", role: .cancel) {}
 
-            Button("Delete", role: .destructive) {
+            Button("Xóa", role: .destructive) {
                 if let allergy = selectedAllergy {
                     onDelete(allergy)
                 }
             }
 
         } message: {
-            Text("Are you sure you want to remove this allergy?")
+            Text("Bạn có chắc chắn muốn xóa dị ứng này khỏi hồ sơ không?")
         }
     }
 }
@@ -79,7 +79,7 @@ struct AllergiesCard: View {
 #Preview {
     AllergiesCard(
         allergies: [
-            Allergy(id: "1", name: "Nuts"),
+            Allergy(id: "1", name: "Đậu phộng"),
             Allergy(id: "2", name: "Gluten")
         ],
         onAdd: {},

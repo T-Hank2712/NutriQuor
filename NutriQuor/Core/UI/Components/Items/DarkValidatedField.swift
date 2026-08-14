@@ -20,7 +20,7 @@ struct DarkValidatedField: View {
 
     private var borderColor: Color {
         if error != nil { return Color.nqDanger.opacity(0.72) }
-        return isFocused ? Color.nqPrimary.opacity(0.62) : Color.white.opacity(0.22)
+        return isFocused ? Color.nqPrimary.opacity(0.62) : Color.nqBorder.opacity(0.9)
     }
 
     var body: some View {
@@ -85,7 +85,7 @@ struct DarkValidatedField: View {
         Color("AppDarkBackground").ignoresSafeArea()
         DarkValidatedField(
             title: "Email",
-            placeholder: "jane@example.com",
+            placeholder: "ten@example.com",
             icon: "envelope.fill",
             text: .constant(""),
             error: "Email không hợp lệ",

@@ -28,7 +28,6 @@ class CameraService: NSObject, ObservableObject, AVCapturePhotoCaptureDelegate {
     func checkPermissions() {
         switch AVCaptureDevice.authorizationStatus(for: .video) {
         case .authorized:
-            print("✅ Camera authorized")
             DispatchQueue.main.async {
                 self.isAuthorized = true
             }
@@ -36,9 +35,7 @@ class CameraService: NSObject, ObservableObject, AVCapturePhotoCaptureDelegate {
                 self?.configure()
             }
         case .notDetermined:
-            print("⏳ Requesting camera permission...")
             AVCaptureDevice.requestAccess(for: .video) { [weak self] granted in
-                print("Camera permission: \(granted ? "✅ Granted" : "❌ Denied")")
                 DispatchQueue.main.async {
                     self?.isAuthorized = granted
                 }
@@ -48,17 +45,15 @@ class CameraService: NSObject, ObservableObject, AVCapturePhotoCaptureDelegate {
                     }
                 } else {
                     DispatchQueue.main.async {
-                        self?.alertError = "Vui lòng cấp quyền camera trong Settings"
+                        self?.alertError = "Vui lòng cấp quyền camera trong phần cài đặt."
                     }
                 }
             }
         case .denied:
-            print("❌ Camera access denied")
             DispatchQueue.main.async {
-                self.alertError = "Camera bị từ chối. Vào Settings > NutriQuor > Camera để bật"
+                self.alertError = "Quyền camera đang bị tắt. Vui lòng mở Cài đặt > NutriQuor > Camera để bật lại."
             }
         case .restricted:
-            print("⚠️ Camera access restricted")
             DispatchQueue.main.async {
                 self.alertError = "Camera bị hạn chế bởi chính sách thiết bị"
             }
@@ -71,12 +66,10 @@ class CameraService: NSObject, ObservableObject, AVCapturePhotoCaptureDelegate {
         session.beginConfiguration()
         session.sessionPreset = .photo
         
-        print("🎥 Configuring camera...")
         
         guard let device = AVCaptureDevice.default(.builtInWideAngleCamera,
                                                    for: .video,
                                                    position: .back) else {
-            print("❌ No camera device found")
             DispatchQueue.main.async {
                 self.alertError = "Không tìm thấy camera"
             }
@@ -88,30 +81,24 @@ class CameraService: NSObject, ObservableObject, AVCapturePhotoCaptureDelegate {
             
             if session.canAddInput(input) {
                 session.addInput(input)
-                print("✅ Camera input added")
             } else {
-                print("❌ Cannot add camera input")
-                throw NSError(domain: "CameraService", code: -1, userInfo: [NSLocalizedDescriptionKey: "Cannot add input"])
+                throw NSError(domain: "CameraService", code: -1)
             }
             
             if session.canAddOutput(output) {
                 session.addOutput(output)
-                print("✅ Camera output added")
             } else {
-                print("❌ Cannot add camera output")
-                throw NSError(domain: "CameraService", code: -2, userInfo: [NSLocalizedDescriptionKey: "Cannot add output"])
+                throw NSError(domain: "CameraService", code: -2)
             }
             
             session.commitConfiguration()
             
             DispatchQueue.global(qos: .userInitiated).async { [weak self] in
                 self?.session.startRunning()
-                print("✅ Camera session started")
             }
         } catch {
-            print("❌ Camera configuration error: \(error.localizedDescription)")
             DispatchQueue.main.async {
-                self.alertError = "Lỗi cấu hình camera: \(error.localizedDescription)"
+                self.alertError = "Không thể khởi động camera. Vui lòng thử lại."
             }
         }
     }

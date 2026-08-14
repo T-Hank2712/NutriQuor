@@ -116,17 +116,17 @@ struct IngredientCard: View {
 #Preview {
     VStack(spacing: 12) {
         IngredientCard(
-            title: "Spring Water",
+            title: "Nước",
             index: 1,
             status: .safe
         )
         IngredientCard(
-            title: "Citric Acid",
+            title: "Axit citric",
             index: 2,
             status: .moderate
         )
         IngredientCard(
-            title: "Sodium Benzoate",
+            title: "Natri benzoat",
             index: 3,
             status: .caution
         )

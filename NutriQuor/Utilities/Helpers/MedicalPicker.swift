@@ -34,7 +34,7 @@ struct MedicalPicker: View {
                     Text(disease.name).foregroundStyle(Color(.colorPrimary))
                 }
             }
-            .navigationTitle("Select Diseases")
+            .navigationTitle("Chọn bệnh lý")
         }
         .task {
             await viewModel.loadDiseases()
@@ -48,4 +48,3 @@ struct MedicalPicker: View {
         
     }
 }
-

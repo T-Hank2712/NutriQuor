@@ -53,7 +53,7 @@ struct DarkInputField: View {
                     .overlay(
                         RoundedRectangle(cornerRadius: .smallRadius, style: .continuous)
                             .stroke(
-                                isFocused ? Color.nqPrimary.opacity(0.62) : Color.white.opacity(0.22),
+                                isFocused ? Color.nqPrimary.opacity(0.62) : Color.nqBorder.opacity(0.9),
                                 lineWidth: 1
                             )
                     )
@@ -68,7 +68,7 @@ struct DarkInputField: View {
         Color(.systemBackground).ignoresSafeArea()
         DarkInputField(
             title: "Email",
-            placeholder: "jane@example.com",
+            placeholder: "ten@example.com",
             icon: "envelope.fill",
             text: .constant("jane@example.com"),
             keyboard: .emailAddress

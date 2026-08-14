@@ -46,7 +46,7 @@ final class RegisterViewModel: ObservableObject {
             )
             isSuccess = true
         } catch {
-            errorMessage = error.localizedDescription
+            errorMessage = UserMessageMapper.message(for: error)
         }
         isLoading = false
     }

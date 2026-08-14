@@ -21,7 +21,7 @@ struct FilterButton: View {
         .padding(.vertical, 6)
         .background(
             Capsule()
-                .stroke(Color.gray.opacity(.opacityMedium))
+                .stroke(Color.nqBorder.opacity(0.9))
         )
     }
 }

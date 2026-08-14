@@ -58,7 +58,6 @@ final class HomeViewModel: ObservableObject {
             let result = try await searchService.fetchDailyFeature()
             daily = result
         } catch {
-            print("Error loading data:", error)
         }
     }
 }

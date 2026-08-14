@@ -117,7 +117,7 @@ struct SearchDetailView: View {
                     icon: "doc.text.magnifyingglass",
                     iconColor: Color("MutedMauve")
                 ) {
-                    Text(detail.description ?? "API chưa trả về section mô tả cho mục này.")
+                    Text(detail.description ?? "Nội dung mô tả cho mục này chưa sẵn sàng.")
                         .font(.system(size: 15, weight: .medium))
                         .foregroundStyle(.secondary)
                         .lineSpacing(5)

@@ -19,7 +19,7 @@ struct NutrientCard: View {
                
                Text(title)
                    .font(.caption)
-                   .foregroundColor(.gray)
+                   .foregroundColor(.secondary)
                
                Text(value)
                    .font(.headline)

@@ -26,12 +26,12 @@ final class LoginViewModel: ObservableObject {
     func login() async {
         
         guard !email.trimmingCharacters(in: .whitespaces).isEmpty else {
-            errorMessage = "Email is required"
+            errorMessage = "Vui lòng nhập email."
             return
         }
 
         guard !password.isEmpty else {
-            errorMessage = "Password is required"
+            errorMessage = "Vui lòng nhập mật khẩu."
             return
         }
 
@@ -54,13 +54,8 @@ final class LoginViewModel: ObservableObject {
                 refreshToken: response.data.refreshToken
             )
 
-            print("Login Success")
-
         } catch {
-
-            errorMessage = error.localizedDescription
-            
-            print(error.localizedDescription)
+            errorMessage = UserMessageMapper.message(for: error)
         }
     }
     

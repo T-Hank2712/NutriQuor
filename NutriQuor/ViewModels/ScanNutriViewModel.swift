@@ -18,7 +18,7 @@ final class ScanNutriViewModel: ObservableObject {
 
     func analyze(image: UIImage, userId: String?) async {
         guard let userId else {
-            errorMessage = "User not logged in"
+            errorMessage = "Vui lòng đăng nhập để phân tích ảnh."
             return
         }
 
@@ -31,7 +31,7 @@ final class ScanNutriViewModel: ObservableObject {
             analyzedProduct = product
             scanHistoryManager.save(product: product, userId: userId)
         } catch {
-            errorMessage = error.localizedDescription
+            errorMessage = UserMessageMapper.message(for: error)
         }
     }
 }

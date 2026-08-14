@@ -165,7 +165,7 @@ struct ImagePreviewView: View {
                 set: { if !$0 { viewModel.errorMessage = nil } }
             )
         ) {
-            Button("OK", role: .cancel) {}
+            Button("Đã hiểu", role: .cancel) {}
         } message: {
             Text(viewModel.errorMessage ?? "")
         }
@@ -173,7 +173,6 @@ struct ImagePreviewView: View {
     
     private func saveImageToPhotoLibrary(_ image: UIImage) {
         UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
-        print("✅ Đã lưu ảnh vào thư viện")
     }
 }
 

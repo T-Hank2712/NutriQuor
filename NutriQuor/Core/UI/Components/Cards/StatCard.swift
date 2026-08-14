@@ -35,11 +35,11 @@ struct StatCard: View {
         .frame(maxWidth: .infinity)
         .background(
             RoundedRectangle(cornerRadius: .cardRadius)
-                .stroke(Color.gray.opacity(.opacityMedium))
+                .stroke(Color.nqBorder.opacity(0.9))
         )
     }
 }
 
 #Preview {
-    StatCard(nutri: Nutrient(id: "1", name: "Calories", key: "calo", description: "100"), icon: "flame", iconColor: .red)
+    StatCard(nutri: Nutrient(id: "1", name: "Calo", key: "calo", description: "100"), icon: "flame", iconColor: .red)
 }

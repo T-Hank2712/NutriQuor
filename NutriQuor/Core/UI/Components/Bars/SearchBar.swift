@@ -18,7 +18,7 @@ struct SearchBar: View {
             Image(systemName: "magnifyingglass")
                 .foregroundStyle(isFocused ? Color.nqPrimary : .secondary)
 
-            TextField("Search", text: $text)
+            TextField("Tìm kiếm", text: $text)
                 .focused($isFocused)
                 .textInputAutocapitalization(.never)
                 .disableAutocorrection(true)

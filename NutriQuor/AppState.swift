@@ -85,7 +85,6 @@ final class AppState: ObservableObject {
                 authState = .login
             }
         } catch {
-            print(error)
             authState = .login
         }
     }

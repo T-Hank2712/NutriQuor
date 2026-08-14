@@ -35,7 +35,7 @@ struct ConditionRow: View {
                     .font(.system(size: 15, weight: .semibold, design: .rounded))
                     .foregroundStyle(.primary)
                 
-                Text("Medical Condition")
+                Text("Bệnh lý")
                     .font(.system(size: 11, weight: .medium, design: .rounded))
                     .foregroundStyle(.secondary)
             }
@@ -98,25 +98,25 @@ struct ConditionRow: View {
     VStack(spacing: 12) {
         
         ConditionRow(
-            title: "Type II Diabetes",
+            title: "Đái tháo đường type 2",
             color: Color(red: 1, green: 0.3, blue: 0.3),
             icon: "drop.fill"
         )
         
         ConditionRow(
-            title: "Hypertension",
+            title: "Tăng huyết áp",
             color: Color(red: 1, green: 0.6, blue: 0),
             icon: "heart.fill"
         )
         
         ConditionRow(
-            title: "Asthma",
+            title: "Hen suyễn",
             color: Color(red: 0.5, green: 0.8, blue: 1),
             icon: "wind"
         )
         
         ConditionRow(
-            title: "Arthritis",
+            title: "Viêm khớp",
             color: Color(red: 0.8, green: 0.3, blue: 0.8),
             icon: "figure.walk"
         )

@@ -59,7 +59,7 @@ struct LoginView: View {
                                     .font(.system(size: 32, weight: .black, design: .rounded))
                                     .foregroundStyle(.primary)
 
-                                Text("Know What's In Your Food")
+                                Text("Hiểu rõ thực phẩm bạn dùng")
                                     .font(.system(size: 14, weight: .medium))
                                     .foregroundStyle(.secondary)
                                     .kerning(0.2)
@@ -85,7 +85,7 @@ struct LoginView: View {
                             VStack(spacing: 16) {
                                 DarkInputField(
                                     title: "Email",
-                                    placeholder: "jane@example.com",
+                                    placeholder: "ten@example.com",
                                     icon: "envelope.fill",
                                     text: $viewModel.email,
                                     keyboard: .emailAddress

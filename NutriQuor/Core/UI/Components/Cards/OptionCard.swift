@@ -16,17 +16,17 @@ struct OptionCard: View {
            HStack{
                Image(systemName: icon)
                    .font(.system(size: 24))
-                   .foregroundStyle(.colorPrimary)
+                   .foregroundStyle(Color.nqPrimary)
                Text(title)
                    .font(.system(size: 18))
                    .fontWeight(.medium)
-                   .foregroundColor(.colorPrimary)
+                   .foregroundColor(Color.nqPrimary)
 
                Spacer()
                
                Image(systemName: "chevron.right")
                    .font(.system(size: 20))
-                   .foregroundStyle(.gray)
+                   .foregroundStyle(.secondary)
            }
            .padding(.horizontal, 16)
            .padding(.vertical, 14)

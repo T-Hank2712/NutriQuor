@@ -34,7 +34,7 @@ struct AllergyPicker: View {
                     Text(allergy.name)
                 }
             }
-            .navigationTitle("Select Allergies")
+            .navigationTitle("Chọn dị ứng")
         }
         .task {
             await viewModel.loadAllergies()

@@ -85,7 +85,6 @@ struct FamilyMemberProfile: View {
                                 }
 
                                 Button {
-                                    print("Change avatar")
                                 } label: {
                                     ZStack {
                                         Circle()

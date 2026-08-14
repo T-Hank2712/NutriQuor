@@ -9,7 +9,7 @@ import Foundation
 
 struct ValidationRule{
     static func required(_ value: String) -> String? {
-        value.trimmingCharacters(in: .whitespaces).isEmpty ? "Field is required" : nil
+        value.trimmingCharacters(in: .whitespaces).isEmpty ? "Vui lòng nhập thông tin này." : nil
     }
     
     static func name(_ value: String) -> String? {
@@ -19,7 +19,7 @@ struct ValidationRule{
         
         let predicate = NSPredicate(format: "SELF MATCHES %@", regex)
         
-        return predicate.evaluate(with: trimmed) ? nil : "Name must contain only letters"
+        return predicate.evaluate(with: trimmed) ? nil : "Tên chỉ được chứa chữ cái."
     }
     
     static func email(_ value: String) -> String? {
@@ -33,12 +33,12 @@ struct ValidationRule{
         
         return predicate.evaluate(with: value)
         ? nil
-        : "Invalid email format"
+        : "Email không đúng định dạng."
     }
     static func password(_ value: String) -> String? {
         
         if value.count < 8 {
-            return "Password must be at least 8 characters"
+            return "Mật khẩu cần có ít nhất 8 ký tự."
         }
         
         return nil

@@ -98,7 +98,6 @@ struct FamilyProfilesCard: View {
             )
         ],
         onAddMember: {
-            print("Add member tapped")
         }
     )
 }

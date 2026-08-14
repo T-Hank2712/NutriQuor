@@ -86,12 +86,12 @@ extension RegisterViewModel {
     func validateFirstName() {
 
           if firstName.value.trimmingCharacters(in: .whitespaces).isEmpty {
-              firstName.error = "First name is required"
+              firstName.error = "Vui lòng nhập tên."
               return
           }
 
           if !Validators.isValidName(firstName.value) {
-              firstName.error = "Only letters allowed"
+              firstName.error = "Tên chỉ được chứa chữ cái."
               return
           }
 
@@ -101,12 +101,12 @@ extension RegisterViewModel {
       func validateLastName() {
 
           if lastName.value.trimmingCharacters(in: .whitespaces).isEmpty {
-              lastName.error = "Last name is required"
+              lastName.error = "Vui lòng nhập họ."
               return
           }
 
           if !Validators.isValidName(lastName.value) {
-              lastName.error = "Only letters allowed"
+              lastName.error = "Họ chỉ được chứa chữ cái."
               return
           }
 
@@ -116,12 +116,12 @@ extension RegisterViewModel {
       func validateEmail() {
 
           if email.value.isEmpty {
-              email.error = "Email is required"
+              email.error = "Vui lòng nhập email."
               return
           }
 
           if !Validators.isValidEmail(email.value) {
-              email.error = "Invalid email"
+              email.error = "Email không đúng định dạng."
               return
           }
 
@@ -131,7 +131,7 @@ extension RegisterViewModel {
       func validatePassword() {
 
           if password.value.count < 6 {
-              password.error = "Minimum 6 characters"
+              password.error = "Mật khẩu cần có ít nhất 6 ký tự."
               return
           }
 
@@ -141,12 +141,12 @@ extension RegisterViewModel {
       func validateConfirmPassword() {
 
           if confirmPassword.value.isEmpty {
-              confirmPassword.error = "Confirm password required"
+              confirmPassword.error = "Vui lòng nhập lại mật khẩu."
               return
           }
 
           if confirmPassword.value != password.value {
-              confirmPassword.error = "Passwords do not match"
+              confirmPassword.error = "Mật khẩu xác nhận chưa khớp."
               return
           }
 

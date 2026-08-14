@@ -23,7 +23,6 @@ extension TokenStorage{
         let status = SecItemAdd(query as CFDictionary, nil)
         
         if status != errSecSuccess {
-            print("Keychain SAVE ERROR:", status)
         }
     }
     

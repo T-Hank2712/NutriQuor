@@ -33,7 +33,6 @@ struct CameraPreview: UIViewRepresentable {
         // Update frame after a short delay to ensure view has proper bounds
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             previewLayer.frame = view.bounds
-            print("📐 Preview layer frame: \(view.bounds)")
         }
         
         return view
@@ -44,7 +43,6 @@ struct CameraPreview: UIViewRepresentable {
         DispatchQueue.main.async {
             if let previewLayer = context.coordinator.previewLayer {
                 previewLayer.frame = uiView.bounds
-                print("🔄 Updated preview layer frame: \(uiView.bounds)")
             }
         }
     }

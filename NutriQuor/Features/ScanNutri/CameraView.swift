@@ -47,7 +47,7 @@ struct CameraView: View {
                             .padding()
                         
                         if camera.alertError != nil {
-                            Button("Mở Settings") {
+                            Button("Mở cài đặt") {
                                 if let url = URL(string: UIApplication.openSettingsURLString) {
                                     UIApplication.shared.open(url)
                                 }
@@ -158,19 +158,14 @@ struct CameraView: View {
         
         guard let cgImage = normalizedImage.cgImage else { return }
         
-        print("🖼️ Original image size: \(image.size), orientation: \(image.imageOrientation.rawValue)")
-        print("🔄 Normalized image size: \(normalizedImage.size)")
-        print("📏 Cutout rect: \(cutoutRect)")
         
         // Lấy kích thước ảnh gốc
         let imageWidth = CGFloat(cgImage.width)
         let imageHeight = CGFloat(cgImage.height)
         
-        print("📷 CGImage size: \(imageWidth) x \(imageHeight)")
         
         // Lấy kích thước màn hình
         let screenSize = UIScreen.main.bounds.size
-        print("📱 Screen size: \(screenSize)")
         
         // Tính tỷ lệ aspect fill - ảnh được scale để fill màn hình
         let imageAspect = imageWidth / imageHeight
@@ -192,7 +187,6 @@ struct CameraView: View {
             offsetY = (scaledHeight - screenSize.height) / 2 * scale
         }
         
-        print("📐 Scale: \(scale), Offset: (\(offsetX), \(offsetY))")
         
         // Chuyển đổi cutout rect sang tọa độ ảnh
         let cropRect = CGRect(
@@ -202,7 +196,6 @@ struct CameraView: View {
             height: cutoutRect.height * scale
         )
         
-        print("✂️ Crop rect in image space: \(cropRect)")
         
         // Đảm bảo crop rect nằm trong bounds của ảnh
         let finalCropRect = CGRect(
@@ -212,17 +205,14 @@ struct CameraView: View {
             height: min(cropRect.height, imageHeight - cropRect.origin.y)
         )
         
-        print("✅ Final crop rect: \(finalCropRect)")
         
         // Crop ảnh
         if let croppedCGImage = cgImage.cropping(to: finalCropRect) {
             self.croppedImage = UIImage(cgImage: croppedCGImage)
-            print("✅ Ảnh đã được crop: \(croppedImage?.size ?? .zero)")
             
             // Chuyển sang trang xem ảnh
             showImagePreview = true
         } else {
-            print("❌ Không thể crop ảnh")
         }
     }
 }

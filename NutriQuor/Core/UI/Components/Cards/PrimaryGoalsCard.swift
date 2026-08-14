@@ -56,18 +56,18 @@ struct colorPrimaryGoalsCard: View {
         }
         
         // Delete confirm
-        .alert("Remove Goal?", isPresented: $showDeleteAlert) {
+        .alert("Xóa mục tiêu?", isPresented: $showDeleteAlert) {
             
-            Button("Cancel", role: .cancel) {}
+            Button("Hủy", role: .cancel) {}
             
-            Button("Delete", role: .destructive) {
+            Button("Xóa", role: .destructive) {
                 if let goal = selectedGoal {
                     onDelete(goal)
                 }
             }
             
         } message: {
-            Text("Are you sure you want to remove this goal?")
+            Text("Bạn có chắc chắn muốn xóa mục tiêu này khỏi hồ sơ không?")
         }
     }
 }
@@ -75,8 +75,8 @@ struct colorPrimaryGoalsCard: View {
 #Preview {
     colorPrimaryGoalsCard(
         goals: [
-            HealthGoal(id: "1", name: "Lose Weight"),
-            HealthGoal(id: "2", name: "Build Muscle")
+            HealthGoal(id: "1", name: "Giảm cân"),
+            HealthGoal(id: "2", name: "Tăng cơ")
         ],
         onAdd: {},
         onDelete: { _ in }

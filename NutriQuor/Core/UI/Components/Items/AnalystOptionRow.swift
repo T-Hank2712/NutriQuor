@@ -14,7 +14,6 @@ struct AnalystOptionRow: View {
 
     var body: some View {
         Button {
-            print(title)
         } label: {
             HStack(spacing: 14) {
                 ZStack {
