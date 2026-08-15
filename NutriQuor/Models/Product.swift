@@ -137,6 +137,7 @@ struct Product: Codable {
     let warning: String?
     let origin: String?
     let imageRef: String?
+    let imageUrl: String?
     let s3Key: String?
     
     enum CodingKeys: String, CodingKey {
@@ -158,6 +159,7 @@ struct Product: Codable {
         case warning
         case origin
         case imageRef = "image_ref"
+        case imageUrl = "image_url"
         case s3Key = "s3_key"
     }
 
@@ -178,6 +180,7 @@ struct Product: Codable {
         warning: String?,
         origin: String?,
         imageRef: String? = nil,
+        imageUrl: String? = nil,
         s3Key: String? = nil
     ) {
         self.analysisId = analysisId
@@ -196,6 +199,7 @@ struct Product: Codable {
         self.warning = warning
         self.origin = origin
         self.imageRef = imageRef
+        self.imageUrl = imageUrl
         self.s3Key = s3Key
     }
 
@@ -225,6 +229,7 @@ struct Product: Codable {
         warning = try container.decodeIfPresent(String.self, forKey: .warning)
         origin = try container.decodeIfPresent(String.self, forKey: .origin)
         imageRef = try container.decodeIfPresent(String.self, forKey: .imageRef)
+        imageUrl = try container.decodeIfPresent(String.self, forKey: .imageUrl)
         s3Key = try container.decodeIfPresent(String.self, forKey: .s3Key)
     }
 
@@ -247,7 +252,34 @@ struct Product: Codable {
         try container.encodeIfPresent(warning, forKey: .warning)
         try container.encodeIfPresent(origin, forKey: .origin)
         try container.encodeIfPresent(imageRef, forKey: .imageRef)
+        try container.encodeIfPresent(imageUrl, forKey: .imageUrl)
         try container.encodeIfPresent(s3Key, forKey: .s3Key)
+    }
+
+    func withHistoryImage(
+        imageRef historyImageRef: String?,
+        imageUrl historyImageUrl: String?
+    ) -> Product {
+        Product(
+            analysisId: analysisId,
+            productName: productName,
+            ageRange: ageRange,
+            ingredients: ingredients,
+            additive: additive,
+            nutrition: nutrition,
+            ingredientItems: ingredientItems,
+            additiveItems: additiveItems,
+            nutrientItems: nutrientItems,
+            manufacturer: manufacturer,
+            mfgDate: mfgDate,
+            expiryDate: expiryDate,
+            netWeight: netWeight,
+            warning: warning,
+            origin: origin,
+            imageRef: imageRef ?? historyImageRef,
+            imageUrl: imageUrl ?? historyImageUrl,
+            s3Key: s3Key
+        )
     }
 }
 

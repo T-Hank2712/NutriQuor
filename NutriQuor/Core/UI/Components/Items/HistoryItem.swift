@@ -12,11 +12,10 @@ struct HistoryItem: View {
     
     var body: some View {
         HStack(spacing: 14) {
-            Image("Example")
-                .resizable()
-                .scaledToFill()
-                .frame(width: 64, height: 64)
-                .clipShape(RoundedRectangle(cornerRadius: .cardRadius))
+            ScanHistoryThumbnail(
+                imageUrl: record.imageUrl,
+                size: 64
+            )
             
             VStack(alignment: .leading, spacing: 4) {
                 Text(record.productName ?? "Sản phẩm chưa đặt tên")

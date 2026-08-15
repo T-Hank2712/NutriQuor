@@ -28,18 +28,10 @@ struct HomeHistoryItem: View {
 
     var body: some View {
         HStack(spacing: 14) {
-            // Thumbnail
-            ZStack {
-                RoundedRectangle(cornerRadius: .cardRadius)
-                    .fill(Color("ColorPrimary").opacity(0.12))
-                    .frame(width: 58, height: 58)
-
-                Image("Example")
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 58, height: 58)
-                    .clipShape(RoundedRectangle(cornerRadius: .cardRadius))
-            }
+            ScanHistoryThumbnail(
+                imageUrl: record.imageUrl,
+                size: 58
+            )
 
             // Info
             VStack(alignment: .leading, spacing: 5) {

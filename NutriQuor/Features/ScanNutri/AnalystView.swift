@@ -76,11 +76,10 @@ struct AnalystView: View {
                                     .frame(width: 110, height: 110)
                                     .shadow(color: Color("ColorPrimary").opacity(0.16), radius: 16, y: 6)
 
-                                Image("Example")
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: 110, height: 110)
-                                    .clipShape(RoundedRectangle(cornerRadius: .cardRadius))
+                                ScanHistoryThumbnail(
+                                    imageUrl: product.imageUrl,
+                                    size: 110
+                                )
                             }
 
                             // Score badge
