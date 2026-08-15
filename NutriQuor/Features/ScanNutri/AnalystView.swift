@@ -199,17 +199,7 @@ struct AnalystView: View {
                                     )
                                 }
 
-                                if let allergen = product.allergen, !allergen.isEmpty {
-                                    ModernAlertRow(
-                                        icon: "allergens",
-                                        color: Color("AccentPink"),
-                                        title: "Dị ứng",
-                                        description: allergen
-                                    )
-                                }
-
-                                if (product.warning?.isEmpty ?? true),
-                                   (product.allergen?.isEmpty ?? true) {
+                                if product.warning?.isEmpty ?? true {
                                     ModernAlertRow(
                                         icon: "checkmark.shield.fill",
                                         color: Color("SuccessTeal"),
@@ -239,31 +229,31 @@ struct AnalystView: View {
                                         badColor: Color("AccentOrange")
                                     )
                                 }
-
-                                if !product.additiveItems.isEmpty {
-                                    VStack(spacing: 10) {
-                                        ForEach(Array(product.additiveItems.prefix(3).enumerated()), id: \.element.stableID) { index, item in
-                                            if let id = item.id, !id.isEmpty {
-                                                NavigationLink {
-                                                    SearchDetailView(id: id)
-                                                } label: {
-                                                    IngredientCard(
-                                                        title: item.displayName,
-                                                        index: index + 1,
-                                                        status: .caution
-                                                    )
-                                                }
-                                                .buttonStyle(.plain)
-                                            } else {
-                                                IngredientCard(
-                                                    title: item.displayName,
-                                                    index: index + 1,
-                                                    status: .caution
-                                                )
-                                            }
-                                        }
-                                    }
-                                }
+//
+//                                if !product.additiveItems.isEmpty {
+//                                    VStack(spacing: 10) {
+//                                        ForEach(Array(product.additiveItems.prefix(3).enumerated()), id: \.element.stableID) { index, item in
+//                                            if let id = item.id, !id.isEmpty {
+//                                                NavigationLink {
+//                                                    SearchDetailView(id: id)
+//                                                } label: {
+//                                                    IngredientCard(
+//                                                        title: item.displayName,
+//                                                        index: index + 1,
+//                                                        status: .caution
+//                                                    )
+//                                                }
+//                                                .buttonStyle(.plain)
+//                                            } else {
+//                                                IngredientCard(
+//                                                    title: item.displayName,
+//                                                    index: index + 1,
+//                                                    status: .caution
+//                                                )
+//                                            }
+//                                        }
+//                                    }
+//                                }
 
                                 NavigationLink {
                                     ContainListView(
@@ -504,7 +494,6 @@ private struct ProductInfoRow: View {
                 mfgDate: "2026-01-01",
                 expiryDate: "2027-01-01",
                 netWeight: "200 g",
-                allergen: "Gluten",
                 warning: "Nhiều đường",
                 origin: "Việt Nam"
             ),

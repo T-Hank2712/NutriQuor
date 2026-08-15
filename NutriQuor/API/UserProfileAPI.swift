@@ -8,64 +8,6 @@
 import Foundation
 
 enum UserProfileAPI {
-
-    static func allergiesRequest() throws -> URLRequest {
-        guard let url = URL(
-            string: "\(AppConfig.shared.devBaseURL)/api/v1/allergies"
-        ) else {
-            throw URLError(.badURL)
-        }
-
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-
-        return request
-    }
-
-    static func allergyProfileRequest(profileId: String) throws -> URLRequest {
-        guard let url = URL(
-            string: "\(AppConfig.shared.devBaseURL)/api/v1/user-profiles/\(profileId)/allergies"
-        ) else {
-            throw URLError(.badURL)
-        }
-
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-
-        return request
-    }
-
-    static func addAllergyRequest(
-        profileId: String,
-        allergyId: String
-    ) throws -> URLRequest {
-        guard let url = URL(
-            string: "\(AppConfig.shared.devBaseURL)/api/v1/user-profiles/\(profileId)/allergies/\(allergyId)"
-        ) else {
-            throw URLError(.badURL)
-        }
-
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-
-        return request
-    }
-
-    static func deleteAllergyRequest(
-        profileId: String,
-        allergyId: String
-    ) throws -> URLRequest {
-        guard let url = URL(
-            string: "\(AppConfig.shared.devBaseURL)/api/v1/user-profiles/\(profileId)/allergies/\(allergyId)"
-        ) else {
-            throw URLError(.badURL)
-        }
-
-        var request = URLRequest(url: url)
-        request.httpMethod = "DELETE"
-
-        return request
-    }
     
     // MARK: - Profile Information
     static func updateUserProfileRequest(profileId: String, firstName: String?, lastName: String?, avatar: String?) throws -> URLRequest {

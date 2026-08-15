@@ -134,7 +134,6 @@ struct Product: Codable {
     let mfgDate: String?
     let expiryDate: String?
     let netWeight: String?
-    let allergen: String?
     let warning: String?
     let origin: String?
     let imageRef: String?
@@ -156,7 +155,6 @@ struct Product: Codable {
         case mfgDate = "mfg_date"
         case expiryDate = "expiry_date"
         case netWeight = "net_weight"
-        case allergen
         case warning
         case origin
         case imageRef = "image_ref"
@@ -177,7 +175,6 @@ struct Product: Codable {
         mfgDate: String?,
         expiryDate: String?,
         netWeight: String?,
-        allergen: String?,
         warning: String?,
         origin: String?,
         imageRef: String? = nil,
@@ -196,7 +193,6 @@ struct Product: Codable {
         self.mfgDate = mfgDate
         self.expiryDate = expiryDate
         self.netWeight = netWeight
-        self.allergen = allergen
         self.warning = warning
         self.origin = origin
         self.imageRef = imageRef
@@ -226,7 +222,6 @@ struct Product: Codable {
         mfgDate = try container.decodeIfPresent(String.self, forKey: .mfgDate)
         expiryDate = try container.decodeIfPresent(String.self, forKey: .expiryDate)
         netWeight = try container.decodeIfPresent(String.self, forKey: .netWeight)
-        allergen = try container.decodeIfPresent(String.self, forKey: .allergen)
         warning = try container.decodeIfPresent(String.self, forKey: .warning)
         origin = try container.decodeIfPresent(String.self, forKey: .origin)
         imageRef = try container.decodeIfPresent(String.self, forKey: .imageRef)
@@ -249,7 +244,6 @@ struct Product: Codable {
         try container.encodeIfPresent(mfgDate, forKey: .mfgDate)
         try container.encodeIfPresent(expiryDate, forKey: .expiryDate)
         try container.encodeIfPresent(netWeight, forKey: .netWeight)
-        try container.encodeIfPresent(allergen, forKey: .allergen)
         try container.encodeIfPresent(warning, forKey: .warning)
         try container.encodeIfPresent(origin, forKey: .origin)
         try container.encodeIfPresent(imageRef, forKey: .imageRef)

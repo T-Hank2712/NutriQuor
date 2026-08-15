@@ -34,7 +34,6 @@ struct AnalyzeResponse: Codable {
     let expiryDate: String
 
     let netWeight: String
-    let allergen: String
     let warning: String
     let origin: String
     let s3Key: String
@@ -49,7 +48,6 @@ struct AnalyzeResponse: Codable {
         case mfgDate = "mfg_date"
         case expiryDate = "expiry_date"
         case netWeight = "net_weight"
-        case allergen
         case warning
         case origin
         case s3Key = "s3_key"

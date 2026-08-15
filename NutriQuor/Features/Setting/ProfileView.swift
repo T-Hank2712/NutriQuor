@@ -12,7 +12,6 @@ struct ProfileView: View {
 
     @StateObject private var viewModel = UserProfileViewModel()
 
-    @State private var showAllergyPicker = false
     @State private var showEditNameSheet = false
 
     @State private var firstName = ""
@@ -47,21 +46,6 @@ struct ProfileView: View {
                     VStack(spacing: 22) {
                         profileHeader
                         accountSummaryCard
-
-                        AllergiesCard(
-                            allergies: viewModel.selectedAllergies,
-                            onAdd: {
-                                showAllergyPicker = true
-                            },
-                            onDelete: { allergy in
-                                Task {
-                                    _ = await viewModel.deleteAllergy(
-                                        profileId: profileId,
-                                        allergyId: allergy.id
-                                    )
-                                }
-                            }
-                        )
                     }
                     .padding(.horizontal, 20)
                     .padding(.top, 18)
@@ -107,18 +91,6 @@ struct ProfileView: View {
         }
         .task {
             syncProfileState()
-            guard !profileId.isEmpty else { return }
-            await viewModel.loadProfileAllergies(profileId: profileId)
-        }
-        .sheet(isPresented: $showAllergyPicker) {
-            AllergyPicker(
-                selectedAllergies: viewModel.selectedAllergies
-            ) { allergy in
-                Task {
-                    await viewModel.addAllergy(profileId: profileId, allergyId: allergy.id)
-                    await viewModel.loadProfileAllergies(profileId: profileId)
-                }
-            }
         }
     }
 

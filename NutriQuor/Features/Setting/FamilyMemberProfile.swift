@@ -24,8 +24,6 @@ struct FamilyMemberProfile: View {
     @State private var editFirstName: String = ""
     @State private var editLastName: String = ""
 
-    @State private var showAllergyPicker = false
-
     @StateObject private var viewModel = UserProfileViewModel()
 
 
@@ -127,24 +125,6 @@ struct FamilyMemberProfile: View {
                     // MARK: - Content
                     VStack(spacing: 16) {
 
-                        // Allergies
-                        VStack(alignment: .leading, spacing: 12) {
-                            SectionLabel(text: "DỊ ỨNG")
-
-                            AllergiesCard(
-                                allergies: viewModel.selectedAllergies,
-                                onAdd: { showAllergyPicker = true },
-                                onDelete: { allergy in
-                                    Task {
-                                        _ = await viewModel.deleteAllergy(
-                                            profileId: profile.profileId,
-                                            allergyId: allergy.id
-                                        )
-                                    }
-                                }
-                            )
-                        }
-                        
                         DangerButton(
                             title: "Xóa thành viên",
                             icon: "trash.fill",
@@ -213,18 +193,6 @@ struct FamilyMemberProfile: View {
             firstName = profile.firstName
             lastName = profile.lastName
             avatar = profile.avatar ?? ""
-
-            await viewModel.loadProfileAllergies(profileId: profile.profileId)
-        }
-
-        // MARK: - Sheets
-        .sheet(isPresented: $showAllergyPicker) {
-            AllergyPicker(selectedAllergies: viewModel.selectedAllergies) { allergy in
-                Task {
-                    await viewModel.addAllergy(profileId: profile.profileId, allergyId: allergy.id)
-                    await viewModel.loadProfileAllergies(profileId: profile.profileId)
-                }
-            }
         }
         .alert("Xóa thành viên", isPresented: $showDeleteAlert) {
             Button("Hủy", role: .cancel) { }

@@ -8,66 +8,6 @@
 import Foundation
 
 final class UserProfileAPIService {
-
-    // MARK: - Fetch All System Data
-    func fetchAllergies() async throws -> [Allergy] {
-        let request = try UserProfileAPI.allergiesRequest()
-
-        let response = try await APIClient.shared.request(
-            request,
-            responseType: APIResponse<[Allergy]>.self
-        )
-        
-        return response.data
-    }
-
-    // MARK: - Allergy Profile
-    func getAllergyProfile(
-        profileId: String
-    ) async throws -> [Allergy] {
-        let request = try UserProfileAPI.allergyProfileRequest(profileId: profileId)
-
-        let response = try await APIClient.shared.request(
-            request,
-            responseType: APIResponse<[Allergy]>.self
-        )
-
-        return response.data
-    }
-
-    func addAllergy(
-        profileId: String,
-        allergyId: String
-    ) async throws -> Allergy {
-        let request = try UserProfileAPI.addAllergyRequest(
-            profileId: profileId,
-            allergyId: allergyId
-        )
-
-        let response = try await APIClient.shared.request(
-            request,
-            responseType: APIResponse<Allergy>.self
-        )
-
-        return response.data
-    }
-
-    func deleteAllergy(
-        profileId: String,
-        allergyId: String
-    ) async throws -> Bool {
-        let request = try UserProfileAPI.deleteAllergyRequest(
-            profileId: profileId,
-            allergyId: allergyId
-        )
-
-        let response = try await APIClient.shared.request(
-            request,
-            responseType: APIResponse<Bool>.self
-        )
-
-        return response.data
-    }
     
     // MARK: - Profile Information
     func updateProfile(
