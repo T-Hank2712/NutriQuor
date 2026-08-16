@@ -71,7 +71,7 @@ struct HomeView: View {
                         
                         LazyVGrid(columns: bentoColumns, spacing: 14) {
                             CountScansCard(count: viewModel.todayScanCount)
-                            IndexCard()
+                            IndexCard(latestScan: viewModel.scanHistory.first)
                         }
                     }
                     
@@ -97,7 +97,7 @@ struct HomeView: View {
                             SectionLabel(text: "LỊCH SỬ QUÉT GẦN ĐÂY")
                             Spacer()
                             Button {
-                                // view all
+                                appState.selectedTab = 2
                             } label: {
                                 Text("Xem tất cả")
                                     .font(.system(size: 12, weight: .semibold, design: .rounded))
@@ -107,12 +107,11 @@ struct HomeView: View {
                         
                         VStack(spacing: 12) {
                             ForEach(viewModel.scanHistory) { item in
-                                NavigationLink {
+                                FullScreenDetailLink {
                                     HistoryDetailView(analysisId: item.analysisId)
                                 } label: {
                                     HomeHistoryItem(record: item)
                                 }
-                                .buttonStyle(.plain)
                             }
                         }
                     }
@@ -131,8 +130,14 @@ struct HomeView: View {
                     await viewModel.loadTodayScanHistory()
                 }
             }
+            .onChange(of: appState.scanHistoryRefreshToken) { _, _ in
+                Task {
+                    await viewModel.loadTodayScanHistory()
+                }
+            }
             .background(Color("Background"))
         }
+        .restoreBottomBarOnRoot()
     }
 }
 

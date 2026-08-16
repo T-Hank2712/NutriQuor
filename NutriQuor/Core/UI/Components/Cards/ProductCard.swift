@@ -21,20 +21,11 @@ struct ProductCard: View {
             ZStack {
 
                 RoundedRectangle(cornerRadius: .cardRadius)
-                    .fill(
-                        LinearGradient(
-                            colors: [
-                                Color("SuccessTeal").opacity(0.16),
-                                Color("ColorPrimary").opacity(0.06)
-                            ],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
+                    .fill(Color("ColorPrimary").opacity(0.08))
 
                 Image(systemName: "leaf.fill")
                     .font(.system(size: 28))
-                    .foregroundStyle(Color("SuccessTeal"))
+                    .foregroundStyle(Color("ColorPrimary"))
 
             }
             .frame(width: 88, height: 88)
@@ -53,7 +44,7 @@ struct ProductCard: View {
                         ForEach(tags, id: \.self) { tag in
                             Tag(
                                 text: tag,
-                                color: Color("SuccessTeal")
+                                color: Color("ColorPrimary")
                             )
                         }
                     }

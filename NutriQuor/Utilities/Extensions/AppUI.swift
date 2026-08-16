@@ -62,27 +62,13 @@ private struct GlassPanelModifier: ViewModifier {
 
     func body(content: Content) -> some View {
         content
-            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
+            .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
             .overlay(
                 RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                    .fill(
-                        LinearGradient(
-                            colors: [
-                                Color.white.opacity(scheme == .dark ? 0.08 : 0.28),
-                                Color.white.opacity(scheme == .dark ? 0.02 : 0.08)
-                            ],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
-                    .allowsHitTesting(false)
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                    .stroke(Color.white.opacity(scheme == .dark ? borderOpacity * 0.75 : borderOpacity), lineWidth: 1)
+                    .stroke(Color("Border").opacity(scheme == .dark ? 0.8 : borderOpacity), lineWidth: 1)
             )
             .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
-            .shadow(color: Color.black.opacity(scheme == .dark ? 0.32 : 0.07), radius: scheme == .dark ? 18 : 20, y: 10)
+            .shadow(color: Color.black.opacity(scheme == .dark ? 0.20 : 0.035), radius: 10, y: 4)
     }
 }
 

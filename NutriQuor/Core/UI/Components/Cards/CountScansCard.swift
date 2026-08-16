@@ -18,7 +18,7 @@ struct CountScansCard: View {
                     Image(systemName: "viewfinder.circle.fill")
                         .font(.system(size: 18, weight: .semibold))
                         .foregroundStyle(Color("ColorPrimary"))
-                        .frame(width: 36, height: 36)
+                        .frame(width: 42, height: 42)
                         .background(
                             RoundedRectangle(cornerRadius: .cardRadius)
                                 .fill(Color("ColorPrimary").opacity(0.12))
@@ -40,8 +40,9 @@ struct CountScansCard: View {
                         .font(.caption)
                         .foregroundStyle(Color("ColorPrimary"))
                 }
+                .lineLimit(1)
             }
-            .frame(maxWidth: .infinity, minHeight: 132, alignment: .leading)
+            .frame(maxWidth: .infinity, minHeight: 144, maxHeight: 144, alignment: .leading)
         }
     }
 }

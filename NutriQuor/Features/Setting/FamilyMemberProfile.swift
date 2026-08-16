@@ -32,95 +32,49 @@ struct FamilyMemberProfile: View {
             ScrollView {
                 VStack(spacing: 0) {
 
-                    // MARK: - Hero Header
-                    ZStack(alignment: .bottom) {
-                        LinearGradient(
-                            colors: [
-                                Color("DeepNavyDark"),
-                                Color("DeepNavyMid"),
-                                Color("ColorPrimary")
-                            ],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                        .frame(height: 300)
-                        .ignoresSafeArea(edges: .top)
+                    // MARK: - Header
+                    BentoCard(accent: Color("ColorPrimary"), style: .plain, padding: 18) {
+                        HStack(spacing: 16) {
+                            ZStack {
+                                Circle()
+                                    .fill(Color("ColorPrimary").opacity(0.12))
+                                    .frame(width: 78, height: 78)
 
-                        // Decorative circles
-                        Circle()
-                            .fill(Color.white.opacity(0.03))
-                            .frame(width: 200, height: 200)
-                            .offset(x: -80, y: -20)
-
-                        Circle()
-                            .fill(Color("SuccessTeal").opacity(0.16))
-                            .frame(width: 150, height: 150)
-                            .offset(x: 100, y: 30)
-
-                        VStack(spacing: 12) {
-                            // Avatar
-                            ZStack(alignment: .bottomTrailing) {
-                                ZStack {
-                                    Circle()
-                                        .fill(
-                                            LinearGradient(
-                                                colors: [
-                                                    Color("SuccessTeal"),
-                                                    Color("ColorPrimary")
-                                                ],
-                                                startPoint: .topLeading,
-                                                endPoint: .bottomTrailing
-                                            )
-                                        )
-                                        .frame(width: 100, height: 100)
-                                        .shadow(color: Color("ColorPrimary").opacity(0.2), radius: 18, y: 8)
-
-                                    Text(initials)
-                                        .font(.system(size: 36, weight: .bold, design: .rounded))
-                                        .foregroundStyle(.white)
-                                }
-
-                                Button {
-                                } label: {
-                                    ZStack {
-                                        Circle()
-                                            .fill(Color("ColorPrimary"))
-                                            .frame(width: 30, height: 30)
-                                        Image(systemName: "camera.fill")
-                                            .font(.system(size: 13, weight: .semibold))
-                                            .foregroundStyle(.white)
-                                    }
-                                    .shadow(color: Color("ColorPrimary").opacity(0.22), radius: 8, y: 3)
-                                }
+                                Text(initials)
+                                    .font(.system(size: 24, weight: .bold, design: .rounded))
+                                    .foregroundStyle(Color("ColorPrimary"))
                             }
-                            
-                            Text("\(firstName) \(lastName)")
-                                .font(.system(size: 20, weight: .bold, design: .rounded))
-                                .foregroundStyle(.white)
-                                .padding(.bottom, 16)
-                            
+
+                            VStack(alignment: .leading, spacing: 5) {
+                                Text("\(firstName) \(lastName)")
+                                    .font(.system(size: 21, weight: .bold, design: .rounded))
+                                    .foregroundStyle(.primary)
+                                    .lineLimit(2)
+
+                                Text("Thành viên gia đình")
+                                    .font(.system(size: 13, weight: .medium))
+                                    .foregroundStyle(.secondary)
+                            }
+
+                            Spacer(minLength: 8)
+
                             Button {
                                 editFirstName = firstName
                                 editLastName = lastName
                                 showEditNameSheet = true
                             } label: {
-                                Label("Chỉnh sửa thông tin", systemImage: "pencil")
-                                    .font(.subheadline.weight(.medium))
-                                    .foregroundStyle(.white)
-                                    .padding(.horizontal, 18)
-                                    .padding(.vertical, 9)
-                                    .background(
-                                        LinearGradient(
-                                            colors: [Color("ColorPrimary"), Color("SuccessTeal")],
-                                            startPoint: .leading,
-                                            endPoint: .trailing
-                                        )
-                                    )
-                                    .clipShape(Capsule())
-                                    .shadow(color: Color("ColorPrimary").opacity(0.18), radius: 6, y: 3)
-                            }.padding(.bottom, 20)
-                        }.padding(.top, 70)
+                                Image(systemName: "pencil")
+                                    .font(.system(size: 14, weight: .semibold))
+                                    .foregroundStyle(Color("ColorPrimary"))
+                                    .frame(width: 38, height: 38)
+                                    .background(Color("ColorPrimary").opacity(0.10))
+                                    .clipShape(Circle())
+                            }
+                            .buttonStyle(.plain)
+                        }
                     }
+                    .padding(.horizontal, 20)
+                    .padding(.top, 18)
 
                     // MARK: - Content
                     VStack(spacing: 16) {
@@ -128,13 +82,13 @@ struct FamilyMemberProfile: View {
                         DangerButton(
                             title: "Xóa thành viên",
                             icon: "trash.fill",
-                            color: Color("AccentPink")
+                            color: .red
                         ) {
                             showDeleteAlert = true
                         }
                     }
                     .padding(.horizontal, 20)
-                    .padding(.top, 24)
+                    .padding(.top, 18)
                 }
                 
             }
@@ -172,23 +126,6 @@ struct FamilyMemberProfile: View {
                 )
             }
         }
-        .ignoresSafeArea(edges: .top)
-        .navigationBarBackButtonHidden(true)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                Button {
-                    dismiss()
-                } label: {
-                    HStack(spacing: 6) {
-                        Image(systemName: "chevron.left")
-                            .font(.system(size: 14, weight: .semibold))
-                        Text("Quay lại")
-                            .font(.system(size: 15, weight: .medium))
-                    }
-                    .foregroundStyle(.white)
-                }
-            }
-        }
         .task {
             firstName = profile.firstName
             lastName = profile.lastName
@@ -209,6 +146,7 @@ struct FamilyMemberProfile: View {
         } message: {
             Text("Bạn có chắc chắn muốn xóa thành viên này khỏi hồ sơ gia đình không?")
         }
+        .hideBottomBarOnDetail()
     }
 
     // MARK: - Helpers

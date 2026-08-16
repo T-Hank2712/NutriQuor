@@ -52,6 +52,7 @@ struct SearchView: View {
                 Task { await viewModel.loadByCategory(selectedCategory) }
             }
         }
+        .restoreBottomBarOnRoot()
     }
 
     // MARK: - Category Select
@@ -101,7 +102,7 @@ struct SearchView: View {
                 } else {
                     VStack(spacing: 10) {
                         ForEach(viewModel.filteredList, id: \.id) { item in
-                            NavigationLink {
+                            FullScreenDetailLink {
                                 SearchDetailView(id: item.id)
                             } label: {
                                 ModernProductCard(
@@ -111,7 +112,6 @@ struct SearchView: View {
                                     type: item.type
                                 )
                             }
-                            .buttonStyle(.plain)
                         }
                     }
                 }
@@ -137,7 +137,7 @@ struct SearchView: View {
             } else {
                 VStack(spacing: 10) {
                     ForEach(viewModel.filteredList, id: \.id) { item in
-                        NavigationLink {
+                        FullScreenDetailLink {
                             SearchDetailView(id: item.id)
                         } label: {
                             ModernProductCard(
@@ -147,7 +147,6 @@ struct SearchView: View {
                                 type: item.type
                             )
                         }
-                        .buttonStyle(.plain)
                     }
                 }
             }

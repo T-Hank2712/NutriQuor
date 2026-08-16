@@ -37,7 +37,7 @@ struct InsightCard: View {
                         .lineLimit(3)
                 }
             
-                NavigationLink {
+                FullScreenDetailLink {
                     SearchDetailView(id: item.id)
                 } label: {
                     Text("XEM CHI TIẾT")
@@ -48,7 +48,6 @@ struct InsightCard: View {
                         .foregroundColor(.white)
                         .cornerRadius(.smallRadius)
                 }
-                .buttonStyle(.plain)
             }
         }
     }

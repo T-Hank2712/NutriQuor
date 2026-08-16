@@ -36,19 +36,11 @@ struct AnalystSection<Content: View>: View {
 }
 
 #Preview {
-    AnalystSection(title: "Tuỳ chọn", icon: "ellipsis.circle.fill", iconColor: Color("ColorPrimary")) {
-        VStack(spacing: 10) {
-            AnalystOptionRow(
-                title: "Thêm vào yêu thích",
-                icon: "heart.fill",
-                color: Color("AccentPink")
-            )
-            Divider().padding(.leading, 48)
-            AnalystOptionRow(
-                title: "Chia sẻ sản phẩm",
-                icon: "square.and.arrow.up.fill",
-                color: Color("AccentPurple")
-            )
-        }
+    AnalystSection(title: "Dinh dưỡng", icon: "chart.bar.fill", iconColor: Color("ColorPrimary")) {
+        Text("Thông tin dinh dưỡng được hiển thị từ dữ liệu phân tích nhãn.")
+            .font(.footnote)
+            .foregroundStyle(.secondary)
     }
+    .padding()
+    .background(Color(.systemGroupedBackground))
 }

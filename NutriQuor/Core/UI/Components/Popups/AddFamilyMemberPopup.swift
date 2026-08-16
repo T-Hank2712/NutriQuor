@@ -35,13 +35,7 @@ struct AddFamilyMemberPopup: View {
 
             ZStack {
                 Circle()
-                    .fill(
-                        LinearGradient(
-                            colors: [Color("ColorPrimary"), Color("SuccessTeal")],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
+                    .fill(Color("ColorPrimary").opacity(0.14))
 
                 Text(
                     firstName.isEmpty
@@ -49,7 +43,7 @@ struct AddFamilyMemberPopup: View {
                     : String(firstName.prefix(1))
                 )
                 .font(.system(size: 40, weight: .bold))
-                .foregroundStyle(.white)
+                .foregroundStyle(Color("ColorPrimary"))
             }
             .frame(width: 110, height: 110)
 

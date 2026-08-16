@@ -94,12 +94,11 @@ struct HistoryView: View {
                                 }
                                 .frame(width: 60)
 
-                                NavigationLink {
+                                FullScreenDetailLink {
                                     HistoryDetailView(analysisId: item.analysisId)
                                 } label: {
                                     HistoryItem(record: item)
                                 }
-                                .buttonStyle(.plain)
                             }
                         }
                     }
@@ -123,6 +122,12 @@ struct HistoryView: View {
                 await viewModel.loadScanHistory(for: newDate)
             }
         }
+        .onChange(of: appState.scanHistoryRefreshToken) { _, _ in
+            Task {
+                await viewModel.loadScanHistory(for: selectedDate)
+            }
+        }
+        .restoreBottomBarOnRoot()
     }
     
     // MARK: - Format Time

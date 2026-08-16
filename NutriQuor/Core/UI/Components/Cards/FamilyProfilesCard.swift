@@ -28,7 +28,7 @@ struct FamilyProfilesCard: View {
                     HStack(spacing: 20) {
 
                         ForEach(members, id: \.profileId) { member in
-                            NavigationLink {
+                            FullScreenDetailLink {
                                 FamilyMemberProfile(profile: member)
                             } label: {
                                 VStack(spacing: 8) {
@@ -49,7 +49,6 @@ struct FamilyProfilesCard: View {
                                         .lineLimit(1)
                                 }
                             }
-                            .buttonStyle(.plain)
                         }
 
                         Button(action: onAddMember) {

@@ -76,10 +76,10 @@ struct ModernProductCard: View {
 
     private var cardColor: Color {
         switch type {
-        case "ingredient": return Color("SuccessTeal")
+        case "ingredient": return Color("ColorPrimary")
         case "nutrient": return Color("ColorPrimary")
-        case "additive": return Color("AccentOrange")
-        default: return Color("AccentPurple")
+        case "additive": return Color("ColorPrimary")
+        default: return Color("ColorPrimary")
         }
     }
 }

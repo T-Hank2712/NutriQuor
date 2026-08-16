@@ -7,25 +7,27 @@
 
 import Foundation
 import Combine
-//
-//  AppState.swift
-//  NutriQuor
-//
-//  Created by Lâm Tấn Thành on 18/5/26.
-//
+import SwiftUI
 
-import Foundation
-import Combine
+struct FullScreenDetailRoute: Identifiable {
+    let id = UUID()
+    let view: AnyView
+}
+
 @MainActor
 final class AppState: ObservableObject {
 
     @Published var authState: AuthState = .loading
     @Published var selectedTab: Int = 0
+    @Published private(set) var isBottomBarHidden = false
+    @Published private(set) var fullScreenDetailStack: [FullScreenDetailRoute] = []
+    @Published private(set) var scanHistoryRefreshToken = UUID()
 
     @Published var user: User?
     @Published var profile: Profile?
 
     private let hasLoggedInKey = "has_logged_in"
+    private var bottomBarHiddenDepth = 0
 
     private var hasLoggedInBefore: Bool {
         UserDefaults.standard.bool(forKey: hasLoggedInKey)
@@ -110,7 +112,45 @@ final class AppState: ObservableObject {
         user = nil
         profile = nil
         selectedTab = 0
+        resetBottomBarVisibility()
+        dismissAllFullScreenDetails()
 
         authState = .login
+    }
+
+    func pushBottomBarHidden() {
+        bottomBarHiddenDepth += 1
+        isBottomBarHidden = bottomBarHiddenDepth > 0
+    }
+
+    func popBottomBarHidden() {
+        bottomBarHiddenDepth = max(0, bottomBarHiddenDepth - 1)
+        isBottomBarHidden = bottomBarHiddenDepth > 0
+    }
+
+    func resetBottomBarVisibility() {
+        bottomBarHiddenDepth = 0
+        isBottomBarHidden = false
+    }
+
+    func pushFullScreenDetail<Content: View>(
+        @ViewBuilder _ content: () -> Content
+    ) {
+        fullScreenDetailStack.append(
+            FullScreenDetailRoute(view: AnyView(content()))
+        )
+    }
+
+    func popFullScreenDetail() {
+        guard !fullScreenDetailStack.isEmpty else { return }
+        fullScreenDetailStack.removeLast()
+    }
+
+    func dismissAllFullScreenDetails() {
+        fullScreenDetailStack.removeAll()
+    }
+
+    func notifyScanHistoryChanged() {
+        scanHistoryRefreshToken = UUID()
     }
 }

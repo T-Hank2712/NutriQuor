@@ -103,6 +103,8 @@ struct ScanHistoryDetail: Decodable {
 private enum HistoryDateParser {
     static func parse(_ raw: String?) -> Date? {
         guard let raw else { return nil }
+        let normalizedRaw = raw.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !normalizedRaw.isEmpty else { return nil }
 
         let isoWithFraction = ISO8601DateFormatter()
         isoWithFraction.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
@@ -110,6 +112,29 @@ private enum HistoryDateParser {
         let isoWithoutFraction = ISO8601DateFormatter()
         isoWithoutFraction.formatOptions = [.withInternetDateTime]
 
-        return isoWithFraction.date(from: raw) ?? isoWithoutFraction.date(from: raw)
+        if let date = isoWithFraction.date(from: normalizedRaw)
+            ?? isoWithoutFraction.date(from: normalizedRaw) {
+            return date
+        }
+
+        let formatters: [DateFormatter] = [
+            makeFormatter("yyyy-MM-dd'T'HH:mm:ss.SSSSSSXXXXX"),
+            makeFormatter("yyyy-MM-dd'T'HH:mm:ss.SSSXXXXX"),
+            makeFormatter("yyyy-MM-dd'T'HH:mm:ssXXXXX"),
+            makeFormatter("yyyy-MM-dd'T'HH:mm:ss.SSSSSS"),
+            makeFormatter("yyyy-MM-dd'T'HH:mm:ss.SSS"),
+            makeFormatter("yyyy-MM-dd'T'HH:mm:ss"),
+        ]
+
+        return formatters.lazy.compactMap { $0.date(from: normalizedRaw) }.first
+    }
+
+    private static func makeFormatter(_ format: String) -> DateFormatter {
+        let formatter = DateFormatter()
+        formatter.calendar = Calendar(identifier: .gregorian)
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        formatter.dateFormat = format
+        return formatter
     }
 }

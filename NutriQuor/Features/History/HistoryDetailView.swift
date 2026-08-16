@@ -12,7 +12,7 @@ struct HistoryDetailView: View {
     var body: some View {
         Group {
             if let product {
-                AnalystView(product: product, onDismiss: {})
+                AnalystView(product: product)
             } else if isLoading {
                 VStack(spacing: 12) {
                     ProgressView()
@@ -41,6 +41,7 @@ struct HistoryDetailView: View {
         .task {
             await loadDetail()
         }
+        .hideBottomBarOnDetail()
     }
 
     private func loadDetail() async {

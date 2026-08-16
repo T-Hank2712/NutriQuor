@@ -9,27 +9,11 @@ import SwiftUI
 
 struct AnalystView: View {
     let product: Product
-    let onDismiss: () -> Void
+    var showsDismissButton = false
+    var onDismiss: () -> Void = { }
 
     @Environment(\.dismiss) private var dismiss
-    @State private var selectedRow: NutriText?
     @State private var showAllNutrition = false
-
-//    private var scoreColor: Color {
-//        switch nutriItem.score.lowercased() {
-//        case "tốt":  return Color("SuccessTeal")
-//        case "xấu":  return Color("AccentPink")
-//        default:     return Color("ColorPrimary")
-//        }
-//    }
-//
-//    private var scoreIcon: String {
-//        switch nutriItem.score.lowercased() {
-//        case "tốt":  return "checkmark.shield.fill"
-//        case "xấu":  return "xmark.shield.fill"
-//        default:     return "minus.shield.fill"
-//        }
-//    }
     
     struct NutrientItem: Identifiable {
         let id: String
@@ -41,126 +25,65 @@ struct AnalystView: View {
     }
 
     var body: some View {
-        NavigationStack{
-            ScrollView(showsIndicators: false) {
-                VStack(spacing: 0) {
+        ScrollView(showsIndicators: false) {
+            VStack(spacing: 22) {
 
-                    // MARK: - Hero
-                    ZStack(alignment: .bottom) {
-                        LinearGradient(
-                            colors: [
-                                Color("SoftPink1"),
-                                Color("SoftPink2"),
-                                Color("SuccessTeal").opacity(0.18)
-                            ],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                        .frame(height: 280)
+                // MARK: - Hero
+                VStack(spacing: 18) {
+                    ScanHistoryThumbnail(
+                        imageRef: product.imageRef,
+                        imageUrl: product.imageUrl,
+                        size: 112
+                    )
+                    .padding(.top, 18)
 
-                        Circle()
-                            .fill(Color("ColorPrimary").opacity(0.18))
-                            .frame(width: 220)
-                            .offset(x: 110, y: -30)
+                    VStack(spacing: 10) {
+                        Text(product.productName ?? "Kết quả phân tích")
+                            .font(.system(size: 26, weight: .black, design: .rounded))
+                            .foregroundStyle(.primary)
+                            .multilineTextAlignment(.center)
 
-                        Circle()
-                            .fill(Color("ColorPrimary").opacity(0.12))
-                            .frame(width: 160)
-                            .offset(x: -90, y: 20)
-
-                        VStack(spacing: 14) {
-                            // Product image
-                            ZStack {
-                                RoundedRectangle(cornerRadius: .cardRadius)
-                                    .fill(.white)
-                                    .frame(width: 110, height: 110)
-                                    .shadow(color: Color("ColorPrimary").opacity(0.16), radius: 16, y: 6)
-
-                                ScanHistoryThumbnail(
-                                    imageUrl: product.imageUrl,
-                                    size: 110
-                                )
+                        HStack(spacing: 8) {
+                            ForEach(productTags, id: \.self) { tag in
+                                Text(tag)
+                                    .font(.system(size: 12, weight: .bold, design: .rounded))
+                                    .foregroundStyle(Color("ColorPrimary"))
+                                    .padding(.horizontal, 12)
+                                    .padding(.vertical, 5)
+                                    .background(
+                                        Capsule()
+                                            .fill(Color("ColorPrimary").opacity(0.15))
+                                            .overlay(Capsule().stroke(Color("ColorPrimary").opacity(0.18), lineWidth: 1))
+                                    )
                             }
-
-                            // Score badge
-//                            HStack(spacing: 6) {
-//                                Image(systemName: scoreIcon)
-//                                    .font(.system(size: 13, weight: .bold))
-//                                Text(nutriItem.score.uppercased())
-//                                    .font(.system(size: 12, weight: .black, design: .rounded))
-//                                    .kerning(0.5)
-//                            }
-//                            .foregroundStyle(scoreColor)
-//                            .padding(.horizontal, 14)
-//                            .padding(.vertical, 7)
-//                            .background(
-//                                Capsule()
-//                                    .fill(scoreColor.opacity(0.1))
-//                                    .overlay(Capsule().stroke(scoreColor.opacity(0.3), lineWidth: 1))
-//                            )
                         }
-                        .padding(.bottom, 28)
                     }
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.horizontal, 20)
+                .padding(.top, 12)
 
-                    // MARK: - Content
-                    VStack(spacing: 22) {
+                // MARK: - Content
+                VStack(spacing: 18) {
 
-                        // Product name + tags
-                        VStack(spacing: 10) {
-                            Text(product.productName ?? "Kết quả phân tích")
-                                .font(.system(size: 26, weight: .black, design: .rounded))
-                                .foregroundStyle(.primary)
-                                .kerning(-0.4)
-                                .multilineTextAlignment(.center)
-
-                            HStack(spacing: 8) {
-                                ForEach(productTags, id: \.self) { tag in
-                                    Text(tag)
-                                        .font(.system(size: 12, weight: .bold, design: .rounded))
-                                        .foregroundStyle(Color("ColorPrimary"))
-                                        .padding(.horizontal, 12)
-                                        .padding(.vertical, 5)
-                                        .background(
-                                            Capsule()
-                                                .fill(Color("ColorPrimary").opacity(0.15))
-                                                .overlay(Capsule().stroke(Color("ColorPrimary").opacity(0.18), lineWidth: 1))
-                                        )
-                                }
-                            }
-                        }
-                        .padding(.top, 10)
-
-                        // MARK: - Nutrition
+                    // MARK: - Nutrition
+                    if !nutritionItems.isEmpty {
                         AnalystSection(title: "Dinh dưỡng",
                                        icon: "chart.bar.fill",
                                        iconColor: Color("ColorPrimary")) {
 
-                            if !nutritionItems.isEmpty {
+                            let displayItems = showAllNutrition ? nutritionItems : Array(nutritionItems.prefix(3))
 
-                                let displayItems = showAllNutrition
-                                    ? nutritionItems
-                                    : Array(nutritionItems.prefix(3))
-
-                                VStack(spacing: 12) {
-
-                                    LazyVGrid(
-                                        columns: Array(repeating: GridItem(.flexible(), spacing: 12), count: 3),
-                                        spacing: 12
-                                    ) {
-                                        ForEach(displayItems) { item in
-                                            if let detailID = item.detailID {
-                                                NavigationLink {
-                                                    SearchDetailView(id: detailID)
-                                                } label: {
-                                                    ModernNutrientCard(
-                                                        title: item.title,
-                                                        value: item.value ?? "0",
-                                                        color: item.color,
-                                                        icon: item.icon
-                                                    )
-                                                }
-                                                .buttonStyle(.plain)
-                                            } else {
+                            VStack(spacing: 12) {
+                                LazyVGrid(
+                                    columns: Array(repeating: GridItem(.flexible(), spacing: 12), count: 3),
+                                    spacing: 12
+                                ) {
+                                    ForEach(displayItems) { item in
+                                        if let detailID = item.detailID {
+                                            FullScreenDetailLink {
+                                                SearchDetailView(id: detailID)
+                                            } label: {
                                                 ModernNutrientCard(
                                                     title: item.title,
                                                     value: item.value ?? "0",
@@ -168,93 +91,68 @@ struct AnalystView: View {
                                                     icon: item.icon
                                                 )
                                             }
+                                        } else {
+                                            ModernNutrientCard(
+                                                title: item.title,
+                                                value: item.value ?? "0",
+                                                color: item.color,
+                                                icon: item.icon
+                                            )
                                         }
                                     }
+                                }
 
-                                    if nutritionItems.count > 3 {
-                                        Button {
-                                            withAnimation(.spring(response: 0.3, dampingFraction: 0.85)) {
-                                                showAllNutrition.toggle()
-                                            }
-                                        } label: {
-                                            Text(showAllNutrition ? "Thu gọn" : "Xem tất cả")
-                                                .font(.system(size: 13, weight: .semibold))
-                                                .foregroundStyle(Color("ColorPrimary"))
+                                if nutritionItems.count > 3 {
+                                    Button {
+                                        withAnimation(.spring(response: 0.3, dampingFraction: 0.85)) {
+                                            showAllNutrition.toggle()
                                         }
+                                    } label: {
+                                        Text(showAllNutrition ? "Thu gọn" : "Xem tất cả")
+                                            .font(.system(size: 13, weight: .semibold))
+                                            .foregroundStyle(Color("ColorPrimary"))
                                     }
                                 }
                             }
                         }
-                        
-                        // MARK: - Alerts
+                    }
+                    
+                    // MARK: - Alerts
+                    if let warning = product.warning, !warning.isEmpty {
                         AnalystSection(title: "Cảnh báo", icon: "exclamationmark.triangle.fill", iconColor: Color("WarningAmber")) {
                             VStack(spacing: 10) {
-                                if let warning = product.warning, !warning.isEmpty {
-                                    ModernAlertRow(
-                                        icon: "exclamationmark.triangle.fill",
-                                        color: Color("WarningAmber"),
-                                        title: "Cảnh báo",
-                                        description: warning
-                                    )
-                                }
-
-                                if product.warning?.isEmpty ?? true {
-                                    ModernAlertRow(
-                                        icon: "checkmark.shield.fill",
-                                        color: Color("SuccessTeal"),
-                                        title: "Không có cảnh báo",
-                                        description: "Chưa phát hiện cảnh báo từ kết quả phân tích."
-                                    )
-                                }
+                                ModernAlertRow(
+                                    icon: "exclamationmark.triangle.fill",
+                                    color: Color("WarningAmber"),
+                                    title: "Cảnh báo",
+                                    description: warning
+                                )
                             }
                         }
+                    }
 
-                        // MARK: - Contains
+                    // MARK: - Contains
+                    if hasContainData {
                         AnalystSection(title: "Thành phần", icon: "list.bullet.clipboard.fill", iconColor: Color("ColorPrimary")) {
                             VStack(spacing: 12) {
                                 HStack(spacing: 12) {
                                     ModernContainCard(
                                         title: "Thành phần",
                                         good: "\(product.ingredients.count) mục",
-                                        bad: "Từ nhãn sản phẩm",
+                                        bad: "",
                                         goodColor: Color("SuccessTeal"),
-                                        badColor: Color("WarningAmber")
+                                        badColor: Color("ColorPrimary")
                                     )
                                     ModernContainCard(
                                         title: "Phụ gia",
-                                        good: "",
-                                        bad: "\(product.additive.count) phụ gia",
-                                        goodColor: Color("SuccessTeal"),
-                                        badColor: Color("AccentOrange")
+                                        good: "\(product.additive.count) phụ gia",
+                                        bad: "",
+                                        goodColor: Color("ColorPrimary"),
+                                        badColor: Color("ColorPrimary")
                                     )
                                 }
-//
-//                                if !product.additiveItems.isEmpty {
-//                                    VStack(spacing: 10) {
-//                                        ForEach(Array(product.additiveItems.prefix(3).enumerated()), id: \.element.stableID) { index, item in
-//                                            if let id = item.id, !id.isEmpty {
-//                                                NavigationLink {
-//                                                    SearchDetailView(id: id)
-//                                                } label: {
-//                                                    IngredientCard(
-//                                                        title: item.displayName,
-//                                                        index: index + 1,
-//                                                        status: .caution
-//                                                    )
-//                                                }
-//                                                .buttonStyle(.plain)
-//                                            } else {
-//                                                IngredientCard(
-//                                                    title: item.displayName,
-//                                                    index: index + 1,
-//                                                    status: .caution
-//                                                )
-//                                            }
-//                                        }
-//                                    }
-//                                }
 
-                                NavigationLink {
+                                FullScreenDetailLink {
                                     ContainListView(
                                         ingredients: product.ingredients,
                                         additives: product.additive,
@@ -283,41 +181,25 @@ struct AnalystView: View {
                                 }
                             }
                         }
+                    }
 
-                        if !detailRows.isEmpty {
-                            AnalystSection(title: "Thông tin sản phẩm", icon: "info.circle.fill", iconColor: Color("InfoBlue")) {
-                                VStack(spacing: 10) {
-                                    ForEach(detailRows, id: \.title) { row in
-                                        ProductInfoRow(title: row.title, value: row.value)
-                                    }
+                    if !detailRows.isEmpty {
+                        AnalystSection(title: "Thông tin sản phẩm", icon: "info.circle.fill", iconColor: Color("InfoBlue")) {
+                            VStack(spacing: 10) {
+                                ForEach(detailRows, id: \.title) { row in
+                                    ProductInfoRow(title: row.title, value: row.value)
                                 }
                             }
                         }
-
-                        // MARK: - Options
-                        AnalystSection(title: "Tuỳ chọn", icon: "ellipsis.circle.fill", iconColor: Color("ColorPrimary")) {
-                            VStack(spacing: 10) {
-                                AnalystOptionRow(
-                                    title: "Thêm vào yêu thích",
-                                    icon: "heart.fill",
-                                    color: Color("ColorPrimary")
-                                )
-                                Divider().padding(.leading, 48)
-                                AnalystOptionRow(
-                                    title: "Chia sẻ sản phẩm",
-                                    icon: "square.and.arrow.up.fill",
-                                    color: Color("InfoBlue")
-                                )
-                            }
-                        }
                     }
-                    .padding(.horizontal, 20)
-                    .padding(.bottom, 40)
                 }
+                .padding(.horizontal, 20)
+                .padding(.bottom, 40)
             }
-            .ignoresSafeArea(edges: .top)
-            .navigationBarBackButtonHidden(true)
-            .toolbar {
+        }
+        .navigationBarBackButtonHidden(showsDismissButton)
+        .toolbar {
+            if showsDismissButton {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button {
                         onDismiss()
@@ -331,8 +213,12 @@ struct AnalystView: View {
                     }
                 }
             }
-            .background(Color("Background"))
         }
+        .background(Color("Background"))
+    }
+
+    private var hasContainData: Bool {
+        !product.ingredients.isEmpty || !product.additive.isEmpty
     }
     
     private var nutritionItems: [NutrientItem] {
@@ -426,13 +312,13 @@ struct AnalystView: View {
 
     private func nutritionColor(for key: String) -> Color {
         switch key {
-        case "energy": return Color("AccentOrange")
-        case "protein": return Color("SuccessTeal")
+        case "energy": return Color("ColorPrimary")
+        case "protein": return Color("ColorPrimary")
         case "carbohydrate": return Color("ColorPrimary")
-        case "sugars", "sugar": return Color("AccentPink")
-        case "fat", "saturated_fat", "saturatedFat": return Color("WarningAmber")
-        case "sodium": return Color("InfoBlue")
-        default: return Color("AccentPurple")
+        case "sugars", "sugar": return Color("ColorPrimary")
+        case "fat", "saturated_fat", "saturatedFat": return Color("ColorPrimary")
+        case "sodium": return Color("ColorPrimary")
+        default: return Color("ColorPrimary")
         }
     }
 }

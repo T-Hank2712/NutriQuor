@@ -92,97 +92,60 @@ struct ProfileView: View {
         .task {
             syncProfileState()
         }
+        .hideBottomBarOnDetail()
     }
 
     private var profileHeader: some View {
-        VStack(spacing: 16) {
-            ZStack {
-                RoundedRectangle(cornerRadius: .cardRadius, style: .continuous)
-                    .fill(
-                        LinearGradient(
-                            colors: [
-                                Color("DeepNavyDark"),
-                                Color("DeepNavyMid"),
-                                Color("ColorPrimary")
-                            ],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
+        BentoCard(accent: Color("ColorPrimary"), style: .plain, padding: 18) {
+            HStack(spacing: 16) {
+                ZStack {
+                    Circle()
+                        .fill(Color("ColorPrimary").opacity(0.12))
+                        .frame(width: 78, height: 78)
 
-                Circle()
-                    .fill(Color.white.opacity(0.05))
-                    .frame(width: 180, height: 180)
-                    .offset(x: -120, y: -55)
-
-                Circle()
-                    .fill(Color("SuccessTeal").opacity(0.20))
-                    .frame(width: 140, height: 140)
-                    .offset(x: 130, y: 48)
-
-                VStack(spacing: 14) {
-                    ZStack {
-                        Circle()
-                            .fill(
-                                LinearGradient(
-                                    colors: [
-                                        Color("SuccessTeal"),
-                                        Color("ColorPrimary")
-                                    ],
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                )
-                            )
-                            .frame(width: 104, height: 104)
-                            .shadow(color: Color("ColorPrimary").opacity(0.22), radius: 18, y: 8)
-
-                        Text(initials)
-                            .font(.system(size: 30, weight: .bold, design: .rounded))
-                            .foregroundStyle(.white)
-                    }
-
-                    VStack(spacing: 5) {
-                        Text(displayName)
-                            .font(.system(size: 23, weight: .bold, design: .rounded))
-                            .foregroundStyle(.white)
-                            .multilineTextAlignment(.center)
-
-                        Text(email.isEmpty ? "Chưa có email" : email)
-                            .font(.system(size: 13, weight: .medium))
-                            .foregroundStyle(.white.opacity(0.68))
-                            .lineLimit(1)
-                    }
-
-                    Button {
-                        editFirstName = firstName
-                        editLastName = lastName
-                        showEditNameSheet = true
-                    } label: {
-                        Label("Chỉnh sửa", systemImage: "pencil")
-                            .font(.system(size: 14, weight: .semibold, design: .rounded))
-                            .foregroundStyle(Color("DeepNavyDark"))
-                            .padding(.horizontal, 16)
-                            .padding(.vertical, 9)
-                            .background(.white.opacity(0.92))
-                            .clipShape(Capsule())
-                    }
-                    .buttonStyle(.plain)
+                    Text(initials)
+                        .font(.system(size: 24, weight: .bold, design: .rounded))
+                        .foregroundStyle(Color("ColorPrimary"))
                 }
-                .padding(.vertical, 28)
-                .padding(.horizontal, 18)
+
+                VStack(alignment: .leading, spacing: 5) {
+                    Text(displayName)
+                        .font(.system(size: 21, weight: .bold, design: .rounded))
+                        .foregroundStyle(.primary)
+                        .lineLimit(2)
+
+                    Text(email.isEmpty ? "Chưa có email" : email)
+                        .font(.system(size: 13, weight: .medium))
+                        .foregroundStyle(.secondary)
+                        .lineLimit(1)
+                }
+
+                Spacer(minLength: 8)
+
+                Button {
+                    editFirstName = firstName
+                    editLastName = lastName
+                    showEditNameSheet = true
+                } label: {
+                    Image(systemName: "pencil")
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundStyle(Color("ColorPrimary"))
+                        .frame(width: 38, height: 38)
+                        .background(Color("ColorPrimary").opacity(0.10))
+                        .clipShape(Circle())
+                }
+                .buttonStyle(.plain)
             }
-            .frame(maxWidth: .infinity)
-            .frame(minHeight: 260)
         }
     }
 
     private var accountSummaryCard: some View {
-        BentoCard(accent: Color("InfoBlue"), style: .plain, padding: 16) {
+        BentoCard(accent: Color("ColorPrimary"), style: .plain, padding: 16) {
             VStack(alignment: .leading, spacing: 14) {
                 HStack(spacing: 10) {
                     Image(systemName: "person.text.rectangle.fill")
                         .font(.system(size: 17, weight: .semibold))
-                        .foregroundStyle(Color("InfoBlue"))
+                        .foregroundStyle(Color("ColorPrimary"))
 
                     Text("Thông tin tài khoản")
                         .font(.headline.weight(.bold))
@@ -213,12 +176,12 @@ struct ProfileView: View {
         HStack(spacing: 12) {
             ZStack {
                 RoundedRectangle(cornerRadius: 10, style: .continuous)
-                    .fill(Color("InfoBlue").opacity(0.12))
+                    .fill(Color("ColorPrimary").opacity(0.10))
                     .frame(width: 36, height: 36)
 
                 Image(systemName: icon)
                     .font(.system(size: 15, weight: .semibold))
-                    .foregroundStyle(Color("InfoBlue"))
+                    .foregroundStyle(Color("ColorPrimary"))
             }
 
             VStack(alignment: .leading, spacing: 2) {

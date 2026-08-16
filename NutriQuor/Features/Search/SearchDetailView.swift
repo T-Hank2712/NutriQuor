@@ -9,11 +9,10 @@ struct SearchDetailView: View {
     let id: String
 
     @StateObject private var viewModel = SearchNutritionViewModel()
-    @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         ScrollView(showsIndicators: false) {
-            VStack(spacing: 0) {
+            VStack(spacing: 18) {
                 hero
 
                 if let detail = viewModel.detail {
@@ -26,63 +25,28 @@ struct SearchDetailView: View {
         .task {
             await viewModel.loadDetail(id: id)
         }
-        .ignoresSafeArea(edges: .top)
-        .navigationBarBackButtonHidden(true)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                Button { dismiss() } label: {
-                    ZStack {
-                        Circle()
-                            .fill(.ultraThinMaterial)
-                            .frame(width: 34, height: 34)
-                            .overlay(Circle().stroke(Color.white.opacity(0.26), lineWidth: 1))
-                            .shadow(color: .black.opacity(0.08), radius: 10, y: 4)
-                        Image(systemName: "chevron.left")
-                            .font(.system(size: 13, weight: .bold))
-                            .foregroundStyle(.primary)
-                    }
-                }
-                .buttonStyle(PressScaleButtonStyle())
-            }
-        }
         .background(Color("Background"))
+        .hideBottomBarOnDetail()
     }
 
     private var hero: some View {
-        ZStack(alignment: .bottom) {
-            LinearGradient(
-                colors: [
-                    Color("Background"),
-                    heroColor.opacity(0.14),
-                    Color.nqInfo.opacity(0.10)
-                ],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-            .frame(height: 250)
-
+        BentoCard(accent: heroColor, style: .tinted, padding: 20) {
             ZStack {
                 RoundedRectangle(cornerRadius: .cardRadius)
-                    .fill(.ultraThinMaterial)
-                    .frame(width: 112, height: 112)
+                    .fill(heroColor.opacity(0.10))
+                    .frame(width: 84, height: 84)
                     .overlay(
                         RoundedRectangle(cornerRadius: .cardRadius, style: .continuous)
-                            .stroke(Color.white.opacity(0.32), lineWidth: 1)
+                            .stroke(heroColor.opacity(0.16), lineWidth: 1)
                     )
-                    .shadow(color: heroColor.opacity(0.18), radius: 20, y: 8)
 
                 Image(systemName: heroIcon)
-                    .font(.system(size: 44, weight: .semibold))
-                    .foregroundStyle(
-                        LinearGradient(
-                            colors: [heroColor, Color.nqInfo],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
+                    .font(.system(size: 34, weight: .semibold))
+                    .foregroundStyle(heroColor)
             }
-            .padding(.bottom, 28)
         }
+        .padding(.horizontal, 20)
+        .padding(.top, 14)
     }
 
     private func detailContent(_ detail: SearchDetailDTO) -> some View {
@@ -99,17 +63,17 @@ struct SearchDetailView: View {
                     }
 
                     if let code = detail.code, !code.isEmpty {
-                        DetailChip(text: code, color: Color("AccentOrange"))
+                        DetailChip(text: code, color: Color("ColorPrimary"))
                     }
 
                     if let unit = detail.defaultUnit, !unit.isEmpty {
-                        DetailChip(text: unit, color: Color("InfoBlue"))
+                        DetailChip(text: unit, color: Color("ColorPrimary"))
                     }
 
-                    DetailChip(text: "\(detail.sections.count) mục", color: Color("AccentPurple"))
+                    DetailChip(text: "\(detail.sections.count) mục", color: Color("ColorPrimary"))
                 }
             }
-            .padding(.top, 24)
+            .padding(.top, 4)
 
             if detail.sections.isEmpty {
                 DetailSection(
@@ -169,7 +133,7 @@ struct SearchDetailView: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.horizontal, 20)
-        .padding(.top, 28)
+        .padding(.top, 12)
         .padding(.bottom, 40)
     }
 
@@ -270,9 +234,9 @@ private enum SearchItemType {
 
     var color: Color {
         switch self {
-        case .ingredient: return Color("SuccessTeal")
+        case .ingredient: return Color("ColorPrimary")
         case .nutrient: return Color("ColorPrimary")
-        case .additive: return Color("AccentOrange")
+        case .additive: return Color("ColorPrimary")
         }
     }
 }
@@ -310,11 +274,11 @@ private extension KnowledgeSection {
     var displayColor: Color {
         switch sectionType {
         case "overview": return Color("ColorPrimary")
-        case "classification_and_role": return Color("AccentPurple")
-        case "health_effects": return Color("AccentPink")
-        case "common_sources": return Color("SuccessTeal")
+        case "classification_and_role": return Color("ColorPrimary")
+        case "health_effects": return Color("ColorPrimary")
+        case "common_sources": return Color("ColorPrimary")
         case "usage_and_limits": return Color("WarningAmber")
-        default: return Color("InfoBlue")
+        default: return Color("ColorPrimary")
         }
     }
 }

@@ -24,70 +24,39 @@ struct BentoCard<Content: View>: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(background)
             .overlay(border)
-            .overlay(alignment: .topTrailing) {
-                Circle()
-                    .fill(accent.opacity(style == .plain ? 0.10 : 0.18))
-                    .blur(radius: 18)
-                    .frame(width: 68, height: 68)
-                    .offset(x: 22, y: -24)
-            }
             .clipShape(RoundedRectangle(cornerRadius: .cardRadius, style: .continuous))
             .shadow(
-                color: Color.black.opacity(scheme == .dark ? 0.30 : (style == .elevated ? 0.09 : 0.05)),
-                radius: style == .elevated ? 22 : 16,
-                y: style == .elevated ? 12 : 8
+                color: Color.black.opacity(scheme == .dark ? 0.22 : (style == .elevated ? 0.07 : 0.025)),
+                radius: style == .elevated ? 14 : 8,
+                y: style == .elevated ? 7 : 3
             )
     }
 
     private var background: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: .cardRadius, style: .continuous)
-                .fill(.ultraThinMaterial)
-
-            RoundedRectangle(cornerRadius: .cardRadius, style: .continuous)
-                .fill(
-                    LinearGradient(
-                        colors: backgroundColors,
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    )
-                )
-        }
+        RoundedRectangle(cornerRadius: .cardRadius, style: .continuous)
+            .fill(backgroundColor)
     }
 
     private var border: some View {
         RoundedRectangle(cornerRadius: .cardRadius, style: .continuous)
-            .stroke(
-                LinearGradient(
-                    colors: [
-                        Color.white.opacity(scheme == .dark ? 0.18 : 0.55),
-                        accent.opacity(style == .plain ? 0.12 : 0.24)
-                    ],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                ),
-                lineWidth: 1
-            )
+            .stroke(borderColor, lineWidth: 1)
     }
 
-    private var backgroundColors: [Color] {
+    private var backgroundColor: Color {
         switch style {
         case .plain:
-            return [
-                Color(.systemBackground).opacity(scheme == .dark ? 0.10 : 0.72),
-                Color(.systemBackground).opacity(scheme == .dark ? 0.06 : 0.52)
-            ]
+            return Color(.secondarySystemGroupedBackground)
         case .tinted:
-            return [
-                Color(.systemBackground).opacity(scheme == .dark ? 0.10 : 0.70),
-                accent.opacity(scheme == .dark ? 0.16 : 0.10)
-            ]
+            return accent.opacity(scheme == .dark ? 0.12 : 0.07)
         case .elevated:
-            return [
-                Color(.systemBackground).opacity(scheme == .dark ? 0.16 : 0.82),
-                Color("Background").opacity(scheme == .dark ? 0.18 : 0.70)
-            ]
+            return Color(.systemBackground)
         }
+    }
+
+    private var borderColor: Color {
+        style == .tinted
+            ? accent.opacity(scheme == .dark ? 0.22 : 0.16)
+            : Color("Border").opacity(scheme == .dark ? 0.8 : 0.65)
     }
 }
 

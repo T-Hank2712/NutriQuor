@@ -41,10 +41,26 @@ struct ContentView: View {
             .tint(Color.nqPrimary)
             .toolbarBackground(.ultraThinMaterial, for: .tabBar)
             .toolbarBackground(.visible, for: .tabBar)
-            .animation(.spring(response: 0.34, dampingFraction: 0.82), value: appState.selectedTab)
+            .toolbar(appState.fullScreenDetailStack.isEmpty ? .visible : .hidden, for: .tabBar)
+
             CameraButton()
 
+            ForEach(Array(appState.fullScreenDetailStack.enumerated()), id: \.element.id) { index, route in
+                route.view
+                    .id(route.id)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(Color("Background"))
+                    .ignoresSafeArea()
+                    .zIndex(Double(10 + index))
+                    .transition(
+                        .asymmetric(
+                            insertion: .move(edge: .trailing),
+                            removal: .move(edge: .trailing)
+                        )
+                    )
+            }
         }
+        .animation(.easeInOut(duration: 0.26), value: appState.fullScreenDetailStack.count)
         
     }
 }

@@ -51,6 +51,7 @@ struct ContainListView: View {
         .background(Color("Background"))
         .navigationTitle("Chi tiết thành phần")
         .navigationBarTitleDisplayMode(.inline)
+        .hideBottomBarOnDetail()
     }
 
     private var additiveNames: [String] {

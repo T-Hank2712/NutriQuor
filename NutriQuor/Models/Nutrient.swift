@@ -57,8 +57,3 @@ struct Nutrient: Identifiable, Decodable {
         description = try container.decodeIfPresent(String.self, forKey: .description) ?? overview
     }
 }
-
-struct NutriText: Identifiable, Equatable {
-    let id = UUID()
-    let text: String
-}

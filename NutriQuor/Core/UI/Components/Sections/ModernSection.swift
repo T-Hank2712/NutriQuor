@@ -40,14 +40,7 @@ struct ModernSection<Content: View>: View {
             title: "Chỉnh sửa hồ sơ",
             subtitle: "Tên, ảnh đại diện, thông tin cá nhân",
             icon: "person.text.rectangle.fill",
-            iconColor: Color("AccentPink")
-        )
-        Divider().padding(.leading, 56)
-        ModernOptionRow(
-            title: "Đổi mật khẩu",
-            subtitle: "Cập nhật mật khẩu bảo mật",
-            icon: "lock.fill",
-            iconColor: Color("DeepNavy")
+            iconColor: Color("ColorPrimary")
         )
     }
     .padding()

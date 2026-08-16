@@ -13,6 +13,7 @@ struct HistoryItem: View {
     var body: some View {
         HStack(spacing: 14) {
             ScanHistoryThumbnail(
+                imageRef: record.imageRef,
                 imageUrl: record.imageUrl,
                 size: 64
             )
@@ -33,12 +34,7 @@ struct HistoryItem: View {
                 HStack {
                     Image(systemName: "clock.fill")
                         .foregroundStyle(Color("ColorPrimary"))
-                    Text(
-                        (record.createdAt ?? Date()).formatted(
-                            date: .omitted,
-                            time: .shortened
-                        )
-                        )
+                    Text(displayTime)
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -54,6 +50,17 @@ struct HistoryItem: View {
         .overlay(
             RoundedRectangle(cornerRadius: .cardRadius)
                 .stroke(Color.primary.opacity(0.06), lineWidth: 1)
+        )
+    }
+
+    private var displayTime: String {
+        guard let createdAt = record.createdAt else {
+            return "Chưa rõ thời gian"
+        }
+
+        return createdAt.formatted(
+            date: .omitted,
+            time: .shortened
         )
     }
 }

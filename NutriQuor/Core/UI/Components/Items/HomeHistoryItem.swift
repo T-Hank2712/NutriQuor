@@ -10,25 +10,10 @@ import SwiftUI
 struct HomeHistoryItem: View {
     let record: ScanHistory
 
-//    private var scoreColor: Color {
-//        switch record.score.lowercased() {
-//        case "tốt": return Color("SuccessTeal")
-//        case "xấu": return Color("AccentPink")
-//        default:    return Color("ColorPrimary")
-//        }
-//    }
-//
-//    private var scoreIcon: String {
-//        switch record.score.lowercased() {
-//        case "tốt": return "checkmark.circle.fill"
-//        case "xấu": return "xmark.circle.fill"
-//        default:    return "minus.circle.fill"
-//        }
-//    }
-
     var body: some View {
         HStack(spacing: 14) {
             ScanHistoryThumbnail(
+                imageRef: record.imageRef,
                 imageUrl: record.imageUrl,
                 size: 58
             )
@@ -49,29 +34,13 @@ struct HomeHistoryItem: View {
                         .foregroundStyle(.secondary)
                 }
 
-                Text(
-                    (record.createdAt ?? Date()).formatted(
-                        date: .omitted,
-                        time: .shortened
-                    )
-                )
+                Text(displayTime)
                     .font(.system(size: 11))
                     .foregroundStyle(.tertiary)
             }
 
             Spacer()
 
-            // Score badge
-//            VStack(spacing: 4) {
-//                Image(systemName: scoreIcon)
-//                    .font(.system(size: 20, weight: .semibold))
-//                    .foregroundStyle(scoreColor)
-//
-//                Text(record.score)
-//                    .font(.system(size: 11, weight: .bold, design: .rounded))
-//                    .foregroundStyle(scoreColor)
-//            }
-//            .padding(.trailing, 4)
         }
         .padding(14)
         .background(
@@ -82,6 +51,17 @@ struct HomeHistoryItem: View {
                         .stroke(Color.primary.opacity(0.06), lineWidth: 1)
                 )
                 .shadow(color: .black.opacity(0.03), radius: 8, y: 3)
+        )
+    }
+
+    private var displayTime: String {
+        guard let createdAt = record.createdAt else {
+            return "Chưa rõ thời gian"
+        }
+
+        return createdAt.formatted(
+            date: .omitted,
+            time: .shortened
         )
     }
 }
