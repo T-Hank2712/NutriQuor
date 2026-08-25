@@ -1,6 +1,6 @@
 # Implementation Plan: Hồ Sơ Và Gia Đình
 
-**Branch**: `004-profile-family` | **Date**: 2026-08-25 | **Spec**: `spec.md`
+**Branch**: `004-profile-family` | **Date**: 2026-06-23 | **Spec**: `spec.md`
 
 **Input**: Đặc tả chức năng từ `/specs/004-profile-family/spec.md`
 

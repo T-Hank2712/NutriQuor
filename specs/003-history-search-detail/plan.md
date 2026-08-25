@@ -1,6 +1,6 @@
 # Implementation Plan: Lịch Sử, Tìm Kiếm Và Chi Tiết
 
-**Branch**: `003-history-search-detail` | **Date**: 2026-08-13 | **Spec**: `spec.md`
+**Branch**: `003-history-search-detail` | **Date**: 2026-07-20 | **Spec**: `spec.md`
 
 **Input**: Đặc tả chức năng từ `/specs/003-history-search-detail/spec.md`
 

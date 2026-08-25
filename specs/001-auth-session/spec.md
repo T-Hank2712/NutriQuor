@@ -2,7 +2,7 @@
 
 **Feature Branch**: `001-auth-session`
 
-**Created**: 2026-08-13
+**Created**: 2026-06-14
 
 **Status**: Đã duyệt cho quy trình AI4SE
 
